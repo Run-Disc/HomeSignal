@@ -4,9 +4,10 @@ HomeSignal can run as an unsigned Windows app for people who should not have to 
 
 ## Download
 
-1. Open the public repository: https://github.com/Run-Disc/HomeSignal
-2. Open **Actions** → workflow **Windows desktop** → the latest successful run → **HomeSignal-Setup** artifact.
-3. If a version tag such as `v0.1.0` was published, download **HomeSignal-Setup.exe** from that GitHub Release instead.
+Use the copy in this repository (also present if you **Download ZIP** from GitHub):
+
+- Repository file: [HomeSignal-Setup.exe](./HomeSignal-Setup.exe)
+- Direct link: https://github.com/Run-Disc/HomeSignal/raw/main/HomeSignal-Setup.exe
 
 This file is built on GitHub’s Windows runners. It is **not** a Microsoft Store app and is **not** code-signed.
 
@@ -32,4 +33,4 @@ Use Windows **Settings → Apps → Installed apps → HomeSignal → Uninstall*
 
 ## If the window does not open
 
-Re-download `HomeSignal-Setup.exe` from the repository Actions artifact or Release. This package does not include a runtime AI key and will not call an external model.
+Re-download `HomeSignal-Setup.exe` from this repository. This package does not include a runtime AI key and will not call an external model.

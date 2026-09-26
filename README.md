@@ -2,6 +2,8 @@
 
 HomeSignal is a Pittsburgh permit-evidence observatory for the AI for Housing Hackathon (AI Horizons 2026), Track 2: Housing Production, Rents & Household Flow Observatory.
 
+**Windows judges: download [HomeSignal-Setup.exe](./HomeSignal-Setup.exe) from this repository and double-click it.** It is also inside the GitHub **Code → Download ZIP** archive. No Node.js, terminal, API key, or internet is required. Windows SmartScreen may warn because the file is unsigned — choose **More info → Run anyway** only for this GitHub copy. Details: [WINDOWS_INSTALL.md](./WINDOWS_INSTALL.md).
+
 **Public repository:** https://github.com/Run-Disc/HomeSignal
 
 **One sentence:** it helps a housing analyst turn messy PLI permit descriptions into reviewable evidence about proposed housing activity, while keeping record counts, proposed-unit mentions, and completed homes distinct.
@@ -10,11 +12,11 @@ A permit record is not a housing unit. An issued permit is not a completed home.
 
 ## Windows download (no Node.js)
 
-Judges and housing staff who should not use a terminal can run the same source-review app on Windows:
+The installer sits in the repository root so it is visible on the GitHub front page and runnable after a ZIP download:
 
-1. Download **HomeSignal-Setup.exe** from the repository **Actions** artifact named `HomeSignal-Setup`, or from a GitHub Release if a `v*` tag was published.
-2. Windows SmartScreen may warn because the installer is **unsigned**. Choose **More info → Run anyway** only for a file from this GitHub project. Details: `WINDOWS_INSTALL.md`.
-3. Open the **HomeSignal** shortcut. The app serves itself on `127.0.0.1` and does not need the internet or an API key.
+1. Open **[HomeSignal-Setup.exe](./HomeSignal-Setup.exe)** on this page, or unzip the repository ZIP and double-click the same file.
+2. Windows SmartScreen may warn because the installer is **unsigned**. Choose **More info → Run anyway** only for a file from this GitHub project.
+3. After setup, open the **HomeSignal** shortcut. The app serves itself on `127.0.0.1` and does not need the internet or an API key.
 
 The browser/web workflow (`npm run dev` / `npm start`) is unchanged.
 
