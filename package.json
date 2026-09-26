@@ -1,0 +1,31 @@
+{
+  "name": "homesignal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HomeSignal: Permit Evidence Observatory — Pittsburgh PLI housing-permit evidence review",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "start:3001": "next start --port 3001",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/lib/*.test.ts",
+    "ingest": "python3 scripts/ingest_pli.py"
+  },
+  "dependencies": {
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.6",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "^15.5.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}

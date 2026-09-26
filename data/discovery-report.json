@@ -1,0 +1,807 @@
+{
+  "retrievedAt": "2026-09-26T13:49:20+00:00",
+  "rawFile": "tmp/pli_raw.csv",
+  "rawBytes": 19790610,
+  "rawSha256": "f296f30050c1982b480c86516b3ded59523666264276cfa915064301321d83ef",
+  "csvFieldnames": [
+    "_id",
+    "permit_id",
+    "permit_type",
+    "owner_name",
+    "contractor_name",
+    "work_description",
+    "work_type",
+    "commercial_or_residential",
+    "total_project_value",
+    "issue_date",
+    "parcel_num",
+    "address",
+    "latitude",
+    "longitude",
+    "council_district",
+    "neighborhood",
+    "ward",
+    "zip_code",
+    "status"
+  ],
+  "downloadedRows": 65378,
+  "datastoreReportedTotal": 65378,
+  "resourcePagePreviewRows": 49255,
+  "rowCountNote": "csv.DictReader row count is the downloaded count; multiline descriptions can make wc -l larger.",
+  "permitTypeCountsAllYears": [
+    [
+      "ELECTRICAL",
+      20501
+    ],
+    [
+      "BUILDING",
+      17800
+    ],
+    [
+      "Building & Development Application",
+      9242
+    ],
+    [
+      "MECHANICAL",
+      8150
+    ],
+    [
+      "Suppression System Permit",
+      2760
+    ],
+    [
+      "Fire Alarm Permit",
+      2576
+    ],
+    [
+      "Demolition Permit",
+      1300
+    ],
+    [
+      "Occupancy Only Permit",
+      952
+    ],
+    [
+      "Sign Permit",
+      946
+    ],
+    [
+      "Floodplain Permit",
+      495
+    ],
+    [
+      "Occupant Load Placard Permit",
+      448
+    ],
+    [
+      "Land Operations Permit",
+      88
+    ],
+    [
+      "Storm Water Permit",
+      71
+    ],
+    [
+      "Plan Review Meeting",
+      49
+    ]
+  ],
+  "yearCountsAllTypes": [
+    [
+      "2023",
+      9301
+    ],
+    [
+      "2025",
+      9160
+    ],
+    [
+      "2021",
+      9129
+    ],
+    [
+      "2024",
+      9124
+    ],
+    [
+      "2022",
+      8804
+    ],
+    [
+      "2020",
+      8249
+    ],
+    [
+      "2026",
+      7079
+    ],
+    [
+      "2019",
+      4532
+    ]
+  ],
+  "cohort": {
+    "definition": "issue_date year 2025 AND permit_type in {BUILDING, Building & Development Application}",
+    "acceptedUniqueIds": 4243,
+    "exactDuplicateRowsCollapsed": 0,
+    "conflictingSameIdRows": {},
+    "classCounts": [
+      [
+        "Residential",
+        3063
+      ],
+      [
+        "Commercial",
+        1180
+      ]
+    ],
+    "statusCounts": [
+      [
+        "Issued",
+        2090
+      ],
+      [
+        "Completed",
+        2090
+      ],
+      [
+        "Revoked",
+        24
+      ],
+      [
+        "Application Finalization",
+        18
+      ],
+      [
+        "Amendment Applicant Revisions",
+        11
+      ],
+      [
+        "Amendment Application Incomplete",
+        4
+      ],
+      [
+        "Amendment Review",
+        3
+      ],
+      [
+        "Stop Work",
+        2
+      ],
+      [
+        "Applicant Revisions",
+        1
+      ]
+    ],
+    "workTypeCounts": [
+      [
+        "Existing (alteration/addition)",
+        4021
+      ],
+      [
+        "New Construction",
+        113
+      ],
+      [
+        "ADDITION / ALTERATION",
+        66
+      ],
+      [
+        "NEW CONSTRUCTION",
+        33
+      ],
+      [
+        "MINOR ALTERATION",
+        10
+      ]
+    ],
+    "monthCounts": [
+      [
+        "2025-01",
+        258
+      ],
+      [
+        "2025-02",
+        277
+      ],
+      [
+        "2025-03",
+        328
+      ],
+      [
+        "2025-04",
+        331
+      ],
+      [
+        "2025-05",
+        409
+      ],
+      [
+        "2025-06",
+        403
+      ],
+      [
+        "2025-07",
+        401
+      ],
+      [
+        "2025-08",
+        377
+      ],
+      [
+        "2025-09",
+        419
+      ],
+      [
+        "2025-10",
+        360
+      ],
+      [
+        "2025-11",
+        374
+      ],
+      [
+        "2025-12",
+        306
+      ]
+    ],
+    "neighborhoodCounts": [
+      [
+        "Shadyside",
+        191
+      ],
+      [
+        "Squirrel Hill South",
+        181
+      ],
+      [
+        "Brookline",
+        178
+      ],
+      [
+        "Central Business District",
+        171
+      ],
+      [
+        "Squirrel Hill North",
+        165
+      ],
+      [
+        "Bloomfield",
+        143
+      ],
+      [
+        "South Side Flats",
+        136
+      ],
+      [
+        "Mount Washington",
+        134
+      ],
+      [
+        "Highland Park",
+        120
+      ],
+      [
+        "Greenfield",
+        120
+      ],
+      [
+        "Point Breeze",
+        107
+      ],
+      [
+        "Carrick",
+        104
+      ],
+      [
+        "Central Lawrenceville",
+        103
+      ],
+      [
+        "Beechview",
+        86
+      ],
+      [
+        "Troy Hill",
+        81
+      ],
+      [
+        "Hazelwood",
+        77
+      ],
+      [
+        "Stanton Heights",
+        76
+      ],
+      [
+        "Brighton Heights",
+        71
+      ],
+      [
+        "Central Northside",
+        69
+      ],
+      [
+        "East Liberty",
+        64
+      ],
+      [
+        "Lincoln-Lemington-Belmar",
+        64
+      ],
+      [
+        "Strip District",
+        63
+      ],
+      [
+        "Garfield",
+        62
+      ],
+      [
+        "Sheraden",
+        62
+      ],
+      [
+        "South Side Slopes",
+        61
+      ],
+      [
+        "Marshall-Shadeland",
+        56
+      ],
+      [
+        "Upper Lawrenceville",
+        55
+      ],
+      [
+        "Lower Lawrenceville",
+        52
+      ],
+      [
+        "Bluff",
+        52
+      ],
+      [
+        "Morningside",
+        52
+      ],
+      [
+        "Banksville",
+        51
+      ],
+      [
+        "Perry North",
+        50
+      ],
+      [
+        "East Allegheny",
+        48
+      ],
+      [
+        "Crafton Heights",
+        47
+      ],
+      [
+        "Westwood",
+        47
+      ],
+      [
+        "Crawford-Roberts",
+        43
+      ],
+      [
+        "North Oakland",
+        42
+      ],
+      [
+        "Larimer",
+        42
+      ],
+      [
+        "Allentown",
+        41
+      ],
+      [
+        "Perry South",
+        40
+      ],
+      [
+        "Lincoln Place",
+        40
+      ],
+      [
+        "Overbrook",
+        39
+      ],
+      [
+        "Manchester",
+        37
+      ],
+      [
+        "Central Oakland",
+        37
+      ],
+      [
+        "Point Breeze North",
+        35
+      ],
+      [
+        "Knoxville",
+        34
+      ],
+      [
+        "North Shore",
+        32
+      ],
+      [
+        "Duquesne Heights",
+        32
+      ],
+      [
+        "South Oakland",
+        31
+      ],
+      [
+        "Bedford Dwellings",
+        27
+      ],
+      [
+        "West Oakland",
+        27
+      ],
+      [
+        "Polish Hill",
+        26
+      ],
+      [
+        "Upper Hill",
+        25
+      ],
+      [
+        "Swisshelm Park",
+        25
+      ],
+      [
+        "Elliott",
+        25
+      ],
+      [
+        "Spring Hill-City View",
+        24
+      ],
+      [
+        "Beltzhoover",
+        22
+      ],
+      [
+        "Homewood South",
+        22
+      ],
+      [
+        "Arlington",
+        21
+      ],
+      [
+        "Regent Square",
+        20
+      ],
+      [
+        "East Hills",
+        19
+      ],
+      [
+        "Fineview",
+        18
+      ],
+      [
+        "Chateau",
+        18
+      ],
+      [
+        "Middle Hill",
+        17
+      ],
+      [
+        "Windgap",
+        17
+      ],
+      [
+        "Summer Hill",
+        14
+      ],
+      [
+        "Homewood North",
+        14
+      ],
+      [
+        "Bon Air",
+        13
+      ],
+      [
+        "Allegheny Center",
+        12
+      ],
+      [
+        "New Homestead",
+        12
+      ],
+      [
+        "Friendship",
+        11
+      ],
+      [
+        "Oakwood",
+        8
+      ],
+      [
+        "Allegheny West",
+        8
+      ],
+      [
+        "California-Kirkbride",
+        7
+      ],
+      [
+        "Fairywood",
+        7
+      ],
+      [
+        "Chartiers City",
+        7
+      ],
+      [
+        "West End",
+        6
+      ],
+      [
+        "Ridgemont",
+        6
+      ],
+      [
+        "Spring Garden",
+        6
+      ],
+      [
+        "Terrace Village",
+        6
+      ],
+      [
+        "East Carnegie",
+        5
+      ],
+      [
+        "South Shore",
+        5
+      ],
+      [
+        "Mt. Oliver",
+        4
+      ],
+      [
+        "Northview Heights",
+        3
+      ],
+      [
+        "Homewood West",
+        3
+      ],
+      [
+        "Hays",
+        3
+      ],
+      [
+        "Glen Hazel",
+        3
+      ],
+      [
+        "Esplen",
+        2
+      ],
+      [
+        "St. Clair",
+        1
+      ]
+    ],
+    "blankDescriptions": 2417,
+    "missingNeighborhood": 0,
+    "commercialRecordsWithHousingKeywords": 107,
+    "unitHintRecordIdsSample": [
+      "BDA-2024-01276",
+      "BDA-2024-03621",
+      "BDA-2024-04035",
+      "BDA-2024-05307",
+      "BDA-2024-05433",
+      "BDA-2024-06603",
+      "BDA-2024-06631",
+      "BDA-2024-06746",
+      "BDA-2024-07467",
+      "BDA-2024-07470",
+      "BDA-2024-07488",
+      "BDA-2024-07702",
+      "BDA-2024-08094",
+      "BDA-2025-00044",
+      "BDA-2025-00560",
+      "BDA-2025-01101",
+      "BDA-2025-01572",
+      "BDA-2025-02945",
+      "BDA-2025-03142",
+      "BDA-2025-04300",
+      "BDA-2025-05331",
+      "BDA-2025-05419",
+      "BDA-2025-05486",
+      "BDA-2025-05710",
+      "BDA-2025-06002"
+    ],
+    "unitHintRecordCount": 37
+  },
+  "candidateSelection": {
+    "method": "case-insensitive keyword list on work_description OR work_type containing NEW/CONVERSION/CHANGE OF USE/DEMOLITION; all source classes retained",
+    "candidateCount": 727,
+    "nonCandidateCount": 3516,
+    "reviewCorpusTarget": 120,
+    "reviewCorpusCount": 120,
+    "comparisonSampleCount": 20,
+    "keywords": [
+      "DWELLING",
+      "RESIDENTIAL",
+      "APARTMENT",
+      "APARTMENTS",
+      "MULTI-FAMILY",
+      "MULTIFAMILY",
+      "MULTI FAMILY",
+      "MIXED USE",
+      "MIXED-USE",
+      "CONDO",
+      "CONDOMINIUM",
+      "TOWNHOUSE",
+      "TOWNHOME",
+      "HOUSING",
+      "UNITS",
+      "UNIT ",
+      " UNIT",
+      "BEDROOM",
+      "SINGLE-FAMILY",
+      "SINGLE FAMILY",
+      "TWO-FAMILY",
+      "TWO FAMILY",
+      "THREE-FAMILY",
+      "FOUR-FAMILY",
+      "DUPLEX",
+      "TRIPLEX",
+      "CONVERSION",
+      "CHANGE OF USE",
+      "CHANGE-OF-USE",
+      "NEW CONSTRUCTION",
+      "NEW BUILDING",
+      "NEW 3-STORY",
+      "NEW 2-STORY",
+      "NEW TWO",
+      "NEW THREE",
+      "ACCESSORY DWELLING",
+      "ADU",
+      "LIVE/WORK",
+      "LIVE-WORK",
+      "ROOMING",
+      "BOARDING"
+    ]
+  },
+  "privacy": {
+    "excludedStructuredFields": [
+      "owner_name",
+      "contractor_name",
+      "address",
+      "parcel_num",
+      "latitude",
+      "longitude",
+      "total_project_value"
+    ],
+    "redactionFlags": {
+      "redacted_street_address": 21
+    },
+    "recordsExcludedForResidualPersonalData": 0,
+    "exclusionReasonCounts": {},
+    "note": "Automated redaction is incomplete. Builder must inspect the review corpus before any external model call. Exclusion/redaction audit does not store the removed personal strings."
+  },
+  "snapshotSha256": "283a311a5dde72bacf863a8dfe638ca62f624e45af17d97d0c3b4218a9dabf3d",
+  "snapshotVersion": "pli-2025-bda-v1",
+  "permitTypesObservedInCohort": [
+    "BUILDING",
+    "Building & Development Application"
+  ],
+  "sourceClassesObservedInCohort": [
+    "Commercial",
+    "Residential"
+  ],
+  "neighborhoodsObservedInCohort": [
+    "Allegheny Center",
+    "Allegheny West",
+    "Allentown",
+    "Arlington",
+    "Banksville",
+    "Bedford Dwellings",
+    "Beechview",
+    "Beltzhoover",
+    "Bloomfield",
+    "Bluff",
+    "Bon Air",
+    "Brighton Heights",
+    "Brookline",
+    "California-Kirkbride",
+    "Carrick",
+    "Central Business District",
+    "Central Lawrenceville",
+    "Central Northside",
+    "Central Oakland",
+    "Chartiers City",
+    "Chateau",
+    "Crafton Heights",
+    "Crawford-Roberts",
+    "Duquesne Heights",
+    "East Allegheny",
+    "East Carnegie",
+    "East Hills",
+    "East Liberty",
+    "Elliott",
+    "Esplen",
+    "Fairywood",
+    "Fineview",
+    "Friendship",
+    "Garfield",
+    "Glen Hazel",
+    "Greenfield",
+    "Hays",
+    "Hazelwood",
+    "Highland Park",
+    "Homewood North",
+    "Homewood South",
+    "Homewood West",
+    "Knoxville",
+    "Larimer",
+    "Lincoln Place",
+    "Lincoln-Lemington-Belmar",
+    "Lower Lawrenceville",
+    "Manchester",
+    "Marshall-Shadeland",
+    "Middle Hill",
+    "Morningside",
+    "Mount Washington",
+    "Mt. Oliver",
+    "New Homestead",
+    "North Oakland",
+    "North Shore",
+    "Northview Heights",
+    "Oakwood",
+    "Overbrook",
+    "Perry North",
+    "Perry South",
+    "Point Breeze",
+    "Point Breeze North",
+    "Polish Hill",
+    "Regent Square",
+    "Ridgemont",
+    "Shadyside",
+    "Sheraden",
+    "South Oakland",
+    "South Shore",
+    "South Side Flats",
+    "South Side Slopes",
+    "Spring Garden",
+    "Spring Hill-City View",
+    "Squirrel Hill North",
+    "Squirrel Hill South",
+    "St. Clair",
+    "Stanton Heights",
+    "Strip District",
+    "Summer Hill",
+    "Swisshelm Park",
+    "Terrace Village",
+    "Troy Hill",
+    "Upper Hill",
+    "Upper Lawrenceville",
+    "West End",
+    "West Oakland",
+    "Westwood",
+    "Windgap"
+  ]
+}

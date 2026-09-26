@@ -1,0 +1,66 @@
+{
+  "sourceId": "wprdc-pli-permits",
+  "title": "PLI Permits",
+  "publisher": "City of Pittsburgh (hosted by Western Pennsylvania Regional Data Center)",
+  "landingUrl": "https://data.wprdc.org/dataset/pli-permits",
+  "resourceId": "f4d1177a-f597-4c32-8cbf-7885f56253f6",
+  "downloadUrl": "https://data.wprdc.org/datastore/dump/f4d1177a-f597-4c32-8cbf-7885f56253f6",
+  "retrievalDate": "2026-09-26T13:49:20+00:00",
+  "sourceUpdateDate": "2026-09-26T03:22:05.014160",
+  "coveredDates": "Issue dates 2025-01-01 through 2025-12-31 in this snapshot; source series documentation starts 2019-06-01.",
+  "geography": "City of Pittsburgh neighborhoods as provided by the source neighborhood field",
+  "license": "Creative Commons Attribution (cc-by)",
+  "licenseUrl": "http://www.opendefinition.org/licenses/cc-by",
+  "attribution": "Contains data from the Western Pennsylvania Regional Data Center and the City of Pittsburgh Permits, Licenses, and Inspections Department. HomeSignal transformed the 2025 Building / Building & Development Application cohort as documented in SOURCES.md.",
+  "fieldsUsed": [
+    "permit_id",
+    "permit_type",
+    "work_description",
+    "work_type",
+    "commercial_or_residential",
+    "issue_date",
+    "neighborhood",
+    "status"
+  ],
+  "excludedFields": [
+    "owner_name",
+    "contractor_name",
+    "address",
+    "parcel_num",
+    "latitude",
+    "longitude",
+    "total_project_value",
+    "council_district",
+    "ward",
+    "zip_code"
+  ],
+  "transformations": [
+    "Kept issue-date year 2025 and permit_type BUILDING or Building & Development Application.",
+    "Trimmed neighborhood whitespace; empty neighborhood labeled Unknown.",
+    "Stored issue_date as date-only YYYY-MM-DD.",
+    "Scanned descriptions for emails, phones, SSN-like ids, contact phrases, house-number street addresses, and owner/contractor/source-address strings; redacted matches with tokens or excluded the record if residual personal data remained.",
+    "Did not retain owner, contractor, street address, parcel number, coordinates, or project value.",
+    "Candidate flag uses documented keywords or NEW/CONVERSION/CHANGE OF USE/DEMOLITION in work_type."
+  ],
+  "obtainedRowCount": 65378,
+  "acceptedRowCount": 4243,
+  "candidateCount": 727,
+  "privacyExcludedCount": 0,
+  "missingness": {
+    "blankDescriptionsInCohort": 2417,
+    "missingNeighborhoodInCohort": 0,
+    "resourcePagePreviewRowsDisagreeWithDatastoreTotal": "49255 preview vs 65378 datastore/download rows"
+  },
+  "duplicateHandling": "No exact duplicate rows and no conflicting permit_id values observed in the 2025 Building/BDA cohort.",
+  "checksum": "283a311a5dde72bacf863a8dfe638ca62f624e45af17d97d0c3b4218a9dabf3d",
+  "snapshotVersion": "pli-2025-bda-v1",
+  "knownLimitations": [
+    "An issued permit is not evidence that work started, finished, or became occupied.",
+    "Source status is a current label, not a complete historical timeline.",
+    "Candidate selection is a discovery aid, not a complete housing-permit inventory.",
+    "No project-level deduplication; multiple records may describe one building.",
+    "Automated redaction is incomplete.",
+    "Blank work descriptions remain blank; they are missing text, not zero units.",
+    "Parcel numbers are not retained in the public snapshot."
+  ]
+}
