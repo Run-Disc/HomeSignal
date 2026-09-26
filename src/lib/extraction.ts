@@ -167,4 +167,5 @@ Return JSON only, matching the schema. Rules:
 8. citation IDs must be only those supplied. Do not invent IDs.
 9. Do not claim construction started, finished, passed inspection, became occupied, is affordable, or caused rent change.
 10. Provide a practical follow-up role and question without inventing contact details.
-11. schemaVersion must be "${SCHEMA_VERSION}".`;
+11. schemaVersion must be "${SCHEMA_VERSION}".
+12. Owner names, contractor names, street addresses, parcel identifiers, phones, and emails are not supplied. Do not invent them.`;

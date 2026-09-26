@@ -1,52 +1,67 @@
 # HomeSignal BUILD_STATUS
 
-Updated: 2026-09-26 ~09:50 America/New_York
+Updated: 2026-09-26 10:15 America/New_York
 
 ## Stage
 
-Core Track 2 workflow is implemented. Public snapshot regenerated after removing parcel identifiers and adding a description privacy scan. Next: tests/typecheck, `npm run dev`, browser inspection, local git commit. No public publish or event-form submission.
+Must-ship workflow is implemented and running locally. Public snapshot has no parcel identifiers. Privacy scan results below are from the 2026-09-26 ingest of the downloaded PLI dump. No event form was submitted.
 
-## Source (verified 2026-09-26)
+## Source (verified)
 
-- PLI resource `f4d1177a-f597-4c32-8cbf-7885f56253f6`
-- Dump rows obtained: **65,378** (catalog preview still listed 49,255)
-- 2025 Building + Building & Development Application unique IDs in public snapshot: **4,243**
-- Candidates: **727**; review-corpus allowlist: **120**; comparison sample: **20**
-- Commercial-class records with housing keywords (pre-privacy, same cohort size): **107**
-- Unit-hint descriptions: **37**
+- Resource: `f4d1177a-f597-4c32-8cbf-7885f56253f6`
+- Dump rows: **65,378** (catalog HTML preview still listed 49,255; product uses the dump)
+- 2025 Building / Building & Development Application unique IDs in public snapshot: **4,243**
+- Potential housing candidates: **727**
+- Review-corpus allowlist: **120**
+- Comparison sample: **20**
 - Blank descriptions: **2,417**
 - Snapshot version: `pli-2025-bda-v1`
 - Snapshot sha256: `283a311a5dde72bacf863a8dfe638ca62f624e45af17d97d0c3b4218a9dabf3d`
 
-## Privacy scan results (this ingest)
+## Privacy scan (automated ingest)
 
-Structured fields **not** written to the public snapshot, client types, model prompt, or CSV/print export: `owner_name`, `contractor_name`, `address`, `parcel_num` / `parcelId`, `latitude`, `longitude`, `total_project_value`, `council_district`, `ward`, `zip_code`.
+Public snapshot, `PermitRecord` / client types, model prompt payload, and CSV/print export **do not include** `parcelId`, `parcel_num`, `owner_name`, `contractor_name`, `address`, `latitude`, `longitude`, `total_project_value`, or contact details.
 
-Description scan on the 4,243 cohort records:
+Description scan on the 4,243 retained cohort records (tokens replace matches; no invented source prose):
 
-| Result | Count |
+| Check | Count |
 |---|---|
 | Records excluded for residual personal data after sanitization | **0** |
-| Descriptions with house-number street pattern replaced by `[REDACTED_ADDRESS]` | **21** |
+| House-number street patterns replaced with `[REDACTED_ADDRESS]` | **21** |
 | Email redactions | **0** |
 | Phone redactions | **0** |
-| Contact-phrase redactions | **0** |
-| Owner/contractor string matches in description | **0** |
+| Owner/contractor/contact-phrase redactions | **0** |
 
-The audit does not store the removed address strings. Automated redaction is incomplete. Builder inspection of `data/review-corpus-preview.json` is still required before any external model call.
+Audit counts do not store the removed strings. Automated redaction is incomplete. Inspect `data/review-corpus-preview.json` before any external model call.
 
-## Runtime AI
+## Checks
 
-No `EXTRACTION_API_KEY` in this environment. Mode is **source-review-only**. `saved-extractions.json` is `[]`. No genuine saved model responses exist.
+- `npm test`: **19 passed, 0 failed** (metrics, extraction validation, CSV safety, snapshot privacy including no `parcelId` in the public JSON files).
+- `npx tsc --noEmit`: exit 0.
+- Production `next build` is not required for the local demo; it was not re-run in this pass.
+- Runtime mode: **source-review-only** (`saved-extractions.json` is `[]`; no `EXTRACTION_API_KEY`).
 
-## How to run
+## Browser (this event window)
+
+- Overview: 4,243 / 727 record metrics, 2025 monthly issued-record chart, search for `BDA-2024-05307`.
+- Review: Commercial source class; description includes “TOTAL OF 12 DWELLING UNITS ABOVE”; no parcel field shown.
+- Sources: CC-BY, dump URL, parcel numbers listed among excluded fields.
+- Export: HTTP 200. Print/CSV omit parcel identifiers.
+- `POST /api/extract`: HTTP 200, `mode: source-review` (no runtime key).
+
+## Run
 
 ```bash
-export PATH="$PWD/.tools/node/bin:$PATH"   # or Node 22+
+export PATH="$PWD/.tools/node/bin:$PATH"
 npm install
 npm test
-npx tsc --noEmit
 npm run dev
 ```
 
 Open http://localhost:3000
+
+## Builder-only remaining actions
+
+1. Review the labeling sheet and corpus yourself.
+2. Optional live AI: `.env.local` with `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` (never commit).
+3. Public repo, 3–5 minute demo, and event-form submission are yours. Do not ask Cursor to attest eligibility.

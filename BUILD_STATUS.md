@@ -1,41 +1,67 @@
 # HomeSignal BUILD_STATUS
 
-Updated: 2026-09-26 ~09:57 America/New_York
+Updated: 2026-09-26 10:15 America/New_York
 
 ## Stage
 
-Core product is running locally through Overview → record review → export. Live AI is implemented but not demonstrated (no runtime key; 0 saved genuine responses).
+Must-ship workflow is implemented and running locally. Public snapshot has no parcel identifiers. Privacy scan results below are from the 2026-09-26 ingest of the downloaded PLI dump. No event form was submitted.
 
-## Verified in this session
+## Source (verified)
 
-- Time gate: Saturday 2026-09-26 after 9:00 ET.
-- PLI dump retrieved 2026-09-26 from `f4d1177a-f597-4c32-8cbf-7885f56253f6`. Downloaded rows 65,378 vs catalog HTML 49,255. Product uses the dump.
-- 2025 Building / Building & Development Application unique IDs: 4,243. Candidates: 727. Blank descriptions: 2,417. Commercial-class housing language present (BDA-2024-05307).
-- `npm test`: 17 passed, 0 failed. `npx tsc --noEmit` exit 0. `npm run build` succeeded (Next.js 15.5.26).
-- Browser at http://localhost:3000: metrics 4243 / 727; search found BDA-2024-05307; review page showed Commercial class and “TOTAL OF 12 DWELLING UNITS ABOVE”; Ask AI returned the no-key unavailable banner; Correct stored “corrected · Your local review”; export text included that permit, 12, and the permit-is-not-a-unit limitation; sources listed CC-BY and 0 saved examples.
+- Resource: `f4d1177a-f597-4c32-8cbf-7885f56253f6`
+- Dump rows: **65,378** (catalog HTML preview still listed 49,255; product uses the dump)
+- 2025 Building / Building & Development Application unique IDs in public snapshot: **4,243**
+- Potential housing candidates: **727**
+- Review-corpus allowlist: **120**
+- Comparison sample: **20**
+- Blank descriptions: **2,417**
+- Snapshot version: `pli-2025-bda-v1`
+- Snapshot sha256: `283a311a5dde72bacf863a8dfe638ca62f624e45af17d97d0c3b4218a9dabf3d`
 
-## Honest gaps
+## Privacy scan (automated ingest)
 
-- No live model call has succeeded. Cursor credits are not a runtime API key.
-- Evaluation sheet is unlabeled. No accuracy percentage.
-- No public git remote, hosted demo, or weekend video.
-- ACS, maps, extra years omitted.
-- Event form not submitted.
+Public snapshot, `PermitRecord` / client types, model prompt payload, and CSV/print export **do not include** `parcelId`, `parcel_num`, `owner_name`, `contractor_name`, `address`, `latitude`, `longitude`, `total_project_value`, or contact details.
+
+Description scan on the 4,243 retained cohort records (tokens replace matches; no invented source prose):
+
+| Check | Count |
+|---|---|
+| Records excluded for residual personal data after sanitization | **0** |
+| House-number street patterns replaced with `[REDACTED_ADDRESS]` | **21** |
+| Email redactions | **0** |
+| Phone redactions | **0** |
+| Owner/contractor/contact-phrase redactions | **0** |
+
+Audit counts do not store the removed strings. Automated redaction is incomplete. Inspect `data/review-corpus-preview.json` before any external model call.
+
+## Checks
+
+- `npm test`: **19 passed, 0 failed** (metrics, extraction validation, CSV safety, snapshot privacy including no `parcelId` in the public JSON files).
+- `npx tsc --noEmit`: exit 0.
+- Production `next build` is not required for the local demo; it was not re-run in this pass.
+- Runtime mode: **source-review-only** (`saved-extractions.json` is `[]`; no `EXTRACTION_API_KEY`).
+
+## Browser (this event window)
+
+- Overview: 4,243 / 727 record metrics, 2025 monthly issued-record chart, search for `BDA-2024-05307`.
+- Review: Commercial source class; description includes “TOTAL OF 12 DWELLING UNITS ABOVE”; no parcel field shown.
+- Sources: CC-BY, dump URL, parcel numbers listed among excluded fields.
+- Export: HTTP 200. Print/CSV omit parcel identifiers.
+- `POST /api/extract`: HTTP 200, `mode: source-review` (no runtime key).
 
 ## Run
 
-```
-cd homesignal
-export PATH="$PWD/.tools/node/bin:$PATH"   # if node is not on PATH
+```bash
+export PATH="$PWD/.tools/node/bin:$PATH"
 npm install
+npm test
 npm run dev
 ```
 
 Open http://localhost:3000
 
-## Next builder actions (shortest)
+## Builder-only remaining actions
 
-1. Inspect `data/evaluation/labeling-sheet.json` and the review corpus yourself.
-2. If you want live extraction, add `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` in `.env.local` only.
-3. Create a public repository from `homesignal/` and record the 3–5 minute demo.
-4. Submit the event form yourself. Do not ask Cursor to attest eligibility.
+1. Review the labeling sheet and corpus yourself.
+2. Optional live AI: `.env.local` with `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` (never commit).
+3. Public repo, 3–5 minute demo, and event-form submission are yours. Do not ask Cursor to attest eligibility.

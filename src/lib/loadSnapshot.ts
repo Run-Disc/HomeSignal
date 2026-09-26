@@ -4,30 +4,41 @@ import { SNAPSHOT_VERSION, SOURCE_RESOURCE_ID } from "./constants";
 import { sanitizedInputHash } from "./hash";
 import type { ClientPermit, PermitRecord } from "./types";
 
+const PUBLIC_RECORD_KEYS = [
+  "recordId",
+  "sourcePermitId",
+  "sourceResourceId",
+  "issueDate",
+  "permitTypeRaw",
+  "permitTypeNormalized",
+  "sourceClassRaw",
+  "workTypeRaw",
+  "sourceStatusRaw",
+  "neighborhood",
+  "workDescriptionSanitized",
+  "citationId",
+  "snapshotVersion",
+  "qualityFlags",
+  "candidateDiscovery",
+  "inReviewCorpus",
+  "inComparisonSample",
+] as const satisfies ReadonlyArray<keyof PermitRecord>;
+
 let cached: PermitRecord[] | null = null;
+
+function asPublicRecord(raw: Record<string, unknown>): PermitRecord {
+  const record = {} as PermitRecord;
+  for (const key of PUBLIC_RECORD_KEYS) {
+    (record as unknown as Record<string, unknown>)[key] = raw[key];
+  }
+  return record;
+}
 
 export function loadPermits(): PermitRecord[] {
   if (cached) return cached;
   const path = join(process.cwd(), "data/public/permits-2025.json");
   const parsed = JSON.parse(readFileSync(path, "utf8")) as Array<Record<string, unknown>>;
-  cached = parsed
-    .filter((r) => r.snapshotVersion === SNAPSHOT_VERSION)
-    .map((raw) => {
-      const {
-        parcelId: _parcelId,
-        parcel_num: _parcelNum,
-        owner_name: _owner,
-        contractor_name: _contractor,
-        address: _address,
-        ...rest
-      } = raw as Record<string, unknown> & { parcelId?: unknown; parcel_num?: unknown; owner_name?: unknown; contractor_name?: unknown; address?: unknown };
-      void _parcelId;
-      void _parcelNum;
-      void _owner;
-      void _contractor;
-      void _address;
-      return rest as unknown as PermitRecord;
-    });
+  cached = parsed.filter((r) => r.snapshotVersion === SNAPSHOT_VERSION).map(asPublicRecord);
   return cached;
 }
 

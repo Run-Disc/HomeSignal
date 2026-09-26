@@ -1,7 +1,9 @@
-import { SNAPSHOT_VERSION } from "./constants";
-import { loadPermits } from "./loadSnapshot";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { SNAPSHOT_VERSION } from "./constants";
+import { loadPermits } from "./loadSnapshot";
 
 describe("snapshot privacy and schema", () => {
   const records = loadPermits();
@@ -19,9 +21,17 @@ describe("snapshot privacy and schema", () => {
     );
   });
 
-  it("does not retain owner, contractor, address, or parcel keys", () => {
-    const sample = records[0] as unknown as Record<string, unknown>;
-    for (const key of [
+  it("public JSON files do not contain parcel identifiers", () => {
+    const raw = readFileSync(join(process.cwd(), "data/public/permits-2025.json"), "utf8");
+    assert.equal(raw.includes('"parcelId"'), false);
+    assert.equal(raw.includes('"parcel_num"'), false);
+    const rows = JSON.parse(raw) as Array<Record<string, unknown>>;
+    assert.equal(rows.length, records.length);
+    assert.ok(rows.every((row) => !("parcelId" in row) && !("parcel_num" in row)));
+  });
+
+  it("loaded records omit owner, contractor, address, and parcel keys", () => {
+    const forbidden = [
       "owner_name",
       "contractor_name",
       "address",
@@ -29,9 +39,12 @@ describe("snapshot privacy and schema", () => {
       "longitude",
       "parcelId",
       "parcel_num",
-    ]) {
-      assert.equal(key in sample, false);
-      assert.ok(records.every((r) => !(key in (r as unknown as Record<string, unknown>))));
+    ];
+    for (const record of records) {
+      const keys = Object.keys(record as unknown as Record<string, unknown>);
+      for (const key of forbidden) {
+        assert.equal(keys.includes(key), false, key);
+      }
     }
   });
 
