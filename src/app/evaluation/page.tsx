@@ -12,9 +12,9 @@ export default function EvaluationPage() {
       <main id="main" className="prose">
         <h1>Evaluation</h1>
         <p>
-          No independent accuracy percentage is reported. The labeling sheet in{" "}
-          <code>data/evaluation/labeling-sheet.json</code> is unlabeled. Cursor assembled the sheet from the
-          snapshot and did not fill ground-truth labels.
+          A readable 12-row worksheet for independent human labels is in{" "}
+          <code>data/evaluation/blind-label-worksheet.md</code>. Held-out IDs stay off that sheet’s answer
+          columns on purpose. Until those labels exist, housing-relevance agreement is not measured.
         </p>
         <p>
           Synthetic adversarial strings in <code>data/evaluation/adversarial-synthetic.json</code> are not City

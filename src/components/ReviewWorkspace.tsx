@@ -11,6 +11,7 @@ import {
   saveReviews,
 } from "@/lib/clientStore";
 import { COUNT_LABELS, DECISION_SUPPORT, SCOPE_LABELS } from "@/lib/constants";
+import { DISCOVERY_CAVEAT, explainDiscovery } from "@/lib/discovery";
 import { reviewerLabel } from "@/lib/briefing";
 import {
   SOURCE_REVIEW_STATUS,
@@ -18,6 +19,7 @@ import {
   extractionButtonLabel,
   shouldCallExtractionApi,
 } from "@/lib/extractUi";
+import { applyCountCorrection } from "@/lib/reviewLogic";
 import type { AiMode, ClientPermit } from "@/lib/types";
 import type {
   CountField,
@@ -80,9 +82,14 @@ export function ReviewWorkspace(props: {
   const [quote, setQuote] = useState("");
   const [countKey, setCountKey] = useState<CountField>("proposedTotalUnitCount");
   const [countValue, setCountValue] = useState("");
+  const [fieldError, setFieldError] = useState<{ field: "quote" | "countVal"; error: string } | null>(null);
   const requestGen = useRef(0);
 
   const current = reviews[record.recordId];
+  const stale = Boolean(current && current.sanitizedInputHash !== record.inputHash);
+  const blank = record.qualityFlags.includes("blank_description") || !record.workDescriptionSanitized;
+  const discovery = useMemo(() => explainDiscovery(record), [record]);
+  const sourceReviewMode = aiMode === "source-review" && !proposal;
 
   useEffect(() => {
     setProposal(loadCachedProposal(record.recordId, record.inputHash));
@@ -90,6 +97,9 @@ export function ReviewWorkspace(props: {
     setWaiting(false);
     setDraft(emptyFields());
     setReason("");
+    setQuote("");
+    setCountValue("");
+    setFieldError(null);
     const existing = loadReviews()[record.recordId];
     if (existing?.finalFields) setDraft(existing.finalFields);
   }, [record.recordId, record.inputHash, aiMode]);
@@ -203,11 +213,13 @@ export function ReviewWorkspace(props: {
     const next = { ...loadReviews(), [record.recordId]: decision };
     saveReviews(next);
     setReviews(next);
+    setFieldError(null);
+    setMessage(`Saved as ${decision.state.replaceAll("_", " ")}. ${reviewerLabel(decision.reviewerRole)}.`);
   }
 
   function accept() {
     if (!proposal) {
-      setMessage("There is no AI proposal to accept. Use manual source review instead.");
+      setMessage("There is no AI proposal to accept. Use Record human source review instead.");
       return;
     }
     persist({
@@ -224,39 +236,18 @@ export function ReviewWorkspace(props: {
     });
   }
 
-  function correct() {
-    const notes = [...draft.unsourcedNotes];
-    const n = countValue === "" ? null : Number(countValue);
-    if (n != null && Number.isFinite(n) && n >= 0) {
-      const desc = record.workDescriptionSanitized || "";
-      const idx = quote ? desc.indexOf(quote) : -1;
-      if (idx === -1) {
-        notes.push(`${COUNT_LABELS[countKey]} ${n} recorded as a reviewer note without matching source excerpt.`);
-        persist({
-          recordId: record.recordId,
-          snapshotVersion: record.snapshotVersion,
-          sanitizedInputHash: record.inputHash,
-          origin: proposal ? "ai_assisted_review" : "manual_source_review",
-          proposalVersion: proposal ? `${proposal.modelId}:${proposal.generatedAt}` : null,
-          state: "corrected",
-          reviewerRole: "local_reviewer",
-          timestamp: new Date().toISOString(),
-          finalFields: {
-            ...draft,
-            unsourcedNotes: notes,
-          },
-          reason: reason || "Corrected classification; numeric note is unsourced.",
-        });
-        return;
-      }
-      draft.countEvidence[countKey] = {
-        field: "workDescriptionSanitized",
-        quote,
-        start: idx,
-        end: idx + quote.length,
-        interpretation: reason || "Reviewer-selected excerpt",
-      };
-      draft[countKey] = n;
+  function saveSourceReview() {
+    const result = applyCountCorrection({
+      draft,
+      countKey,
+      countValue,
+      quote,
+      sourceText: record.workDescriptionSanitized || "",
+      reason,
+    });
+    if (!result.ok) {
+      setFieldError({ field: result.field, error: result.error });
+      return;
     }
     persist({
       recordId: record.recordId,
@@ -267,18 +258,23 @@ export function ReviewWorkspace(props: {
       state: "corrected",
       reviewerRole: "local_reviewer",
       timestamp: new Date().toISOString(),
-      finalFields: { ...draft, unsourcedNotes: notes },
-      reason: reason || "Corrected after source inspection.",
+      finalFields: result.fields,
+      reason: reason || "Recorded after inspecting the sanitized source text.",
     });
+    setDraft(result.fields);
   }
 
   function reject() {
+    if (!proposal) {
+      setMessage("There is no AI proposal to reject. Use Insufficient evidence or save a source review.");
+      return;
+    }
     persist({
       recordId: record.recordId,
       snapshotVersion: record.snapshotVersion,
       sanitizedInputHash: record.inputHash,
-      origin: proposal ? "ai_assisted_review" : "manual_source_review",
-      proposalVersion: proposal ? `${proposal.modelId}:${proposal.generatedAt}` : null,
+      origin: "ai_assisted_review",
+      proposalVersion: `${proposal.modelId}:${proposal.generatedAt}`,
       state: "rejected",
       reviewerRole: "local_reviewer",
       timestamp: new Date().toISOString(),
@@ -307,11 +303,18 @@ export function ReviewWorkspace(props: {
     delete next[record.recordId];
     saveReviews(next);
     setReviews(next);
+    setMessage("Local review cleared for this record.");
   }
 
   return (
     <div>
       <p className="banner">{props.modeDescription}</p>
+      {stale ? (
+        <p className="banner error">
+          This browser’s saved review was recorded against a different source-text hash. Re-read the description
+          and save again before treating the old decision as current.
+        </p>
+      ) : null}
       <div className="nav-row">
         <Link className="btn-secondary" href="/">
           Back to overview
@@ -326,6 +329,9 @@ export function ReviewWorkspace(props: {
             Next
           </Link>
         ) : null}
+        <Link className="btn" href={`/export?example=${encodeURIComponent(record.recordId)}`}>
+          Export with this example
+        </Link>
       </div>
       <div className="workspace">
         <section className="card" aria-labelledby="source-heading">
@@ -349,9 +355,18 @@ export function ReviewWorkspace(props: {
           <p className="metric-def">
             Street address, owner, and contractor fields were excluded. Automated redaction is incomplete.
           </p>
+          <h3>Why this record is in the queue</h3>
+          <p>{discovery.summary}</p>
+          <p className="metric-def">{DISCOVERY_CAVEAT}</p>
         </section>
-        <section className="card" aria-labelledby="extract-heading">
-          <h2 id="extract-heading">Extracted fields and review</h2>
+        <section className="card" aria-labelledby="review-heading">
+          <h2 id="review-heading">Record human source review</h2>
+          {sourceReviewMode ? (
+            <p className="metric-def">
+              No model proposal is loaded. Mark what the source supports. Do not invent a count if the text is
+              blank or ambiguous.
+            </p>
+          ) : null}
           <p>
             <button
               type="button"
@@ -404,11 +419,17 @@ export function ReviewWorkspace(props: {
             </div>
           ) : null}
 
-          <h3>Human review</h3>
+          {blank ? (
+            <p className="banner">
+              The source description is blank. Prefer <strong>Insufficient evidence</strong> instead of entering a
+              unit count.
+            </p>
+          ) : null}
+
           <p>
             Current status:{" "}
             <strong>{current?.state.replaceAll("_", " ") ?? "unreviewed"}</strong>
-            {current ? ` · ${reviewerLabel(current.reviewerRole)}` : null}
+            {current ? ` · ${reviewerLabel(current.reviewerRole)} · ${current.timestamp}` : null}
           </p>
           <label htmlFor="rel">Housing relevance</label>
           <select
@@ -433,7 +454,7 @@ export function ReviewWorkspace(props: {
             <option value="other">other</option>
             <option value="uncertain">uncertain</option>
           </select>
-          <label htmlFor="countField">Count field to correct</label>
+          <label htmlFor="countField">Count role to source (optional)</label>
           <select id="countField" value={countKey} onChange={(e) => setCountKey(e.target.value as CountField)}>
             {COUNT_KEYS.map((k) => (
               <option key={k} value={k}>
@@ -441,22 +462,56 @@ export function ReviewWorkspace(props: {
               </option>
             ))}
           </select>
-          <label htmlFor="countVal">Count (blank = unknown)</label>
-          <input id="countVal" value={countValue} onChange={(e) => setCountValue(e.target.value)} inputMode="numeric" />
+          <label htmlFor="countVal">Count (blank = unknown, not zero)</label>
+          <input
+            id="countVal"
+            value={countValue}
+            onChange={(e) => {
+              setCountValue(e.target.value);
+              if (fieldError?.field === "countVal") setFieldError(null);
+            }}
+            inputMode="numeric"
+            aria-invalid={fieldError?.field === "countVal"}
+            aria-describedby={fieldError?.field === "countVal" ? "count-error" : undefined}
+          />
+          {fieldError?.field === "countVal" ? (
+            <p id="count-error" className="field-error" role="alert">
+              {fieldError.error}
+            </p>
+          ) : null}
           <label htmlFor="quote">Exact supporting excerpt from the description</label>
-          <textarea id="quote" rows={3} value={quote} onChange={(e) => setQuote(e.target.value)} />
-          <label htmlFor="reason">Short reason</label>
+          <textarea
+            id="quote"
+            rows={3}
+            value={quote}
+            onChange={(e) => {
+              setQuote(e.target.value);
+              if (fieldError?.field === "quote") setFieldError(null);
+            }}
+            aria-invalid={fieldError?.field === "quote"}
+            aria-describedby={fieldError?.field === "quote" ? "quote-error" : undefined}
+          />
+          {fieldError?.field === "quote" ? (
+            <p id="quote-error" className="field-error" role="alert">
+              {fieldError.error}
+            </p>
+          ) : null}
+          <label htmlFor="reason">Follow-up question or short reason</label>
           <textarea id="reason" rows={2} value={reason} onChange={(e) => setReason(e.target.value)} />
           <div className="nav-row">
-            <button type="button" className="btn" onClick={accept}>
-              Accept supported fields
+            {proposal ? (
+              <button type="button" className="btn" onClick={accept}>
+                Accept supported fields
+              </button>
+            ) : null}
+            <button type="button" className="btn" onClick={saveSourceReview}>
+              Save source review
             </button>
-            <button type="button" className="btn-secondary" onClick={correct}>
-              Correct
-            </button>
-            <button type="button" className="btn-secondary" onClick={reject}>
-              Reject proposal
-            </button>
+            {proposal ? (
+              <button type="button" className="btn-secondary" onClick={reject}>
+                Reject proposal
+              </button>
+            ) : null}
             <button type="button" className="btn-secondary" onClick={insufficient}>
               Insufficient evidence
             </button>

@@ -2,8 +2,16 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { briefingCsv, briefingText } from "@/lib/briefing";
-import { SNAPSHOT_VERSION } from "@/lib/constants";
+import {
+  AMBIGUOUS_PERMIT_ID,
+  AMBIGUOUS_RECORD_ID,
+  FLAGSHIP_PERMIT_ID,
+  FLAGSHIP_RECORD_ID,
+  PAGE_SIZE,
+  SNAPSHOT_VERSION,
+} from "@/lib/constants";
+import { DISCOVERY_CAVEAT, explainDiscovery } from "@/lib/discovery";
+import { filtersToSearchParams } from "@/lib/filters";
 import {
   loadFailedIds,
   loadReviews,
@@ -32,6 +40,7 @@ export function OverviewClient(props: {
   const [failed, setFailed] = useState(loadFailedIds);
   const [sortKey, setSortKey] = useState<"issueDate" | "sourcePermitId" | "neighborhood">("issueDate");
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
 
   const cohort = useMemo(
     () =>
@@ -60,40 +69,51 @@ export function OverviewClient(props: {
     });
   }, [neighborhoodCohort, filters, reviews, sortKey, query]);
 
+  const pageCount = Math.max(1, Math.ceil(tableRows.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const pageRows = tableRows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
+  const from = tableRows.length === 0 ? 0 : safePage * PAGE_SIZE + 1;
+  const to = Math.min(tableRows.length, (safePage + 1) * PAGE_SIZE);
+  const exportHref = `/export?${filtersToSearchParams(filters, FLAGSHIP_RECORD_ID)}`;
+
   function updateFilter<K extends keyof Filters>(key: K, value: Filters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value }));
+    setPage(0);
   }
 
   return (
     <>
+      <section className="card decision-card" aria-labelledby="decision-heading">
+        <h2 id="decision-heading">Analyst decision this tool supports</h2>
+        <p>
+          Find a Pittsburgh PLI permit that may describe housing, inspect what the source actually says, decide
+          what is supported, name what remains unknown, and export a traceable follow-up note.
+        </p>
+        <p className="metric-def">
+          Source: City of Pittsburgh PLI Permits via WPRDC, retrieved {props.retrievedAt.slice(0, 10)}. An issued
+          permit record is not construction start, completion, or occupancy.
+        </p>
+        <div className="nav-row">
+          <Link className="btn" href={`/review/${encodeURIComponent(FLAGSHIP_RECORD_ID)}`}>
+            Explore a real example ({FLAGSHIP_PERMIT_ID})
+          </Link>
+          <Link className="btn-secondary" href={`/review/${encodeURIComponent(AMBIGUOUS_RECORD_ID)}`}>
+            Open an ambiguous case ({AMBIGUOUS_PERMIT_ID})
+          </Link>
+          <Link className="btn-secondary" href={exportHref}>
+            Export the current briefing
+          </Link>
+        </div>
+        <p className="metric-def">
+          Flagship example: {FLAGSHIP_PERMIT_ID} (2025-04-23, Middle Hill, administrative class Commercial, New
+          Construction). Sanitized text includes “TOTAL OF 12 DWELLING UNITS ABOVE.” That is proposed-unit
+          language on an issued record, not evidence of twelve completed homes.
+        </p>
+      </section>
       <p className="banner">
         Issued permit records are not completed homes. Candidate selection is a discovery aid, not a
         completeness guarantee. Local reviews stay in this browser and do not change City data.
       </p>
-      <section className="card demo-path" aria-labelledby="demo-path-heading">
-        <h2 id="demo-path-heading">Two-minute judge path</h2>
-        <ol>
-          <li>
-            Read the four metric cards. They count <strong>permit records</strong>, not homes built.
-          </li>
-          <li>
-            Search permit ID <code>BDA-2024-05307</code> and open it. Commercial class can still contain housing
-            language.
-          </li>
-          <li>
-            Read “TOTAL OF 12 DWELLING UNITS ABOVE.” That is proposed-unit language on an issued permit, not
-            occupancy.
-          </li>
-          <li>
-            If the page says source-review / no runtime key, do not wait for AI. Record a manual review
-            (Correct or Insufficient evidence).
-          </li>
-          <li>
-            Open Export briefing. Print or CSV includes reviewed evidence only. There is still no citywide
-            homes-built total.
-          </li>
-        </ol>
-      </section>
       <form className="filters" aria-label="Cohort filters">
         <div>
           <label htmlFor="year">Issue year</label>
@@ -144,12 +164,15 @@ export function OverviewClient(props: {
           </select>
         </div>
         <div>
-          <label htmlFor="query">Find permit ID</label>
+          <label htmlFor="query">Find permit ID or neighborhood</label>
           <input
             id="query"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="e.g. BDA-2024-05307"
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(0);
+            }}
+            placeholder={`e.g. ${FLAGSHIP_PERMIT_ID}`}
           />
         </div>
         <div>
@@ -159,6 +182,7 @@ export function OverviewClient(props: {
             onClick={() => {
               setFilters(defaultFilters());
               setQuery("");
+              setPage(0);
             }}
           >
             Reset filters
@@ -172,9 +196,9 @@ export function OverviewClient(props: {
         </h2>
         <div className="metrics">
           <article className="card">
-            <h3>Permit records in selected cohort</h3>
+            <h3>Issued permit records</h3>
             <div className="metric-value">{metrics.permitRecordsInCohort}</div>
-            <p className="metric-def">Issued Building/BDA records matching year and neighborhood. Not housing units.</p>
+            <p className="metric-def">Building/BDA records matching year and neighborhood. Not housing units.</p>
           </article>
           <article className="card">
             <h3>Potential housing records</h3>
@@ -184,7 +208,7 @@ export function OverviewClient(props: {
           <article className="card">
             <h3>Reviewed records</h3>
             <div className="metric-value">{metrics.reviewedRecords}</div>
-            <p className="metric-def">Local accept/correct/reject/insufficient decisions for the current snapshot.</p>
+            <p className="metric-def">Local accept/correct/reject/insufficient decisions for snapshot {SNAPSHOT_VERSION}.</p>
           </article>
           <article className="card">
             <h3>Needs review</h3>
@@ -210,8 +234,8 @@ export function OverviewClient(props: {
       <section className="chart card" aria-labelledby="monthly-heading">
         <h2 id="monthly-heading">Monthly issued-record activity</h2>
         <p className="metric-def">
-          Counts issued records in the selected cohort by <code>issue_date</code> month. This chart uses the
-          cohort, not only candidates.
+          Counts issued records in the selected cohort by <code>issue_date</code> month. This is not a housing
+          production chart.
         </p>
         <div role="img" aria-label="Bar chart of issued records by month">
           {metrics.monthlyIssued.map((row) => {
@@ -247,15 +271,31 @@ export function OverviewClient(props: {
       </section>
 
       <p id="table-count" role="status" aria-live="polite">
-        Showing {tableRows.length} rows. Open a record to inspect source text and record a review.
+        Showing {from}–{to} of {tableRows.length} matching records (page {safePage + 1} of {pageCount}). Metric
+        cards above use the full selected cohort, not this page. Search, sort, and filters still cover every
+        matching record.
       </p>
+      <div className="nav-row print-hide" aria-label="Record list pagination">
+        <button type="button" className="btn-secondary" disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>
+          Previous page
+        </button>
+        <button
+          type="button"
+          className="btn-secondary"
+          disabled={safePage >= pageCount - 1}
+          onClick={() => setPage(safePage + 1)}
+        >
+          Next page
+        </button>
+      </div>
       <ul className="record-cards">
-        {tableRows.length === 0 ? (
+        {pageRows.length === 0 ? (
           <li className="card">No records match these filters. Reset filters or choose another neighborhood.</li>
         ) : (
-          tableRows.map((row) => {
+          pageRows.map((row) => {
             const review = reviews[row.recordId];
             const state = (review?.state ?? "unreviewed") as ReviewState;
+            const discovery = explainDiscovery(row);
             return (
               <li key={`card-${row.recordId}`} className="card record-card">
                 <Link className="record-card-link" href={`/review/${encodeURIComponent(row.recordId)}`}>
@@ -264,6 +304,7 @@ export function OverviewClient(props: {
                     {row.issueDate} · {row.neighborhood} · {row.sourceClassRaw ?? "Unknown"}
                   </span>
                   <span className={statusClass(state)}>{state.replaceAll("_", " ")}</span>
+                  <span className="metric-def">{discovery.summary}</span>
                 </Link>
               </li>
             );
@@ -293,27 +334,20 @@ export function OverviewClient(props: {
               <th>Source class</th>
               <th>Suggested scope</th>
               <th>Proposed-unit mention</th>
-              <th>Evidence state</th>
+              <th>Why in queue</th>
               <th>Review</th>
             </tr>
           </thead>
           <tbody>
-            {tableRows.length === 0 ? (
+            {pageRows.length === 0 ? (
               <tr>
                 <td colSpan={8}>No records match these filters. Reset filters or choose another neighborhood.</td>
               </tr>
             ) : (
-              tableRows.map((row) => {
+              pageRows.map((row) => {
                 const review = reviews[row.recordId];
                 const state = (review?.state ?? "unreviewed") as ReviewState;
-                const evidence =
-                  row.qualityFlags.includes("blank_description")
-                    ? "Blank description"
-                    : row.inComparisonSample
-                      ? "Comparison sample"
-                      : row.candidateDiscovery.selected
-                        ? "Candidate keyword/work type"
-                        : "Not in candidate set";
+                const discovery = explainDiscovery(row);
                 return (
                   <tr key={row.recordId}>
                     <td className="record-id">
@@ -328,7 +362,7 @@ export function OverviewClient(props: {
                         ? String(review.finalFields.proposedTotalUnitCount)
                         : "Unknown"}
                     </td>
-                    <td>{evidence}</td>
+                    <td>{discovery.summary}</td>
                     <td>
                       <span className={statusClass(state)}>{state.replaceAll("_", " ")}</span>
                     </td>
@@ -339,10 +373,11 @@ export function OverviewClient(props: {
           </tbody>
         </table>
       </div>
+      <p className="metric-def">{DISCOVERY_CAVEAT}</p>
 
       <div className="nav-row print-hide">
-        <Link className="btn" href="/export">
-          Open export with current local reviews
+        <Link className="btn" href={exportHref}>
+          Open export with current filters and local reviews
         </Link>
         <button
           type="button"
@@ -356,33 +391,6 @@ export function OverviewClient(props: {
           }}
         >
           Reset demo (local only)
-        </button>
-        <button
-          type="button"
-          className="btn-secondary"
-          onClick={() => {
-            const text = briefingText({
-              preparedAt: new Date().toISOString(),
-              filters,
-              metrics,
-              snapshotVersion: SNAPSHOT_VERSION,
-              snapshotHash: props.snapshotHash,
-              sourceUpdateDate: props.sourceUpdateDate,
-              mode: props.mode,
-              records: tableRows,
-              reviews,
-            });
-            const blob = new Blob([briefingCsv(tableRows, reviews)], { type: "text/csv;charset=utf-8" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "homesignal-reviewed-evidence.csv";
-            a.click();
-            URL.revokeObjectURL(url);
-            void text;
-          }}
-        >
-          Download reviewed CSV
         </button>
       </div>
     </>

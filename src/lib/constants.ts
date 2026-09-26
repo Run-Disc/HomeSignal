@@ -1,6 +1,11 @@
 export const SNAPSHOT_VERSION = "pli-2025-bda-v1";
 export const PROMPT_VERSION = "homesignal-extract-v1";
 export const SCHEMA_VERSION = "extraction-proposal-v1";
+export const PAGE_SIZE = 25;
+export const FLAGSHIP_RECORD_ID = "pli:BDA-2024-05307";
+export const FLAGSHIP_PERMIT_ID = "BDA-2024-05307";
+export const AMBIGUOUS_RECORD_ID = "pli:BDA-2025-01572";
+export const AMBIGUOUS_PERMIT_ID = "BDA-2025-01572";
 export const REVIEW_STORAGE_KEY = `homesignal.reviews.${SNAPSHOT_VERSION}`;
 export const EXTRACTION_CACHE_KEY = `homesignal.extractionCache.${SNAPSHOT_VERSION}`;
 export const FAILED_EXTRACTION_KEY = `homesignal.failedExtractions.${SNAPSHOT_VERSION}`;

@@ -98,9 +98,15 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   color: var(--ink);
 }
 .banner.error { background: var(--error-soft); border-color: #d47a73; }
-.demo-path { margin: 16px 0; }
-.demo-path ol { margin: 8px 0 0; padding-left: 1.3rem; }
-.demo-path li { margin: 6px 0; }
+.decision-card { margin: 16px 0; }
+.decision-card p { margin: 0 0 8px; }
+.field-error {
+  color: var(--error);
+  background: var(--error-soft);
+  border: 1px solid #d47a73;
+  padding: 8px 10px;
+  margin: 4px 0 12px;
+}
 .filters {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -189,7 +195,18 @@ footer.page-foot { margin-top: 32px; color: var(--muted); font-size: 0.9rem; }
   .nav-row .btn, .nav-row .btn-secondary, .nav-row .btn-danger { width: auto; }
 }
 @media print {
-  .top-actions, .filters, .print-hide, .demo-path, .record-cards { display: none !important; }
-  body { background: white; }
-  .shell { max-width: none; }
+  .skip, .top-actions, .filters, .print-hide, .demo-path, .record-cards, .nav-row, footer.page-foot {
+    display: none !important;
+  }
+  body { background: white; color: #111; font-size: 12pt; }
+  .shell { max-width: none; padding: 0; }
+  .mode-pill, .meta-pill { border: 0; background: transparent; padding: 0; }
+  .briefing-text {
+    white-space: pre-wrap;
+    font-size: 11pt;
+    line-height: 1.4;
+    border: 0;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  a { color: inherit; text-decoration: none; }
 }

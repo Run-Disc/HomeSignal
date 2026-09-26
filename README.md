@@ -14,11 +14,11 @@ The required public demo is a **3–5 minute video**. Narration is in `DEMO_SCRI
 
 In the running app:
 
-1. Open Overview. The four cards count **issued permit records**, not homes built.
-2. Search `BDA-2024-05307` and open the record. It is Commercial class with “TOTAL OF 12 DWELLING UNITS ABOVE.”
-3. Treat that sentence as proposed-unit language on an issued permit, not occupancy.
-4. This deployment is **source-review** unless you add a runtime key: do not wait for AI. Record a manual Correct or Insufficient-evidence decision.
-5. Open Export briefing. Print/CSV covers reviewed evidence only. There is no citywide homes-built total.
+1. Open Overview. The question is: inspect a permit description, decide what is supported, export a follow-up note. The four cards count **issued permit records**, not homes built.
+2. Click **Explore a real example** (`BDA-2024-05307`). It is Commercial class with “TOTAL OF 12 DWELLING UNITS ABOVE.”
+3. Treat that sentence as proposed-unit language on an issued permit, not occupancy. A labeled keyword/work-type discovery aid explains why the record is in the queue; it is not model output.
+4. This deployment is **source-review**: there is no runtime key and no saved genuine model response. Use **Save source review** or **Insufficient evidence**. Accept/Reject appear only if a proposal exists.
+5. Open Export briefing. Print/CSV covers **reviewed** evidence only, with the current filter scope named on the page. There is no citywide homes-built total. The record list is paginated (25 per page); search still covers the full matching set.
 
 ## Libraries, frameworks, APIs, and tools
 

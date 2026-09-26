@@ -13,7 +13,8 @@ The app includes a server-side extraction route (`POST /api/extract`) that can c
 As of this document, **no runtime key is configured in the repository**, and **`data/public/saved-extractions.json` is an empty list**. Therefore:
 
 - The working demo path is source review + local human decisions + deterministic metrics/export.
-- On source-review deployments the review action is labeled **“Why AI extraction is unavailable”** and does not show “Requesting extraction.”
+- On source-review deployments the review workspace leads with **Record human source review**. Accept/Reject are hidden until a proposal exists. A secondary control still explains **Why AI extraction is unavailable** and does not show “Requesting extraction.”
+- A deterministic keyword/work-type discovery aid can show why a record entered the queue. It is not model output and can miss records or include false positives.
 - The UI must not label a missing live call as AI analysis.
 - If a live call later succeeds, genuine responses may be saved with original timestamp, model id, record id, and input hash, and replayed as “Previously generated.”
 

@@ -74,4 +74,12 @@ describe("snapshot privacy and schema", () => {
     assert.ok(blanks.length > 0);
     assert.ok(blanks.every((r) => !r.workDescriptionSanitized));
   });
+
+  it("includes the documented flagship commercial example", () => {
+    const flagship = records.find((r) => r.sourcePermitId === "BDA-2024-05307");
+    assert.ok(flagship);
+    assert.equal(flagship?.neighborhood, "Middle Hill");
+    assert.equal(flagship?.sourceClassRaw, "Commercial");
+    assert.match(flagship?.workDescriptionSanitized || "", /TOTAL OF 12 DWELLING UNITS ABOVE/);
+  });
 });

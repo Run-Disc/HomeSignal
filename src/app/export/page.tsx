@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -11,12 +12,14 @@ export default function ExportPage() {
   const snapshotHash = createHash("sha256").update(snapshotBytes).digest("hex");
   const manifest = sourceManifest();
   return (
-    <ExportClient
-      records={permits}
-      snapshotHash={snapshotHash}
-      sourceUpdateDate={manifest.sourceUpdateDate}
-      mode={modeDescription(currentAiMode())}
-      snapshotDate={manifest.retrievalDate}
-    />
+    <Suspense fallback={<p>Loading briefing…</p>}>
+      <ExportClient
+        records={permits}
+        snapshotHash={snapshotHash}
+        sourceUpdateDate={manifest.sourceUpdateDate}
+        mode={modeDescription(currentAiMode())}
+        snapshotDate={manifest.retrievalDate}
+      />
+    </Suspense>
   );
 }

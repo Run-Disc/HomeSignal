@@ -8,7 +8,7 @@
 - Story counts, bedroom counts, and valuations are not unit counts.
 - Residential and commercial are administrative classes. Pittsburgh commercial records can include housing.
 - Permit ID uniqueness in this snapshot does not mean one permit per development.
-- Candidate keyword selection is a discovery aid. Excluded records are not proven to contain no housing.
+- Candidate keyword selection is a discovery aid. It can miss housing language and can include false positives. Excluded records are not proven to contain no housing.
 - Missing, unknown, unsupported, not applicable, and zero are different states.
 - This snapshot is not a representative sample of every Pittsburgh development project and is not proof of complete source coverage.
 - Catalog HTML preview counts (49,255) disagreed with the downloaded dump (65,378). The dump is used; completeness of every month in 2025 was not independently audited against City systems.

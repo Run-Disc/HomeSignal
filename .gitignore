@@ -3,6 +3,7 @@ node_modules
 out
 .tools
 tmp
+.tmp
 .env
 .env.local
 .env*.local

@@ -17,7 +17,9 @@ Composition targeted (counts are sheet membership, not model scores):
 - Comparison records without discovery keywords
 - Blank descriptions
 
-Until the builder completes labels, housing-relevance agreement, scope agreement, and count-type accuracy are **not measured**.
+A 12-row human worksheet is in `data/evaluation/blind-label-worksheet.md` (held-out IDs omitted from the answer columns). Cursor did not fill those labels.
+
+Until the builder completes independent labels, housing-relevance agreement, scope agreement, and count-type accuracy are **not measured**.
 
 ## Held-out IDs (do not use while iterating on the prompt)
 
@@ -35,6 +37,9 @@ Automated validator tests live in `src/lib/extraction.test.ts` and currently che
 
 - Metric denominators and review-state updates (`src/lib/metrics.test.ts`)
 - CSV formula-prefix neutralization (`src/lib/csv.test.ts`)
+- Manual counts become sourced only with an exact matching quote (`src/lib/reviewLogic.test.ts`)
+- Briefing CSV omits unreviewed candidates (`src/lib/briefing.test.ts`)
+- Keyword/work-type discovery aid is labeled as fallible, not as a model (`src/lib/discovery.test.ts`)
 - Proposal validation rejects extra keys, missing evidence, unmatched quotes, record mismatch, and class-as-count evidence (`src/lib/extraction.test.ts`)
 
 ## Release targets not yet demonstrated with a live model

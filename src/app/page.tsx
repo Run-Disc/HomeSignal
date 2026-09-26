@@ -28,7 +28,7 @@ export default function HomePage() {
         <details className="defs">
           <summary>What these counts mean</summary>
           <ul>
-            <li>A permit record is not a housing unit.</li>
+            <li>Issued permit records, potential housing records, reviewed records, and needs-review counts are record counts, not homes built.</li>
             <li>An issued or “Completed” source status is not proof that construction finished or a home is occupied.</li>
             <li>Potential housing records are selected by a project keyword/work-type list. A record excluded by the filter is not proven to contain no housing.</li>
             <li>There is no aggregate homes-built number in this product.</li>
