@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { CITY_PERMIT_GUIDANCE, ONESTOP, SOURCE_DUMP, SOURCE_LANDING, SOURCE_RESOURCE } from "@/lib/constants";
 import { currentAiMode, modeDescription, readSavedExamples } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
@@ -81,6 +82,7 @@ export default function SourcesPage() {
           <Link href="/">Overview</Link>
         </p>
       </main>
+      <SiteFooter />
     </div>
   );
 }

@@ -70,6 +70,30 @@ export function OverviewClient(props: {
         Issued permit records are not completed homes. Candidate selection is a discovery aid, not a
         completeness guarantee. Local reviews stay in this browser and do not change City data.
       </p>
+      <section className="card demo-path" aria-labelledby="demo-path-heading">
+        <h2 id="demo-path-heading">Two-minute judge path</h2>
+        <ol>
+          <li>
+            Read the four metric cards. They count <strong>permit records</strong>, not homes built.
+          </li>
+          <li>
+            Search permit ID <code>BDA-2024-05307</code> and open it. Commercial class can still contain housing
+            language.
+          </li>
+          <li>
+            Read “TOTAL OF 12 DWELLING UNITS ABOVE.” That is proposed-unit language on an issued permit, not
+            occupancy.
+          </li>
+          <li>
+            If the page says source-review / no runtime key, do not wait for AI. Record a manual review
+            (Correct or Insufficient evidence).
+          </li>
+          <li>
+            Open Export briefing. Print or CSV includes reviewed evidence only. There is still no citywide
+            homes-built total.
+          </li>
+        </ol>
+      </section>
       <form className="filters" aria-label="Cohort filters">
         <div>
           <label htmlFor="year">Issue year</label>
@@ -222,24 +246,46 @@ export function OverviewClient(props: {
         </table>
       </section>
 
-      <p>
+      <p id="table-count" role="status" aria-live="polite">
         Showing {tableRows.length} rows. Open a record to inspect source text and record a review.
       </p>
-      <div className="table-wrap">
+      <ul className="record-cards">
+        {tableRows.length === 0 ? (
+          <li className="card">No records match these filters. Reset filters or choose another neighborhood.</li>
+        ) : (
+          tableRows.map((row) => {
+            const review = reviews[row.recordId];
+            const state = (review?.state ?? "unreviewed") as ReviewState;
+            return (
+              <li key={`card-${row.recordId}`} className="card record-card">
+                <Link className="record-card-link" href={`/review/${encodeURIComponent(row.recordId)}`}>
+                  <span className="record-card-id">{row.sourcePermitId}</span>
+                  <span>
+                    {row.issueDate} · {row.neighborhood} · {row.sourceClassRaw ?? "Unknown"}
+                  </span>
+                  <span className={statusClass(state)}>{state.replaceAll("_", " ")}</span>
+                </Link>
+              </li>
+            );
+          })
+        )}
+      </ul>
+      <div className="table-wrap desktop-table">
         <table>
+          <caption className="visually-hidden">Potential housing permit records in the current filter set</caption>
           <thead>
             <tr>
-              <th>
+              <th aria-sort={sortKey === "sourcePermitId" ? "ascending" : "none"}>
                 <button type="button" className="btn-secondary" onClick={() => setSortKey("sourcePermitId")}>
                   Permit ID
                 </button>
               </th>
-              <th>
+              <th aria-sort={sortKey === "issueDate" ? "ascending" : "none"}>
                 <button type="button" className="btn-secondary" onClick={() => setSortKey("issueDate")}>
                   Issue date
                 </button>
               </th>
-              <th>
+              <th aria-sort={sortKey === "neighborhood" ? "ascending" : "none"}>
                 <button type="button" className="btn-secondary" onClick={() => setSortKey("neighborhood")}>
                   Neighborhood
                 </button>
@@ -270,7 +316,7 @@ export function OverviewClient(props: {
                         : "Not in candidate set";
                 return (
                   <tr key={row.recordId}>
-                    <td>
+                    <td className="record-id">
                       <Link href={`/review/${encodeURIComponent(row.recordId)}`}>{row.sourcePermitId}</Link>
                     </td>
                     <td>{row.issueDate}</td>

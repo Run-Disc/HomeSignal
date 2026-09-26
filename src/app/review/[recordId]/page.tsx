@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/AppHeader";
 import { ReviewWorkspace } from "@/components/ReviewWorkspace";
+import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode, modeDescription } from "@/lib/extractClient";
 import { loadPermits, sourceManifest, toClientPermit } from "@/lib/loadSnapshot";
 
@@ -33,8 +34,10 @@ export default async function ReviewPage({
           record={record}
           neighbors={{ prev, next }}
           modeDescription={modeDescription(mode)}
+          aiMode={mode}
         />
       </main>
+      <SiteFooter />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { briefingCsv, briefingText } from "@/lib/briefing";
 import { SNAPSHOT_VERSION } from "@/lib/constants";
 import { loadFailedIds, loadReviews } from "@/lib/clientStore";
@@ -65,6 +66,7 @@ export function ExportClient(props: {
         </div>
         <pre className="source-text">{text}</pre>
       </main>
+      <SiteFooter />
     </div>
   );
 }

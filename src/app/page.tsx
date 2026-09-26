@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { AppHeader } from "@/components/AppHeader";
 import { OverviewClient } from "@/components/OverviewClient";
+import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode, modeDescription } from "@/lib/extractClient";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -22,6 +22,7 @@ export default function HomePage() {
         snapshotDate={manifest.retrievalDate}
         modeLabel={`AI mode: ${mode}`}
         exportHref="/export"
+        isHome
       />
       <main id="main">
         <details className="defs">
@@ -42,10 +43,7 @@ export default function HomePage() {
           retrievedAt={manifest.retrievalDate}
         />
       </main>
-      <footer className="page-foot">
-        Data: City of Pittsburgh PLI Permits via WPRDC, Creative Commons Attribution.{" "}
-        <Link href="/sources">Sources and method</Link> · <Link href="/limitations">Limitations</Link>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

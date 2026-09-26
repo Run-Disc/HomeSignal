@@ -12,7 +12,13 @@ import {
 } from "@/lib/clientStore";
 import { COUNT_LABELS, DECISION_SUPPORT, SCOPE_LABELS } from "@/lib/constants";
 import { reviewerLabel } from "@/lib/briefing";
-import type { ClientPermit } from "@/lib/types";
+import {
+  SOURCE_REVIEW_STATUS,
+  countsAsFailedLiveExtraction,
+  extractionButtonLabel,
+  shouldCallExtractionApi,
+} from "@/lib/extractUi";
+import type { AiMode, ClientPermit } from "@/lib/types";
 import type {
   CountField,
   ExtractionProposal,
@@ -59,12 +65,15 @@ export function ReviewWorkspace(props: {
   record: ClientPermit;
   neighbors: { prev: string | null; next: string | null };
   modeDescription: string;
+  aiMode: AiMode;
 }) {
-  const { record } = props;
+  const { record, aiMode } = props;
   const [reviews, setReviews] = useState(loadReviews);
   const [proposal, setProposal] = useState<ExtractionProposal | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(
+    aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null,
+  );
+  const [waiting, setWaiting] = useState(false);
   const [selectedField, setSelectedField] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReviewedFields>(emptyFields);
   const [reason, setReason] = useState("");
@@ -77,18 +86,24 @@ export function ReviewWorkspace(props: {
 
   useEffect(() => {
     setProposal(loadCachedProposal(record.recordId, record.inputHash));
-    setMessage(null);
+    setMessage(aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null);
+    setWaiting(false);
     setDraft(emptyFields());
     setReason("");
     const existing = loadReviews()[record.recordId];
     if (existing?.finalFields) setDraft(existing.finalFields);
-  }, [record.recordId, record.inputHash]);
+  }, [record.recordId, record.inputHash, aiMode]);
 
   const requestExtract = useCallback(async () => {
+    if (!shouldCallExtractionApi(aiMode)) {
+      setWaiting(false);
+      setMessage(SOURCE_REVIEW_STATUS);
+      return;
+    }
     const gen = requestGen.current + 1;
     requestGen.current = gen;
-    setLoading(true);
-    setMessage(null);
+    setWaiting(true);
+    setMessage("Waiting for a model response. You can still review the source text on the left.");
     try {
       const cached = loadCachedProposal(record.recordId, record.inputHash);
       if (cached) {
@@ -101,11 +116,19 @@ export function ReviewWorkspace(props: {
         );
         return;
       }
-      const res = await fetch("/api/extract", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recordId: record.recordId }),
-      });
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 15000);
+      let res: Response;
+      try {
+        res = await fetch("/api/extract", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ recordId: record.recordId }),
+          signal: controller.signal,
+        });
+      } finally {
+        window.clearTimeout(timer);
+      }
       const data = (await res.json()) as {
         status: string;
         proposal?: ExtractionProposal;
@@ -123,18 +146,24 @@ export function ReviewWorkspace(props: {
             : `Live extraction ${data.proposal.generatedAt} · ${data.proposal.modelId}`,
         );
       } else {
-        const ids = new Set(loadFailedIds());
-        ids.add(record.recordId);
-        const next = [...ids];
-        saveFailedIds(next);
+        if (countsAsFailedLiveExtraction(aiMode, data.status)) {
+          const ids = new Set(loadFailedIds());
+          ids.add(record.recordId);
+          saveFailedIds([...ids]);
+        }
         setMessage(data.message || "AI extraction unavailable; source review still works.");
       }
-    } catch {
-      setMessage("AI extraction unavailable; source review still works.");
+    } catch (error) {
+      const aborted = error instanceof DOMException && error.name === "AbortError";
+      setMessage(
+        aborted
+          ? "The extraction request timed out after 15 seconds. Source review still works."
+          : "AI extraction unavailable; source review still works.",
+      );
     } finally {
-      setLoading(false);
+      if (requestGen.current === gen) setWaiting(false);
     }
-  }, [record.recordId, record.inputHash]);
+  }, [record.recordId, record.inputHash, aiMode]);
 
   const highlight = useMemo(() => {
     const text = record.workDescriptionSanitized || "";
@@ -324,11 +353,24 @@ export function ReviewWorkspace(props: {
         <section className="card" aria-labelledby="extract-heading">
           <h2 id="extract-heading">Extracted fields and review</h2>
           <p>
-            <button type="button" className="btn" disabled={loading} onClick={() => void requestExtract()}>
-              {loading ? "Requesting extraction…" : "Ask AI to extract evidence"}
+            <button
+              type="button"
+              className={aiMode === "source-review" ? "btn-secondary" : "btn"}
+              disabled={waiting}
+              aria-describedby="extract-status"
+              onClick={() => void requestExtract()}
+            >
+              {extractionButtonLabel(aiMode, waiting)}
             </button>
           </p>
-          {message ? <p className={message.includes("unavailable") ? "banner error" : "banner"}>{message}</p> : null}
+          <p
+            id="extract-status"
+            className={message && /timed out/i.test(message) ? "banner error" : "banner"}
+            role="status"
+            aria-live="polite"
+          >
+            {message ?? "No AI proposal loaded. You can still complete a manual source review."}
+          </p>
           {proposal ? (
             <div>
               <p>
@@ -360,9 +402,7 @@ export function ReviewWorkspace(props: {
                 Next: {proposal.followUpRole} — {proposal.followUpQuestion}
               </p>
             </div>
-          ) : (
-            <p>No AI proposal loaded. You can still complete a manual source review.</p>
-          )}
+          ) : null}
 
           <h3>Human review</h3>
           <p>

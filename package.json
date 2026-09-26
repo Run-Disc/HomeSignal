@@ -2,6 +2,9 @@
   "name": "homesignal",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "description": "HomeSignal: Permit Evidence Observatory — Pittsburgh PLI housing-permit evidence review",
   "scripts": {
     "dev": "next dev --port 3000",

@@ -13,6 +13,7 @@ The app includes a server-side extraction route (`POST /api/extract`) that can c
 As of this document, **no runtime key is configured in the repository**, and **`data/public/saved-extractions.json` is an empty list**. Therefore:
 
 - The working demo path is source review + local human decisions + deterministic metrics/export.
+- On source-review deployments the review action is labeled **“Why AI extraction is unavailable”** and does not show “Requesting extraction.”
 - The UI must not label a missing live call as AI analysis.
 - If a live call later succeeds, genuine responses may be saved with original timestamp, model id, record id, and input hash, and replayed as “Previously generated.”
 

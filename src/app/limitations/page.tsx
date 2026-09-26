@@ -1,4 +1,5 @@
 import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
@@ -30,6 +31,7 @@ export default function LimitationsPage() {
         </ul>
         <p>Decision support only. Verify project details and completion with the responsible public authority.</p>
       </main>
+      <SiteFooter />
     </div>
   );
 }

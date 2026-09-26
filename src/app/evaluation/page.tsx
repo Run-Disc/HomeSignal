@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
@@ -28,6 +29,7 @@ export default function EvaluationPage() {
           <Link href="/">Overview</Link> · <Link href="/sources">Sources</Link>
         </p>
       </main>
+      <SiteFooter />
     </div>
   );
 }
