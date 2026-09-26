@@ -84,37 +84,80 @@ export function OverviewClient(props: {
   return (
     <>
       <section className="card decision-card" aria-labelledby="decision-heading">
-        <h2 id="decision-heading">Analyst decision this tool supports</h2>
+        <p className="page-kicker">Start the demo here</p>
+        <h2 id="decision-heading">Inspect one issued permit, then export a note</h2>
         <p>
           Find a Pittsburgh PLI permit that may describe housing, inspect what the source actually says, decide
-          what is supported, name what remains unknown, and export a traceable follow-up note.
-        </p>
-        <p className="metric-def">
-          Source: City of Pittsburgh PLI Permits via WPRDC, retrieved {props.retrievedAt.slice(0, 10)}. An issued
-          permit record is not construction start, completion, or occupancy.
+          what is supported, and export a traceable follow-up. An issued permit is not construction start,
+          completion, or occupancy.
         </p>
         <div className="nav-row">
           <Link className="btn" href={`/review/${encodeURIComponent(FLAGSHIP_RECORD_ID)}`}>
             Explore a real example ({FLAGSHIP_PERMIT_ID})
           </Link>
           <Link className="btn-secondary" href={`/review/${encodeURIComponent(AMBIGUOUS_RECORD_ID)}`}>
-            Open an ambiguous case ({AMBIGUOUS_PERMIT_ID})
-          </Link>
-          <Link className="btn-secondary" href={exportHref}>
-            Export the current briefing
+            Ambiguous case ({AMBIGUOUS_PERMIT_ID})
           </Link>
         </div>
         <p className="metric-def">
-          Flagship example: {FLAGSHIP_PERMIT_ID} (2025-04-23, Middle Hill, administrative class Commercial, New
-          Construction). Sanitized text includes “TOTAL OF 12 DWELLING UNITS ABOVE.” That is proposed-unit
-          language on an issued record, not evidence of twelve completed homes.
+          {FLAGSHIP_PERMIT_ID} (Middle Hill, Commercial, New Construction) includes “TOTAL OF 12 DWELLING UNITS
+          ABOVE.” That is proposed-unit language on an issued record, not twelve completed homes.
         </p>
       </section>
-      <p className="banner">
-        Issued permit records are not completed homes. Candidate selection is a discovery aid, not a
-        completeness guarantee. Local reviews stay in this browser and do not change City data.
-      </p>
-      <form className="filters" aria-label="Cohort filters">
+
+      <section aria-labelledby="metrics-heading">
+        <h2 id="metrics-heading" className="visually-hidden">
+          Record-based metrics
+        </h2>
+        <div className="metrics">
+          <article className="card">
+            <h3>Issued permit records</h3>
+            <div className="metric-value">{metrics.permitRecordsInCohort}</div>
+            <p className="metric-def">Building/BDA records matching year and neighborhood. Not housing units.</p>
+          </article>
+          <article className="card">
+            <h3>Potential housing records</h3>
+            <div className="metric-value">{metrics.potentialHousingRecords}</div>
+            <p className="metric-def">Keyword or new/conversion/demolition work-type discovery. Includes commercial class.</p>
+          </article>
+          <article className="card">
+            <h3>Reviewed records</h3>
+            <div className="metric-value">{metrics.reviewedRecords}</div>
+            <p className="metric-def">Local accept/correct/reject/insufficient decisions for snapshot {SNAPSHOT_VERSION}.</p>
+          </article>
+          <article className="card">
+            <h3>Needs review</h3>
+            <div className="metric-value">{metrics.needsReview}</div>
+            <p className="metric-def">
+              Candidates without a final review. Insufficient {metrics.insufficientEvidence}; failed
+              extractions {metrics.failedExtractions}.
+            </p>
+          </article>
+        </div>
+        <details className="defs">
+          <summary>What these counts mean</summary>
+          <ul>
+            <li>Issued permit records, potential housing records, reviewed records, and needs-review counts are record counts, not homes built.</li>
+            <li>An issued or “Completed” source status is not proof that construction finished or a home is occupied.</li>
+            <li>Potential housing records are selected by a project keyword/work-type list. A record excluded by the filter is not proven to contain no housing.</li>
+            <li>
+              Records with an explicit proposed-unit mention (reviewed housing records only):{" "}
+              {metrics.recordsWithExplicitProposedUnitMention}. This counts records, not units. There is no
+              citywide homes-built total.
+            </li>
+            <li>
+              Workflow coverage {metrics.extractionCoverageNumerator} / {metrics.extractionCoverageDenominator}{" "}
+              candidates. Blank descriptions in this cohort: {metrics.blankDescriptions}. Coverage is not source
+              completeness or model accuracy.
+            </li>
+            <li>Source: City of Pittsburgh PLI Permits via WPRDC, retrieved {props.retrievedAt.slice(0, 10)}.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section className="card panel" aria-labelledby="find-heading">
+        <h2 id="find-heading">Find a record</h2>
+        <form className="filters" aria-label="Cohort filters">
         <div>
           <label htmlFor="year">Issue year</label>
           <select id="year" value={filters.year} onChange={(e) => updateFilter("year", e.target.value)}>
@@ -189,50 +232,10 @@ export function OverviewClient(props: {
           </button>
         </div>
       </form>
-
-      <section aria-labelledby="metrics-heading">
-        <h2 id="metrics-heading" className="visually-hidden">
-          Record-based metrics
-        </h2>
-        <div className="metrics">
-          <article className="card">
-            <h3>Issued permit records</h3>
-            <div className="metric-value">{metrics.permitRecordsInCohort}</div>
-            <p className="metric-def">Building/BDA records matching year and neighborhood. Not housing units.</p>
-          </article>
-          <article className="card">
-            <h3>Potential housing records</h3>
-            <div className="metric-value">{metrics.potentialHousingRecords}</div>
-            <p className="metric-def">Keyword or new/conversion/demolition work-type discovery. Includes commercial class.</p>
-          </article>
-          <article className="card">
-            <h3>Reviewed records</h3>
-            <div className="metric-value">{metrics.reviewedRecords}</div>
-            <p className="metric-def">Local accept/correct/reject/insufficient decisions for snapshot {SNAPSHOT_VERSION}.</p>
-          </article>
-          <article className="card">
-            <h3>Needs review</h3>
-            <div className="metric-value">{metrics.needsReview}</div>
-            <p className="metric-def">
-              Candidates without a final review. Insufficient {metrics.insufficientEvidence}; failed
-              extractions {metrics.failedExtractions}.
-            </p>
-          </article>
-        </div>
-        <p className="metric-def">
-          Records with an explicit proposed-unit mention (reviewed housing records only):{" "}
-          {metrics.recordsWithExplicitProposedUnitMention}. This counts records, not units. There is no
-          citywide homes-built total.
-        </p>
-        <p className="metric-def">
-          Workflow coverage {metrics.extractionCoverageNumerator} / {metrics.extractionCoverageDenominator}{" "}
-          candidates. Blank descriptions in this cohort: {metrics.blankDescriptions}. Coverage is not source
-          completeness or model accuracy.
-        </p>
       </section>
 
-      <section className="chart card" aria-labelledby="monthly-heading">
-        <h2 id="monthly-heading">Monthly issued-record activity</h2>
+      <details className="chart card defs" aria-labelledby="monthly-heading">
+        <summary id="monthly-heading">Monthly issued-record activity (not housing production)</summary>
         <p className="metric-def">
           Counts issued records in the selected cohort by <code>issue_date</code> month. This is not a housing
           production chart.
@@ -268,7 +271,7 @@ export function OverviewClient(props: {
             ))}
           </tbody>
         </table>
-      </section>
+      </details>
 
       <p id="table-count" role="status" aria-live="polite">
         Showing {from}–{to} of {tableRows.length} matching records (page {safePage + 1} of {pageCount}). Metric
@@ -317,17 +320,17 @@ export function OverviewClient(props: {
           <thead>
             <tr>
               <th aria-sort={sortKey === "sourcePermitId" ? "ascending" : "none"}>
-                <button type="button" className="btn-secondary" onClick={() => setSortKey("sourcePermitId")}>
+                <button type="button" className="sort-btn" onClick={() => setSortKey("sourcePermitId")}>
                   Permit ID
                 </button>
               </th>
               <th aria-sort={sortKey === "issueDate" ? "ascending" : "none"}>
-                <button type="button" className="btn-secondary" onClick={() => setSortKey("issueDate")}>
+                <button type="button" className="sort-btn" onClick={() => setSortKey("issueDate")}>
                   Issue date
                 </button>
               </th>
               <th aria-sort={sortKey === "neighborhood" ? "ascending" : "none"}>
-                <button type="button" className="btn-secondary" onClick={() => setSortKey("neighborhood")}>
+                <button type="button" className="sort-btn" onClick={() => setSortKey("neighborhood")}>
                   Neighborhood
                 </button>
               </th>

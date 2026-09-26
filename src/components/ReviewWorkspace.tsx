@@ -308,6 +308,14 @@ export function ReviewWorkspace(props: {
 
   return (
     <div>
+      <p className="page-kicker">Step 2 of 3 · Review</p>
+      <p className="crumb">
+        <Link href="/">Overview</Link>
+        {" / "}
+        <strong>{record.sourcePermitId}</strong>
+        {" / "}
+        <Link href={`/export?example=${encodeURIComponent(record.recordId)}`}>Export</Link>
+      </p>
       <p className="banner">{props.modeDescription}</p>
       {stale ? (
         <p className="banner error">

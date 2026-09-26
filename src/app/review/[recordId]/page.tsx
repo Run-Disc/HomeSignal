@@ -28,7 +28,12 @@ export default async function ReviewPage({
 
   return (
     <div className="shell">
-      <AppHeader snapshotDate={manifest.retrievalDate} modeLabel={`AI mode: ${mode}`} />
+      <AppHeader
+        snapshotDate={manifest.retrievalDate}
+        modeLabel={`AI mode: ${mode}`}
+        current="review"
+        reviewHref={`/review/${encodeURIComponent(record.recordId)}`}
+      />
       <main id="main">
         <ReviewWorkspace
           record={record}

@@ -7,7 +7,7 @@ export default function LimitationsPage() {
   const m = sourceManifest();
   return (
     <div className="shell">
-      <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${currentAiMode()}`} />
+      <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${currentAiMode()}`} current="limitations" />
       <main id="main" className="prose">
         <h1>Limitations</h1>
         <ul>

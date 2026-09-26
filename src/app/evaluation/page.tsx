@@ -8,7 +8,7 @@ export default function EvaluationPage() {
   const m = sourceManifest();
   return (
     <div className="shell">
-      <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${currentAiMode()}`} />
+      <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${currentAiMode()}`} current="evaluation" />
       <main id="main" className="prose">
         <h1>Evaluation</h1>
         <p>

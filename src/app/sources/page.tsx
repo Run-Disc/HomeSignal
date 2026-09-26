@@ -10,7 +10,7 @@ export default function SourcesPage() {
   const mode = currentAiMode();
   return (
     <div className="shell">
-      <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${mode}`} />
+      <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${mode}`} current="sources" />
       <main id="main" className="prose">
         <h1>Sources and method</h1>
         <p>{modeDescription(mode)}</p>

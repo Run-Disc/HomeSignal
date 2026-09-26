@@ -3,7 +3,7 @@
 Record the **running application** (local `npm run dev` / `npm start`, or a host you personally verified). Do not narrate missing features. Fill `[your name]` and `[optional affiliation]` yourself. This script is not a recorded video.
 
 Public repository: https://github.com/Run-Disc/HomeSignal
-On-screen path: Overview → Explore a real example (`BDA-2024-05307`) → Save source review → Export → Limitations.
+On-screen path: **1 Overview** → **Explore a real example** (`BDA-2024-05307`) → **Save source review** → **3 Export** → Limitations (quiet link in the header).
 
 Do not say the City validated this, that the model is accurate, that a Vercel host is live unless you opened that URL yourself, or that you found N homes built.
 

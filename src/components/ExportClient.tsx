@@ -66,8 +66,9 @@ export function ExportClient(props: {
 
   return (
     <div className="shell">
-      <AppHeader snapshotDate={props.snapshotDate} modeLabel={props.mode} />
+      <AppHeader snapshotDate={props.snapshotDate} modeLabel={props.mode} current="export" />
       <main id="main" className="prose briefing-page">
+        <p className="page-kicker">Step 3 of 3 · Export</p>
         <h1>Evidence briefing</h1>
         <p className="print-hide">
           Print → Save as PDF for a one-page follow-up note. CSV contains local reviewed evidence only,
