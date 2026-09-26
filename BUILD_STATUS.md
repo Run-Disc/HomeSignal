@@ -22,6 +22,7 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 - Review workspace leads with **Record human source review**. Accept/Reject are hidden until a proposal exists. Counts become sourced only with an exact matching quote.
 - Keyword/work-type **discovery aid** is labeled as fallible, not as model output.
 - Export names filter scope, featured example, and reviewed-only evidence; print CSS hides controls.
+- Unsigned Windows Electron wrapper: local Next standalone server on 127.0.0.1, no bundled API key. GitHub Actions workflow `.github/workflows/windows-desktop.yml` builds `HomeSignal-Setup.exe`. This Mac packaged a Windows unpacked tree (`HomeSignal.exe` + `resources/standalone` with snapshot JSON, no `.env`) but could not spawn NSIS `makensis` (error -86). The public installer comes from Actions on `windows-latest` (x64).
 
 ## Checks
 
@@ -38,3 +39,4 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 3. Optional independent labels on `data/evaluation/blind-label-worksheet.md`.
 4. Optional separate runtime extraction key in `.env.local` only — never commit it.
 5. If the local review route 500s, restart the app after `npm run build` so `.next` is not shared with a stale dev server.
+6. After this Windows workflow succeeds on GitHub Actions, download **HomeSignal-Setup.exe** from the artifact (or a `v*` Release).

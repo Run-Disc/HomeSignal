@@ -1,15 +1,14 @@
 import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
 import { PROMPT_VERSION, SCHEMA_VERSION, SNAPSHOT_VERSION } from "./constants";
 import { EXTRACTION_SYSTEM_PROMPT, validateProposal } from "./extraction";
 import { sanitizedInputHash } from "./hash";
-import { allowlistedForExtraction } from "./loadSnapshot";
+import { allowlistedForExtraction, savedExtractionsPath } from "./loadSnapshot";
 import type { AiMode, ExtractionProposal, PermitRecord } from "./types";
 
 export type SavedExample = ExtractionProposal;
 
 export function readSavedExamples(): SavedExample[] {
-  const path = join(process.cwd(), "data/public/saved-extractions.json");
+  const path = savedExtractionsPath();
   if (!existsSync(path)) return [];
   const parsed = JSON.parse(readFileSync(path, "utf8")) as SavedExample[];
   return Array.isArray(parsed) ? parsed : [];

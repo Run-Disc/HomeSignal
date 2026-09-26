@@ -12,3 +12,5 @@ tmp
 coverage
 data/cache
 tsconfig.tsbuildinfo
+dist-desktop
+release

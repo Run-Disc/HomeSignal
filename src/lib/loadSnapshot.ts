@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SNAPSHOT_VERSION, SOURCE_RESOURCE_ID } from "./constants";
 import { sanitizedInputHash } from "./hash";
@@ -26,6 +26,38 @@ const PUBLIC_RECORD_KEYS = [
 
 let cached: PermitRecord[] | null = null;
 
+function firstExisting(paths: string[]): string | null {
+  for (const path of paths) {
+    if (path && existsSync(path)) return path;
+  }
+  return null;
+}
+
+function dataPublicDir(): string {
+  const envDir = (process.env.HOMESIGNAL_DATA_DIR || "").trim();
+  const found = firstExisting([
+    envDir,
+    join(process.cwd(), "data", "public"),
+    join(process.cwd(), "public", "data"),
+  ]);
+  if (!found) {
+    throw new Error("Sanitized snapshot directory not found. Expected data/public next to the running server.");
+  }
+  return found;
+}
+
+export function snapshotFilePath(): string {
+  const path = join(dataPublicDir(), "permits-2025.json");
+  if (!existsSync(path)) {
+    throw new Error("Sanitized snapshot file permits-2025.json was not found.");
+  }
+  return path;
+}
+
+export function savedExtractionsPath(): string {
+  return join(dataPublicDir(), "saved-extractions.json");
+}
+
 function asPublicRecord(raw: Record<string, unknown>): PermitRecord {
   const record = {} as PermitRecord;
   for (const key of PUBLIC_RECORD_KEYS) {
@@ -36,8 +68,7 @@ function asPublicRecord(raw: Record<string, unknown>): PermitRecord {
 
 export function loadPermits(): PermitRecord[] {
   if (cached) return cached;
-  const path = join(process.cwd(), "data/public/permits-2025.json");
-  const parsed = JSON.parse(readFileSync(path, "utf8")) as Array<Record<string, unknown>>;
+  const parsed = JSON.parse(readFileSync(snapshotFilePath(), "utf8")) as Array<Record<string, unknown>>;
   cached = parsed.filter((r) => r.snapshotVersion === SNAPSHOT_VERSION).map(asPublicRecord);
   return cached;
 }

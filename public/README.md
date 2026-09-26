@@ -8,6 +8,16 @@ HomeSignal is a Pittsburgh permit-evidence observatory for the AI for Housing Ha
 
 A permit record is not a housing unit. An issued permit is not a completed home.
 
+## Windows download (no Node.js)
+
+Judges and housing staff who should not use a terminal can run the same source-review app on Windows:
+
+1. Download **HomeSignal-Setup.exe** from the repository **Actions** artifact named `HomeSignal-Setup`, or from a GitHub Release if a `v*` tag was published.
+2. Windows SmartScreen may warn because the installer is **unsigned**. Choose **More info → Run anyway** only for a file from this GitHub project. Details: `WINDOWS_INSTALL.md`.
+3. Open the **HomeSignal** shortcut. The app serves itself on `127.0.0.1` and does not need the internet or an API key.
+
+The browser/web workflow (`npm run dev` / `npm start`) is unchanged.
+
 ## Working prototype walkthrough
 
 The required public demo is a **3–5 minute video**. Narration is in `DEMO_SCRIPT.md` (target about 4:00). No video is in this repository.
@@ -34,6 +44,7 @@ Names below describe what this repository uses. They are **not endorsements** by
 | WPRDC / CKAN | Public catalog and CSV dump of City of Pittsburgh PLI Permits (data API/download, not a paid product API) |
 | Optional OpenAI-compatible Chat Completions HTTP endpoint | Server-side extraction only when `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` are set. **Not configured in this repository.** Not used in the working demo path. |
 | Cursor (Grok 4.6) | Implementation assistance during the authorized build window beginning 2026-09-26 09:00 America/New_York. Not a runtime model for visitors. Coding credits are not an extraction API key. |
+| Electron + electron-builder | Optional unsigned Windows desktop wrapper around the same Next.js app. Not required to run in a browser. |
 
 Python 3 is used only for the optional ingest script `scripts/ingest_pli.py`. The committed snapshot is enough to run the app. Vercel is a documented optional host (`vercel.json`); **no deployment is claimed**.
 
@@ -45,7 +56,7 @@ Python 3 is used only for the optional ingest script `scripts/ingest_pli.py`. Th
 - Optional server-side extraction at `POST /api/extract` (`src/lib/extractClient.ts`). Quote/schema validation in `src/lib/extraction.ts`.
 - Human reviews persist in **this browser’s** `localStorage` for the current snapshot version only.
 - Export: print briefing + formula-neutralized CSV (`src/lib/briefing.ts`, `src/lib/csv.ts`).
-- Ingest: `scripts/ingest_pli.py` (not required to run the app).
+- Optional unsigned Windows wrapper (`electron/main.cjs`) starts the Next standalone server on 127.0.0.1 using Electron’s bundled Node (`ELECTRON_RUN_AS_NODE`). GitHub Actions builds `HomeSignal-Setup.exe`.
 
 ## Data provenance
 

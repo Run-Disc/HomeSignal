@@ -2,9 +2,11 @@
   "name": "homesignal",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.cjs",
   "engines": {
     "node": ">=22"
   },
+  "author": "HomeSignal",
   "description": "HomeSignal: Permit Evidence Observatory — Pittsburgh PLI housing-permit evidence review",
   "scripts": {
     "dev": "next dev --port 3000",
@@ -14,7 +16,9 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/lib/*.test.ts",
-    "ingest": "python3 scripts/ingest_pli.py"
+    "ingest": "python3 scripts/ingest_pli.py",
+    "desktop:prepare": "next build && node scripts/prepare-standalone.cjs && node scripts/validate-standalone.cjs",
+    "desktop:win": "npm run desktop:prepare && electron-builder --win --publish never"
   },
   "dependencies": {
     "next": "^15.5.4",
@@ -26,9 +30,57 @@
     "@types/node": "^22.18.6",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "electron": "^37.4.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.36.0",
     "eslint-config-next": "^15.5.4",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
+  },
+  "build": {
+    "appId": "org.homesignal.app",
+    "productName": "HomeSignal",
+    "copyright": "HomeSignal hackathon prototype. Permit data remains City of Pittsburgh / WPRDC CC-BY.",
+    "directories": {
+      "output": "dist-desktop"
+    },
+    "files": [
+      "electron/main.cjs",
+      "package.json",
+      "!node_modules"
+    ],
+    "npmRebuild": false,
+    "extraResources": [
+      {
+        "from": ".next/standalone",
+        "to": "standalone",
+        "filter": [
+          "**/*",
+          "!.env",
+          "!.env.*",
+          "!**/.env",
+          "!**/.env.*"
+        ]
+      }
+    ],
+    "asar": true,
+    "forceCodeSigning": false,
+    "artifactName": "HomeSignal-Setup.${ext}",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "HomeSignal",
+      "uninstallDisplayName": "HomeSignal"
+    }
   }
 }

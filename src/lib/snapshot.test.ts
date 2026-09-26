@@ -1,9 +1,8 @@
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SNAPSHOT_VERSION } from "./constants";
-import { loadPermits } from "./loadSnapshot";
+import { loadPermits, snapshotFilePath } from "./loadSnapshot";
 
 describe("snapshot privacy and schema", () => {
   const records = loadPermits();
@@ -22,7 +21,7 @@ describe("snapshot privacy and schema", () => {
   });
 
   it("public JSON files do not contain parcel identifiers", () => {
-    const raw = readFileSync(join(process.cwd(), "data/public/permits-2025.json"), "utf8");
+    const raw = readFileSync(snapshotFilePath(), "utf8");
     assert.equal(raw.includes('"parcelId"'), false);
     assert.equal(raw.includes('"parcel_num"'), false);
     const rows = JSON.parse(raw) as Array<Record<string, unknown>>;
