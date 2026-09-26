@@ -8,7 +8,11 @@ HomeSignal is a Pittsburgh permit-evidence observatory for the AI for Housing Ha
 
 A permit record is not a housing unit. An issued permit is not a completed home.
 
-## Two-minute demo flow
+## Working prototype walkthrough
+
+The required public demo is a **3–5 minute video**. Narration is in `DEMO_SCRIPT.md` (target about 4:00). No video is in this repository.
+
+In the running app:
 
 1. Open Overview. The four cards count **issued permit records**, not homes built.
 2. Search `BDA-2024-05307` and open the record. It is Commercial class with “TOTAL OF 12 DWELLING UNITS ABOVE.”
@@ -16,7 +20,22 @@ A permit record is not a housing unit. An issued permit is not a completed home.
 4. This deployment is **source-review** unless you add a runtime key: do not wait for AI. Record a manual Correct or Insufficient-evidence decision.
 5. Open Export briefing. Print/CSV covers reviewed evidence only. There is no citywide homes-built total.
 
-Full narration: `DEMO_SCRIPT.md`.
+## Libraries, frameworks, APIs, and tools
+
+Names below describe what this repository uses. They are **not endorsements** by those projects, vendors, the City of Pittsburgh, WPRDC, OpenAI, Cursor, xAI, or the event organizers.
+
+| Name | Role in HomeSignal |
+|---|---|
+| Next.js 15 (App Router) | Web application framework, routing, production build |
+| React 19 | UI components (overview, review workspace, export) |
+| TypeScript | Typed application and library code |
+| Zod | Schema validation for extraction proposals |
+| Node.js 22 and npm | Runtime, package install, `node:test` + `tsx` test runner |
+| WPRDC / CKAN | Public catalog and CSV dump of City of Pittsburgh PLI Permits (data API/download, not a paid product API) |
+| Optional OpenAI-compatible Chat Completions HTTP endpoint | Server-side extraction only when `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` are set. **Not configured in this repository.** Not used in the working demo path. |
+| Cursor (Grok 4.6) | Implementation assistance during the authorized build window beginning 2026-09-26 09:00 America/New_York. Not a runtime model for visitors. Coding credits are not an extraction API key. |
+
+Python 3 is used only for the optional ingest script `scripts/ingest_pli.py`. The committed snapshot is enough to run the app. Vercel is a documented optional host (`vercel.json`); **no deployment is claimed**.
 
 ## Architecture
 
