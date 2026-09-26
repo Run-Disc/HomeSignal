@@ -16,7 +16,7 @@ The installer sits in the repository root so it is visible on the GitHub front p
 
 1. Open **[HomeSignal-Setup.exe](./HomeSignal-Setup.exe)** on this page, or unzip the repository ZIP and double-click the same file.
 2. Windows SmartScreen may warn because the installer is **unsigned**. Choose **More info → Run anyway** only for a file from this GitHub project.
-3. After setup, open the **HomeSignal** shortcut. The app serves itself on `127.0.0.1` and does not need the internet or an API key.
+3. After setup, open the **HomeSignal** shortcut. The app serves itself on `127.0.0.1` and does not need the internet or an API key. If you already installed an earlier copy, uninstall it first so Windows is not launching the old app.
 
 The browser/web workflow (`npm run dev` / `npm start`) is unchanged.
 

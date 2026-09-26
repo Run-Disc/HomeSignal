@@ -33,4 +33,8 @@ Use Windows **Settings → Apps → Installed apps → HomeSignal → Uninstall*
 
 ## If the window does not open
 
-Re-download `HomeSignal-Setup.exe` from this repository. This package does not include a runtime AI key and will not call an external model.
+Uninstall HomeSignal (Windows **Settings → Apps**), then install a fresh `HomeSignal-Setup.exe` from this repository. An older installer could install the shortcut but fail to start the local review window.
+
+If it still fails, look for `%APPDATA%\\HomeSignal\\homesignal-desktop.log` on this computer. The app should show an error dialog instead of closing silently.
+
+This package does not include a runtime AI key and will not call an external model.

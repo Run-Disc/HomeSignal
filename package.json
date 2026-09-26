@@ -46,16 +46,19 @@
     },
     "files": [
       "electron/main.cjs",
+      "electron/splash.html",
       "package.json",
       "!node_modules"
     ],
     "npmRebuild": false,
+    "afterPack": "scripts/electron-after-pack.cjs",
     "extraResources": [
       {
         "from": ".next/standalone",
         "to": "standalone",
         "filter": [
           "**/*",
+          ".next/**/*",
           "!.env",
           "!.env.*",
           "!**/.env",
@@ -63,6 +66,9 @@
         ]
       }
     ],
+    "electronFuses": {
+      "runAsNode": true
+    },
     "asar": true,
     "forceCodeSigning": false,
     "artifactName": "HomeSignal-Setup.${ext}",
