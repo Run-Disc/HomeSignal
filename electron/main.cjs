@@ -1,7 +1,8 @@
 "use strict";
 
-const { app, BrowserWindow, dialog, utilityProcess } = require("electron");
-const { spawn } = require("node:child_process");
+const { app, BrowserWindow, dialog } = require("electron");
+const { fork, spawn } = require("node:child_process");
+const { createRequire } = require("node:module");
 const http = require("node:http");
 const net = require("node:net");
 const fs = require("node:fs");
@@ -11,6 +12,7 @@ let mainWindow = null;
 let serverChild = null;
 let stopping = false;
 let serverReady = false;
+let usingInProcessServer = false;
 const childLog = [];
 
 function logLine(message) {
@@ -60,31 +62,71 @@ function pickPort() {
 }
 
 function waitForServer(port, timeoutMs) {
-  const started = Date.now();
   return new Promise((resolve, reject) => {
-    const attempt = () => {
-      const req = http.get({ host: "127.0.0.1", port, path: "/", timeout: 2000 }, (res) => {
-        res.resume();
-        resolve();
-      });
-      req.on("timeout", () => {
-        req.destroy();
-      });
-      req.on("error", () => {
-        if (Date.now() - started > timeoutMs) {
-          reject(new Error("Local HomeSignal server did not become ready."));
-          return;
+    const started = Date.now();
+    let settled = false;
+    let inFlight = null;
+
+    const finish = (error) => {
+      if (settled) return;
+      settled = true;
+      clearInterval(tick);
+      if (inFlight) {
+        try {
+          inFlight.destroy();
+        } catch {
+          /* ignore */
         }
-        setTimeout(attempt, 250);
+      }
+      if (error) reject(error);
+      else resolve();
+    };
+
+    const tick = setInterval(() => {
+      if (Date.now() - started > timeoutMs) {
+        finish(new Error(`Local HomeSignal server did not become ready on 127.0.0.1:${port}`));
+      }
+    }, 250);
+
+    const attempt = () => {
+      if (settled) return;
+      inFlight = http.get(
+        { host: "127.0.0.1", port, path: "/desktop-ok.txt", timeout: 1000 },
+        (res) => {
+          res.resume();
+          if (res.statusCode && res.statusCode < 500) {
+            finish(null);
+            return;
+          }
+          setTimeout(attempt, 250);
+        },
+      );
+      inFlight.on("timeout", () => {
+        try {
+          inFlight.destroy();
+        } catch {
+          /* ignore */
+        }
+      });
+      inFlight.on("error", () => {
+        if (!settled) setTimeout(attempt, 250);
       });
     };
+
     attempt();
   });
 }
 
-function stopServer() {
-  if (stopping) return;
-  stopping = true;
+function loadWithTimeout(win, url, timeoutMs) {
+  return Promise.race([
+    win.loadURL(url),
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error(`Timed out loading ${url}`)), timeoutMs);
+    }),
+  ]);
+}
+
+function killServerChild() {
   const child = serverChild;
   serverChild = null;
   if (!child) return;
@@ -99,21 +141,46 @@ function stopServer() {
   }
 }
 
+function stopServer() {
+  if (stopping) return;
+  stopping = true;
+  killServerChild();
+}
+
 function appendChildOutput(chunk) {
   const text = String(chunk || "").trim();
   if (text) logLine(text);
 }
 
-function startServer(port) {
-  const root = standaloneDir();
-  const serverJs = path.join(root, "server.js");
-  const nextDir = path.join(root, ".next");
-  if (!fs.existsSync(serverJs)) {
-    throw new Error(`Bundled server is missing at ${serverJs}`);
-  }
-  if (!fs.existsSync(nextDir)) {
-    throw new Error(`Bundled Next build is missing at ${nextDir}`);
-  }
+function applyServerEnv(root, port) {
+  process.env.ELECTRON_RUN_AS_NODE = "1";
+  process.env.NODE_ENV = "production";
+  process.env.PORT = String(port);
+  process.env.HOSTNAME = "127.0.0.1";
+  process.env.HOMESIGNAL_AI_MODE = "source-review";
+  process.env.HOMESIGNAL_DATA_DIR = dataDir(root);
+  delete process.env.EXTRACTION_API_KEY;
+  delete process.env.EXTRACTION_MODEL;
+  delete process.env.EXTRACTION_API_BASE;
+}
+
+function startServerInProcess(root, serverJs, port) {
+  applyServerEnv(root, port);
+  process.chdir(root);
+  const previousExit = process.exit;
+  process.exit = (code) => {
+    if (code && Number(code) !== 0) {
+      logLine(`Next server called process.exit(${code})`);
+      return undefined;
+    }
+    return previousExit.call(process, code);
+  };
+  logLine(`Starting Next in-process from ${serverJs}`);
+  createRequire(serverJs)(serverJs);
+  usingInProcessServer = true;
+}
+
+function startServerChild(root, serverJs, port) {
   const env = {
     ...process.env,
     ELECTRON_RUN_AS_NODE: "1",
@@ -127,17 +194,19 @@ function startServer(port) {
   delete env.EXTRACTION_MODEL;
   delete env.EXTRACTION_API_BASE;
 
-  logLine(`Starting ${serverJs} on 127.0.0.1:${port}`);
-  serverChild = utilityProcess.fork(serverJs, [], {
+  logLine(`Starting Next child ${serverJs} on 127.0.0.1:${port}`);
+  serverChild = fork(serverJs, [], {
     cwd: root,
     env,
-    stdio: "pipe",
-    serviceName: "homesignal-next",
+    execPath: process.execPath,
+    execArgv: [],
+    silent: true,
+    windowsHide: true,
   });
   if (serverChild.stdout) serverChild.stdout.on("data", appendChildOutput);
   if (serverChild.stderr) serverChild.stderr.on("data", appendChildOutput);
   serverChild.on("error", (error) => {
-    logLine(`utilityProcess error: ${error && error.stack ? error.stack : error}`);
+    logLine(`server child error: ${error && error.stack ? error.stack : error}`);
   });
   serverChild.on("exit", (code) => {
     logLine(`Local server exited (${code})`);
@@ -146,6 +215,24 @@ function startServer(port) {
       mainWindow.close();
     }
   });
+}
+
+function startServer(port) {
+  const root = standaloneDir();
+  const serverJs = path.join(root, "server.js");
+  const nextDir = path.join(root, ".next");
+  if (!fs.existsSync(serverJs)) {
+    throw new Error(`Bundled server is missing at ${serverJs}`);
+  }
+  if (!fs.existsSync(nextDir)) {
+    throw new Error(`Bundled Next build is missing at ${nextDir}`);
+  }
+  try {
+    startServerChild(root, serverJs, port);
+  } catch (error) {
+    logLine(`child_process.fork failed: ${error && error.stack ? error.stack : error}`);
+    startServerInProcess(root, serverJs, port);
+  }
 }
 
 async function showFatal(error) {
@@ -186,9 +273,21 @@ async function createWindow() {
   await createSplash();
   const port = await pickPort();
   startServer(port);
-  await waitForServer(port, 45000);
+  try {
+    await waitForServer(port, 20000);
+  } catch (error) {
+    if (usingInProcessServer || stopping) throw error;
+    logLine("Child server did not listen; starting Next inside the app process.");
+    killServerChild();
+    const root = standaloneDir();
+    startServerInProcess(root, path.join(root, "server.js"), port);
+    await waitForServer(port, 25000);
+  }
   serverReady = true;
-  await mainWindow.loadURL(`http://127.0.0.1:${port}/`);
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    throw new Error("HomeSignal window closed before the review page loaded.");
+  }
+  await loadWithTimeout(mainWindow, `http://127.0.0.1:${port}/`, 30000);
 }
 
 app.whenReady().then(() => createWindow()).catch(async (error) => {

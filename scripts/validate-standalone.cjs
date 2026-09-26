@@ -11,6 +11,7 @@ const required = [
   path.join("data", "public", "permits-2025.json"),
   path.join("data", "public", "saved-extractions.json"),
   path.join("public", "data", "permits-2025.json"),
+  path.join("public", "desktop-ok.txt"),
   path.join(".next", "static"),
 ];
 
