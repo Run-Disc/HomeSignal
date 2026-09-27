@@ -158,6 +158,11 @@ a.meta-pill:hover, a.meta-pill:focus-visible {
   padding: 8px 10px;
   margin: 4px 0 12px;
 }
+.review-guidance { margin: 0 0 14px; padding: 10px 12px; background: var(--teal-soft); border-left: 4px solid var(--teal); }
+.review-message { margin: 10px 0 14px; padding: 10px 12px; background: var(--paper); border: 1px solid var(--line); color: var(--muted); }
+.empty-briefing { margin: 16px 0; padding: 16px; border: 1px solid var(--line); border-left: 4px solid var(--teal); background: var(--paper); }
+.empty-briefing h2 { margin-top: 0; }
+.reviewed-summary { padding: 10px 12px; background: var(--teal-soft); border-left: 4px solid var(--teal); }
 .row-featured { background: var(--teal-soft); }
 .spotlight {
   display: flex;

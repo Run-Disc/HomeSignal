@@ -69,12 +69,34 @@ export function ExportClient(props: {
       <AppHeader snapshotDate={props.snapshotDate} modeLabel={props.mode} current="export" />
       <main id="main" className="prose briefing-page">
         <h1>Briefing</h1>
+        <p>
+          A source-cited handoff for the current queue selection. It includes local human reviews and explicit
+          unknowns; unreviewed candidates are never presented as findings.
+        </p>
+        {metrics.reviewedRecords === 0 ? (
+          <aside className="empty-briefing" aria-labelledby="empty-briefing-heading">
+            <h2 id="empty-briefing-heading">Review one record before exporting</h2>
+            <p>
+              This browser has no saved review yet. Open the guided example, verify its source description, and
+              save a decision. The briefing will then include that reviewed evidence.
+            </p>
+            <Link className="btn" href={`/review/${encodeURIComponent(featuredRecordId)}`}>
+              Review guided example
+            </Link>
+          </aside>
+        ) : (
+          <p className="reviewed-summary" role="status">
+            <strong>{metrics.reviewedRecords}</strong> reviewed record{metrics.reviewedRecords === 1 ? "" : "s"} in
+            this browser; <strong>{metrics.needsReview}</strong> potential record{metrics.needsReview === 1 ? "" : "s"}
+            still need review.
+          </p>
+        )}
         <div className="print-actions print-hide">
           <button type="button" className="btn" onClick={() => window.print()}>
             Print / Save as PDF
           </button>
           <button type="button" className="btn-secondary" onClick={downloadCsv}>
-            Download reviewed CSV
+            Download reviewed CSV{metrics.reviewedRecords === 0 ? " (empty)" : ""}
           </button>
           <Link className="btn-secondary" href="/">
             Queue

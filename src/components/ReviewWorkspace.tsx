@@ -322,6 +322,10 @@ export function ReviewWorkspace(props: {
         </section>
         <section className="card" aria-labelledby="review-heading">
           <h2 id="review-heading">Review</h2>
+          <p className="review-guidance">
+            Read the public description first. Classify only what it supports, attach an exact excerpt to any
+            number, then save the decision. Leave a count blank when it is unknown.
+          </p>
           {blank ? (
             <p className="banner">
               Description is blank. Use Insufficient evidence instead of a count.
@@ -333,6 +337,11 @@ export function ReviewWorkspace(props: {
             <strong>{current?.state.replaceAll("_", " ") ?? "unreviewed"}</strong>
             {current ? ` · ${current.timestamp}` : null}
           </p>
+          {message ? (
+            <p className="review-message" role="status" aria-live="polite">
+              {message}
+            </p>
+          ) : null}
           <label htmlFor="rel">Housing</label>
           <select
             id="rel"
@@ -450,7 +459,6 @@ export function ReviewWorkspace(props: {
                 {extractionButtonLabel(aiMode, waiting)}
               </button>
             </p>
-            {message ? <p className="metric-def">{message}</p> : null}
             {proposal ? <p className="metric-def">{proposal.explanation}</p> : null}
           </details>
         </section>
