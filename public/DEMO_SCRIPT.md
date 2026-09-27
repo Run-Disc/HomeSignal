@@ -47,7 +47,7 @@
 
 **KEY FEATURE:** Multiple sources remain separate, cited, and definition-aware.
 
-## 4. 1:20–1:55 — Source-bound extraction
+## 4. 1:20–2:00 — Enter a source-bound analyst review
 
 **EXACT ACTIONS:**
 1. Scroll down to the filter row above the permit table.
@@ -56,17 +56,18 @@
 4. Wait until the table shows one matching row.
 5. In that row, click the permit ID **BDA-2024-05307**.
 6. In the **1 · Source** card, point to **12 DWELLING UNITS** in the public description.
-7. In **2 · Extracted evidence**, click **Extract evidence**.
-8. Wait until the extracted fact, count **12**, and quote **12 DWELLING UNITS** appear.
-9. Point briefly to **Status: Extracted — review required**.
+7. In **2 · Review evidence**, open **Housing** and choose **Housing-related**.
+8. Open **Scope** and choose **New building (project label)**.
+9. Confirm **Count type** says **Proposed total units mentioned**.
+10. Click **Count** and type **12**.
+11. Click **Quote from description** and type **12 DWELLING UNITS** exactly.
+12. Do not click **Extract evidence** and do not save yet.
 
-> I can find a record directly by permit ID. This source description explicitly mentions twelve dwelling units. The extraction proposes a structured count and preserves the exact supporting quote, but it does not call that number homes built. The reviewer can compare every proposed field directly with the source text.
->
-> In a production deployment, this extraction endpoint could connect to an AI API. This deployment uses a deterministic local simulation and does not retrieve live AI information.
+> I can find a record directly by permit ID. As an analyst, I classify the record, enter the proposed total mentioned in the text, and preserve the exact supporting quote. I am recording what this source says—not claiming that twelve homes were built or occupied.
 
-**KEY FEATURES:** Structured extraction, exact quotations, and visible provenance.
+**KEY FEATURES:** Analyst-entered structured evidence, exact quotations, and visible provenance.
 
-## 5. 1:55–2:35 — Decision support with explicit limits
+## 5. 2:00–2:35 — Decision support with explicit limits
 
 **EXACT ACTIONS:**
 1. Scroll down to **3 · AI interpretation — non-authoritative**.
@@ -87,10 +88,11 @@
 1. In **Evidence coverage**, find **Dwelling-unit language**.
 2. Click the **Show in source** button on that same row.
 3. Wait for the page to scroll to the highlighted **12 DWELLING UNITS** quote.
-4. In the Review card, click **Accept supported fields**.
-5. Point to **Status: Accepted by reviewer**.
+4. In the Review card, confirm the typed **12** and **12 DWELLING UNITS** are still present.
+5. Click **Save analyst review**.
+6. Point to **Status: Reviewed from source by a person**.
 
-> Show in source returns directly to the cited words. I verify the quote and meaning, then accept the supported fields. Only a person can save that decision; the extraction and evidence brief cannot approve a record. Rejected and insufficient-evidence outcomes are also available.
+> Show in source returns directly to the cited words. I verify the quote and meaning, then save my analyst review. Only a person can save that decision; the evidence brief cannot approve a record. Rejected and insufficient-evidence outcomes are also available.
 
 **KEY FEATURES:** Citation tracing, human-in-the-loop approval, and auditable review states.
 

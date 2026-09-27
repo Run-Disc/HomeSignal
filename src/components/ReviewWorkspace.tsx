@@ -446,11 +446,11 @@ export function ReviewWorkspace(props: {
         <section className="card" aria-labelledby="review-heading">
           <h2 id="review-heading">Review</h2>
           <section className="extraction-panel" aria-labelledby="extract-heading">
-            <p className="layer-label">2 · Extracted evidence</p>
-            <h3 id="extract-heading">Structured extraction</h3>
+            <p className="layer-label">2 · Review evidence</p>
+            <h3 id="extract-heading">Structured review</h3>
             <p className="metric-def">
               {aiMode === "source-review"
-                ? "Simulated extraction; no external model is called."
+                ? "Enter evidence from the source, or use the optional simulated extraction. No external model is called."
                 : aiMode === "saved"
                   ? "Replays previously generated responses with their original timestamp."
                   : "Live model extraction for the review-corpus allowlist."}
@@ -579,7 +579,7 @@ export function ReviewWorkspace(props: {
               </button>
             ) : null}
             <button type="button" className="btn" onClick={saveSourceReview}>
-              Save
+              Save analyst review
             </button>
             <Link className="btn-secondary" href={`/export?${props.briefingQuery}`}>
               Briefing
