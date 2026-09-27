@@ -15,8 +15,8 @@ Statuses:
 | No secrets in git | Verified | `.gitignore` excludes `.env`, `.env.local`, `.env*.local`. `.env.example` lists variable **names** only. Committed tree grep found no `EXTRACTION_API_KEY=` values or private-key armor. |
 | One project / one track | Verified | Track 2 only: Housing Production, Rents & Household Flow Observatory. No second track app in this repo. |
 | Working prototype | Verified | Next.js app: overview → review → export; sanitized snapshot committed; local tests and production build succeeded on 2026-09-26 (see `BUILD_STATUS.md`). |
-| 3–5 minute public demo video | Builder action required | `VIDEO_SCRIPT.md` is a timed ~4:00 script. **No video file or public video URL exists in this repository.** |
-| Documentation | Verified | README, SOURCES, DATA_DICTIONARY, LIMITATIONS, AI_DISCLOSURE, EVALUATION, VIDEO_SCRIPT, FINAL_ACTIONS, DEMO_SCRIPT pointer, SUBMISSION_CHECKLIST, WINDOWS_INSTALL, MAC_INSTALL, this audit. |
+| 3–5 minute public demo video | Builder action required | The private recording narration is intentionally kept outside the public repository. **No video file or public video URL exists in this repository.** |
+| Documentation | Verified | README, SOURCES, DATA_DICTIONARY, LIMITATIONS, AI_DISCLOSURE, EVALUATION, FINAL_ACTIONS, SUBMISSION_CHECKLIST, WINDOWS_INSTALL, MAC_INSTALL, this audit. |
 | Exact data citations | Verified | `SOURCES.md`: title, publisher, landing, resource URL, dump URL, resource id `f4d1177a-f597-4c32-8cbf-7885f56253f6`, retrieval 2026-09-26, license CC-BY, dump vs catalog preview counts. |
 | Limitations | Verified | `LIMITATIONS.md` and `/limitations`. Includes permit ≠ unit, issued ≠ complete/occupied, no funnel, blank descriptions, no accuracy %. |
 | Decision-support framing | Verified | UI and docs: prototype review is not a City determination; verify with the responsible authority. |
@@ -45,7 +45,7 @@ Fields currently required on that form, mapped to this repo:
 | Track | Prepared | Housing Production, Rents & Household Flow Observatory |
 | Project title | Prepared | HomeSignal: Permit Evidence Observatory |
 | Project description (including what is next) | Prepared | Draft in `SUBMISSION_CHECKLIST.md`. Includes working path and next steps. Confirm the live box still asks for “what is next.” |
-| Demo Video link | Builder action required | Public 3–5 minute recording using `VIDEO_SCRIPT.md`. Not in this repo. |
+| Demo Video link | Builder action required | Record and publish the private 3–5 minute walkthrough prepared outside this repository. |
 | Public repository link | Prepared | https://github.com/Run-Disc/HomeSignal |
 | Data sources | Prepared | `SOURCES.md` (PLI dump plus related City tools and unused zoning links). |
 | AI disclosure | Prepared | `AI_DISCLOSURE.md`. |

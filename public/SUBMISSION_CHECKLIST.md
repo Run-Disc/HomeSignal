@@ -4,7 +4,7 @@ The live form is the authority: https://docs.google.com/forms/d/e/1FAIpQLSfDK_aD
 
 Cursor must not submit this form, invent identity, or make the over-18 / eligibility attestation.
 
-Numbered remaining steps: `FINAL_ACTIONS.md`. Video narration: `VIDEO_SCRIPT.md`.
+Numbered remaining steps: `FINAL_ACTIONS.md`. The private video narration is intentionally not stored in this public repository.
 
 | Live form field | Prepared value | Who completes it |
 |---|---|---|

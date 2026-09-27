@@ -6,10 +6,10 @@ https://docs.google.com/forms/d/e/1FAIpQLSfDK_aD-miOV3D92Bl4NOFa1Skb8_u-GTCH5j1F
 
 Deadline stated by the event: Sunday 2026-09-27 23:59 ET (confirm on the form).
 
-1. Confirm https://github.com/Run-Disc/HomeSignal `main` shows this latest push (README, desktop workflow, `VIDEO_SCRIPT.md`).
+1. Confirm https://github.com/Run-Disc/HomeSignal `main` shows this latest push (README and desktop workflow).
 2. Confirm the `v0.1.0` GitHub Release has five assets: the Windows installer plus arm64 and x64 Mac DMG/ZIP files.
 3. If you install a desktop package, download it only from that public Release. The packages are unsigned, so follow the platform guide and do not claim signing or notarization.
-4. Record a public 3–5 minute demo using `VIDEO_SCRIPT.md` while the app is actually running. Publish it (YouTube unlisted, or whatever the form accepts).
+4. Record the public 3–5 minute walkthrough prepared privately outside this repository while the app is actually running. Publish it (YouTube unlisted, or whatever the form accepts).
 5. Open the live Google form yourself.
 6. Enter Team Name (solo is allowed). Do not invent a name in this repository.
 7. Enter Member #1 legal name.
