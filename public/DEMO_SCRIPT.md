@@ -50,14 +50,17 @@
 ## 4. 1:20–1:55 — Source-bound extraction
 
 **EXACT ACTIONS:**
-1. Scroll to the **Example record** card.
-2. Click **Open record →** for **BDA-2024-05307**.
-3. In the **1 · Source** card, point to **12 DWELLING UNITS** in the public description.
-4. In **2 · Extracted evidence**, click **Extract evidence**.
-5. Wait until the extracted fact, count **12**, and quote **12 DWELLING UNITS** appear.
-6. Point briefly to **Status: Extracted — review required**.
+1. Scroll down to the filter row above the permit table.
+2. Click the **Search** field.
+3. Type **BDA-2024-05307** exactly.
+4. Wait until the table shows one matching row.
+5. In that row, click the permit ID **BDA-2024-05307**.
+6. In the **1 · Source** card, point to **12 DWELLING UNITS** in the public description.
+7. In **2 · Extracted evidence**, click **Extract evidence**.
+8. Wait until the extracted fact, count **12**, and quote **12 DWELLING UNITS** appear.
+9. Point briefly to **Status: Extracted — review required**.
 
-> The source description explicitly mentions twelve dwelling units. The extraction proposes a structured count and preserves the exact supporting quote, but it does not call that number homes built. The reviewer can compare every proposed field directly with the source text.
+> I can find a record directly by permit ID. This source description explicitly mentions twelve dwelling units. The extraction proposes a structured count and preserves the exact supporting quote, but it does not call that number homes built. The reviewer can compare every proposed field directly with the source text.
 >
 > In a production deployment, this extraction endpoint could connect to an AI API. This deployment uses a deterministic local simulation and does not retrieve live AI information.
 

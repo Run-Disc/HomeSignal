@@ -228,24 +228,6 @@ a.meta-pill:hover, a.meta-pill:focus-visible {
 .briefing-citation { margin: 0; color: var(--muted); font-size: 0.84rem; }
 .briefing-unknown-count { margin: 16px 0; padding: 12px; background: var(--paper); border-left: 4px solid var(--amber); }
 .row-featured { background: var(--teal-soft); }
-.spotlight {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-  align-items: center;
-  margin: 12px 0 16px;
-  padding: 16px 18px;
-  background: linear-gradient(120deg, var(--teal-dark), var(--teal));
-  border: 1px solid var(--teal-dark);
-  border-radius: 11px;
-  box-shadow: var(--shadow-sm);
-  text-decoration: none;
-  color: white;
-}
-.spotlight:hover { color: white; transform: translateY(-1px); box-shadow: var(--shadow-md); }
-.spotlight .eyebrow { color: #bce9df; }
-.spotlight-go { margin-left: auto; color: white; font-weight: 700; }
-.spotlight strong { display: block; }
 .crumb { margin: 0 0 12px; color: var(--muted); }
 .filters {
   display: grid;

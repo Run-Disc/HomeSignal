@@ -38,8 +38,8 @@ The browser workflow (`npm run dev` / `npm start`) is unchanged.
 
 Nav: **Queue** → **Record** → **Briefing**.
 
-1. Queue shows issued / housing queue / reviewed / open, a neighborhood-responsive monthly activity chart, and a spotlight row for `BDA-2024-05307`.
-2. Record is the permit description on the left and a human review form on the right. Select exact source words to copy them into the evidence field. **Extract demo evidence** fills a labeled synthetic proposal marked **Extracted — review required** until a person saves a decision (then **Accepted by reviewer**, **Corrected by reviewer**, and so on). **Analyze this record** runs a simulated, evidence-grounded brief for this row only, labeled **AI interpretation — non-authoritative**. The brief includes:
+1. Queue shows issued / housing queue / reviewed / open, a neighborhood-responsive monthly activity chart, filters, search, and the permit table. Search `BDA-2024-05307` to open the scripted record.
+2. Record is the permit description on the left and a human review form on the right. Select exact source words to copy them into the evidence field. **Extract evidence** fills a simulated proposal marked **Extracted — review required** until a person saves a decision (then **Accepted by reviewer**, **Corrected by reviewer**, and so on). **Analyze this record** runs a simulated, evidence-grounded brief for this row only, labeled **AI interpretation — non-authoritative**. The brief includes:
    - three lists: **What the record establishes**, **What it does not establish**, and **What to verify next**. The verify-next steps are conditional ("If you need evidence of delivered housing, check whether…") and never claim that other records exist;
    - **evidence coverage** with status words, not confidence percentages. Examples: source description *Available*, dwelling-unit language *Explicit*, construction completion *Not established*, occupancy *Not established*, related permits *Not checked*;
    - findings with a **Show in source** button for each citation, which highlights the exact quote in the source text;

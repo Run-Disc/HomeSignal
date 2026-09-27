@@ -19,9 +19,9 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 ## Product
 
 - Header: HomeSignal + Queue / Record / Briefing. Snapshot date and Docs are quiet links.
-- Queue: compact metrics, a neighborhood-responsive 2025 issued-record activity chart, spotlight `BDA-2024-05307`, filters, and table. The chart explicitly does not claim homes built.
-- Record: source text + review form with selection-to-quote evidence capture. Labeled demo extraction and a simulated evidence brief (`POST /api/ai/analyze`) are visible on the record. Demo outputs cite this row only and are not mixed into queue totals.
-- Briefing: preserved neighborhood/search filters, visible export scope, featured evidence, optional labeled demo brief, official verification handoff, unclipped print output, and CSV containing all count quotes and source provenance.
+- Queue: compact metrics, a neighborhood-responsive 2025 issued-record activity chart, filters, permit-ID search, and table. The chart explicitly does not claim homes built.
+- Record: source text + review form with selection-to-quote evidence capture. Simulated extraction and a simulated evidence brief (`POST /api/ai/analyze`) are visible on the record. Simulated outputs cite this row only and are not mixed into queue totals.
+- Briefing: preserved neighborhood/search filters, visible export scope, featured evidence, optional simulated brief, official verification handoff, unclipped print output, and CSV containing all count quotes and source provenance.
 - Zoning and comparable City tools: Sources lists the Affordable Housing Development Project Explorer, the June 2025 Controller dashboard recommendation, and zoning code/map/page as unused future links.
 
 ## Desktop

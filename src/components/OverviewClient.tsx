@@ -157,14 +157,6 @@ export function OverviewClient(props: {
         </p>
       </section>
       <HousingContext />
-      {featured ? (
-        <Link className="spotlight" href={recordHref(featured.recordId)}>
-          <span><span className="eyebrow">Example record</span><strong>{featured.sourcePermitId}</strong></span>
-          <span>{featured.neighborhood}</span>
-          <span>{featured.sourceStatusRaw}</span>
-          <span className="spotlight-go">Open record →</span>
-        </Link>
-      ) : null}
 
       <form className="filters" aria-label="Filters">
         <div>
