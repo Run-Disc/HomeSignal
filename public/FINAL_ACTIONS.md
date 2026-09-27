@@ -7,8 +7,8 @@ https://docs.google.com/forms/d/e/1FAIpQLSfDK_aD-miOV3D92Bl4NOFa1Skb8_u-GTCH5j1F
 Deadline stated by the event: Sunday 2026-09-27 23:59 ET (confirm on the form).
 
 1. Confirm https://github.com/Run-Disc/HomeSignal `main` shows this latest push (README, desktop workflow, `VIDEO_SCRIPT.md`).
-2. After GitHub Actions **Desktop packages** succeeds, download `HomeSignal-Setup.exe` if the committed copy is stale, and download macOS DMG/ZIP files from the separate **HomeSignal-macos-arm64** and **HomeSignal-macos-x64** workflow artifacts (or from a Release if you create a `v*` tag).
-3. Optional: create and push an annotated tag such as `v0.1.0` so the workflow attaches Windows and macOS files to a GitHub Release. Do not rewrite git history.
+2. Confirm the `v0.1.0` GitHub Release has five assets: the Windows installer plus arm64 and x64 Mac DMG/ZIP files.
+3. If you install a desktop package, download it only from that public Release. The packages are unsigned, so follow the platform guide and do not claim signing or notarization.
 4. Record a public 3–5 minute demo using `VIDEO_SCRIPT.md` while the app is actually running. Publish it (YouTube unlisted, or whatever the form accepts).
 5. Open the live Google form yourself.
 6. Enter Team Name (solo is allowed). Do not invent a name in this repository.
@@ -28,6 +28,6 @@ Deadline stated by the event: Sunday 2026-09-27 23:59 ET (confirm on the form).
 20. Optional: review WPRDC terms in a browser if a data-use agreement appears.
 21. Optional: add a runtime extraction key only in `.env.local` or host env. Never commit it. Do not present synthetic fixtures as live output.
 22. Optional: import the GitHub repo into Vercel (or similar) yourself and paste only a URL you opened.
-23. Optional: uninstall an old Windows HomeSignal, then install the newest `HomeSignal-Setup.exe` before a judge video.
+23. Optional: uninstall an old Windows HomeSignal, then install `HomeSignal-Setup.exe` from the latest GitHub Release before a judge video.
 24. On macOS, if Gatekeeper blocks the unsigned app, follow `MAC_INSTALL.md` (right-click Open). Do not claim Apple notarization.
 25. Do not rewrite git timestamps. Do not force-push `main` unless you fully understand you are destroying history.

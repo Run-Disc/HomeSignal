@@ -11,7 +11,7 @@ GitHub Actions (`Desktop packages` on `macos-latest`) builds:
 - `HomeSignal-mac-arm64.dmg` / `HomeSignal-mac-arm64.zip` — Apple Silicon
 - `HomeSignal-mac-x64.dmg` / `HomeSignal-mac-x64.zip` — Intel
 
-Download them from the workflow **Artifacts** on `main`, or from a GitHub **Release** created by a `v*` tag. They are **not** committed to the repo root (too large for GitHub file limits).
+Download them from the [latest GitHub Release](https://github.com/Run-Disc/HomeSignal/releases/latest). The same files also appear in the `main` workflow's **HomeSignal-macos-arm64** and **HomeSignal-macos-x64** artifacts. They are **not** committed to the repo root because they exceed GitHub file limits.
 
 Pick arm64 on M1/M2/M3/M4 Macs. Pick x64 on Intel Macs.
 

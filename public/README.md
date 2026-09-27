@@ -16,9 +16,11 @@ Packages are **unsigned**. Windows SmartScreen and macOS Gatekeeper will warn. O
 
 | Platform | File | Where to get it |
 |---|---|---|
-| Windows (x64) | [HomeSignal-Setup.exe](./HomeSignal-Setup.exe) | Repository root and Code → Download ZIP. Also GitHub Releases on `v*` tags. |
-| macOS Apple Silicon | `HomeSignal-mac-arm64.dmg` and `.zip` | GitHub Actions artifact **HomeSignal-macos-arm64**, or a `v*` Release. |
-| macOS Intel | `HomeSignal-mac-x64.dmg` and `.zip` | GitHub Actions artifact **HomeSignal-macos-x64**, or a `v*` Release. |
+| Windows (x64) | `HomeSignal-Setup.exe` | [Latest GitHub Release](https://github.com/Run-Disc/HomeSignal/releases/latest) |
+| macOS Apple Silicon | `HomeSignal-mac-arm64.dmg` and `.zip` | [Latest GitHub Release](https://github.com/Run-Disc/HomeSignal/releases/latest) |
+| macOS Intel | `HomeSignal-mac-x64.dmg` and `.zip` | [Latest GitHub Release](https://github.com/Run-Disc/HomeSignal/releases/latest) |
+
+Every package is rebuilt from the public tag by GitHub Actions. The same files also appear as architecture-specific workflow artifacts. Packages stay in Releases because current Electron installers exceed GitHub's single-file repository limit.
 
 Windows: [WINDOWS_INSTALL.md](./WINDOWS_INSTALL.md). macOS: [MAC_INSTALL.md](./MAC_INSTALL.md).
 

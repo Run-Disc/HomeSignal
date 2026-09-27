@@ -4,10 +4,7 @@ HomeSignal can run as an unsigned Windows app for people who should not have to 
 
 ## Download
 
-Use the copy in this repository (also present if you **Download ZIP** from GitHub):
-
-- Repository file: [HomeSignal-Setup.exe](./HomeSignal-Setup.exe)
-- Direct link: https://github.com/Run-Disc/HomeSignal/raw/main/HomeSignal-Setup.exe
+Open the [latest GitHub Release](https://github.com/Run-Disc/HomeSignal/releases/latest) and download `HomeSignal-Setup.exe` under **Assets**. Release assets are used because the current installer exceeds GitHub's single-file repository limit.
 
 This file is built on GitHub’s Windows runners. It is **not** a Microsoft Store app and is **not** code-signed.
 
@@ -33,8 +30,8 @@ Use Windows **Settings → Apps → Installed apps → HomeSignal → Uninstall*
 
 ## If the window does not open
 
-Uninstall HomeSignal (Windows **Settings → Apps**), then install a fresh `HomeSignal-Setup.exe` from this repository. An older installer could install the shortcut but fail to start the local review window.
+Uninstall HomeSignal (Windows **Settings → Apps**), then install a fresh `HomeSignal-Setup.exe` from the latest GitHub Release. An older installer could install the shortcut but fail to start the local review window.
 
-If the window stays on a starting screen, wait up to about a minute. If an error dialog appears, uninstall HomeSignal and install the newest `HomeSignal-Setup.exe` from this repository. A log is at `%APPDATA%\\HomeSignal\\homesignal-desktop.log`.
+If the window stays on a starting screen, wait up to about a minute. If an error dialog appears, uninstall HomeSignal and install the newest `HomeSignal-Setup.exe` from the latest GitHub Release. A log is at `%APPDATA%\\HomeSignal\\homesignal-desktop.log`.
 
 This package does not include a runtime AI key and will not call Cursor, Grok, or any other model. macOS packages are documented in [MAC_INSTALL.md](./MAC_INSTALL.md).
