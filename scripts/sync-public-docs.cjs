@@ -6,6 +6,7 @@ const path = require("node:path");
 const root = path.join(__dirname, "..");
 const dest = path.join(root, "public");
 const files = [
+  "LICENSE",
   "README.md",
   "SOURCES.md",
   "DATA_DICTIONARY.md",

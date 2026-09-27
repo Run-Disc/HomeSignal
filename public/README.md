@@ -176,7 +176,9 @@ The product combines a permit-evidence workflow with separately labeled monthly 
 
 ## License and attribution
 
-Application code is provided for the hackathon submission. Permit data remains a City of Pittsburgh dataset published by WPRDC under Creative Commons Attribution. Prototype review is not an official City determination.
+Original HomeSignal code, interface, and documentation are **all rights reserved** and licensed only for review by AI for Housing Hackathon judges and authorized organizers. Copying, modification, redistribution, replication, commercial use, derivative works, and use for AI or machine-learning training or evaluation are prohibited without prior written permission. See [`LICENSE`](./LICENSE).
+
+Third-party materials remain under their own terms. Permit data remains a City of Pittsburgh dataset published by WPRDC under Creative Commons Attribution; Zillow Research, U.S. Census Bureau, and software dependency materials remain subject to their respective terms and licenses. Prototype review is not an official City determination.
 
 ## Benefits, risks, and unanswered questions
 

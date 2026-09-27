@@ -1,0 +1,52 @@
+HomeSignal Judge-Review-Only License
+
+Copyright (c) 2026 Natan Abramson. All rights reserved.
+
+1. Limited permission for judging
+
+AI for Housing Hackathon judges and authorized event organizers may access,
+view, and run this repository solely as reasonably necessary to evaluate the
+HomeSignal submission, verify compliance, and maintain event records. They may
+make only the temporary technical copies required for those purposes.
+
+2. No other permission
+
+No permission is granted to any other person or entity, or for any other
+purpose. Without the copyright holder's prior written permission, you may not:
+
+- use, copy, reproduce, modify, adapt, translate, distribute, publish, display,
+  sublicense, sell, commercialize, or create derivative works from the original
+  HomeSignal materials;
+- replicate, imitate, reverse engineer, or reimplement HomeSignal's original
+  code, interface, design, documentation, workflows, or other original
+  materials;
+- use any original HomeSignal material to train, fine-tune, distill, evaluate,
+  benchmark, test, prompt, ground, retrieve for, or otherwise develop any
+  artificial-intelligence or machine-learning model or system;
+- include any original HomeSignal material in a training corpus, evaluation
+  set, vector database, retrieval system, dataset, or competing product; or
+- remove or alter this notice.
+
+Making this repository publicly viewable does not grant a license beyond the
+limited judge-review permission above.
+
+3. Third-party materials
+
+This license applies only to original HomeSignal code, interface elements,
+documentation, and other original materials owned by the copyright holder. It
+does not replace or restrict licenses or terms that apply to third-party
+datasets, software dependencies, trademarks, or other third-party materials.
+In particular, City of Pittsburgh permit data published through WPRDC remains
+under its stated Creative Commons Attribution terms. Zillow Research, U.S.
+Census Bureau, and software dependency materials remain subject to their
+respective terms and licenses.
+
+4. No warranty
+
+THE ORIGINAL HOMESIGNAL MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. TO THE MAXIMUM EXTENT
+PERMITTED BY LAW, THE COPYRIGHT HOLDER IS NOT LIABLE FOR ANY CLAIM, DAMAGES, OR
+OTHER LIABILITY ARISING FROM ACCESS TO OR USE OF THE MATERIALS.
+
+For permission beyond judge review, contact the copyright holder.
