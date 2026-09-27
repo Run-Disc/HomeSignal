@@ -17,8 +17,13 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/lib/*.test.ts",
     "ingest": "python3 scripts/ingest_pli.py",
+    "docs:public": "node scripts/sync-public-docs.cjs",
     "desktop:prepare": "next build && node scripts/prepare-standalone.cjs && node scripts/validate-standalone.cjs",
-    "desktop:win": "npm run desktop:prepare && electron-builder --win --publish never"
+    "desktop:check": "node scripts/validate-electron.cjs",
+    "desktop:win": "npm run desktop:prepare && electron-builder --win --publish never",
+    "desktop:mac": "npm run desktop:prepare && electron-builder --mac --arm64 --x64 --publish never",
+    "desktop:mac:arm64": "npm run desktop:prepare && electron-builder --mac --arm64 --publish never",
+    "desktop:mac:x64": "npm run desktop:prepare && electron-builder --mac --x64 --publish never"
   },
   "dependencies": {
     "next": "^15.5.4",
@@ -71,8 +76,8 @@
     },
     "asar": true,
     "forceCodeSigning": false,
-    "artifactName": "HomeSignal-Setup.${ext}",
     "win": {
+      "artifactName": "HomeSignal-Setup.${ext}",
       "target": [
         {
           "target": "nsis",
@@ -87,6 +92,22 @@
       "createStartMenuShortcut": true,
       "shortcutName": "HomeSignal",
       "uninstallDisplayName": "HomeSignal"
+    },
+    "mac": {
+      "artifactName": "HomeSignal-mac-${arch}.${ext}",
+      "category": "public.app-category.reference",
+      "target": [
+        { "target": "dmg", "arch": ["arm64", "x64"] },
+        { "target": "zip", "arch": ["arm64", "x64"] }
+      ],
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "notarize": false
+    },
+    "dmg": {
+      "sign": false,
+      "title": "HomeSignal"
     }
   }
 }

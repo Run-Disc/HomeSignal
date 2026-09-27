@@ -8,7 +8,7 @@ export default function NotFound() {
         <h1>Record not found</h1>
         <p>That permit ID is not in the 2025 Building/BDA snapshot.</p>
         <p>
-          <Link href="/">Return to overview</Link>
+          <Link href="/">Queue</Link>
         </p>
       </main>
       <SiteFooter />

@@ -1,64 +1,51 @@
 # HomeSignal
 
-HomeSignal is a Pittsburgh permit-evidence observatory for the AI for Housing Hackathon (AI Horizons 2026), Track 2: Housing Production, Rents & Household Flow Observatory.
+HomeSignal is a permit-review workspace for Pittsburgh PLI building records (AI for Housing Hackathon / AI Horizons 2026, Track 2).
 
-**Windows judges: download [HomeSignal-Setup.exe](./HomeSignal-Setup.exe) from this repository and double-click it.** It is also inside the GitHub **Code → Download ZIP** archive. No Node.js, terminal, API key, or internet is required. Windows SmartScreen may warn because the file is unsigned — choose **More info → Run anyway** only for this GitHub copy. Details: [WINDOWS_INSTALL.md](./WINDOWS_INSTALL.md).
+It helps a housing analyst inspect an issued permit description, record what the text supports, and export a briefing. Queue totals are **permit records**, not homes built.
 
 **Public repository:** https://github.com/Run-Disc/HomeSignal
 
-**One sentence:** it helps a housing analyst turn messy PLI permit descriptions into reviewable evidence about proposed housing activity, while keeping record counts, proposed-unit mentions, and completed homes distinct.
+A permit record is not a housing unit. An issued permit is not a completed or occupied home. HomeSignal does not score zoning feasibility.
 
-A permit record is not a housing unit. An issued permit is not a completed home.
+## Download (no Node.js)
 
-## Windows download (no Node.js)
+Packages are **unsigned**. Windows SmartScreen and macOS Gatekeeper will warn. Open only files from this GitHub project.
 
-The installer sits in the repository root so it is visible on the GitHub front page and runnable after a ZIP download:
+| Platform | File | Where to get it |
+|---|---|---|
+| Windows (x64) | [HomeSignal-Setup.exe](./HomeSignal-Setup.exe) | Repository root and Code → Download ZIP. Also GitHub Releases on `v*` tags. |
+| macOS Apple Silicon | `HomeSignal-mac-arm64.dmg` and `.zip` | GitHub Actions artifact **HomeSignal-macos**, or a `v*` Release. |
+| macOS Intel | `HomeSignal-mac-x64.dmg` and `.zip` | Same as above. |
 
-1. Open **[HomeSignal-Setup.exe](./HomeSignal-Setup.exe)** on this page, or unzip the repository ZIP and double-click the same file.
-2. Windows SmartScreen may warn because the installer is **unsigned**. Choose **More info → Run anyway** only for a file from this GitHub project.
-3. After setup, open the **HomeSignal** shortcut. The app serves itself on `127.0.0.1` and does not need the internet or an API key. If you already installed an earlier copy, uninstall it first so Windows is not launching the old app.
+Windows: [WINDOWS_INSTALL.md](./WINDOWS_INSTALL.md). macOS: [MAC_INSTALL.md](./MAC_INSTALL.md).
 
-The browser/web workflow (`npm run dev` / `npm start`) is unchanged.
+The browser workflow (`npm run dev` / `npm start`) is unchanged.
 
-## Working prototype walkthrough
+## Product path
 
-The required public demo is a **3–5 minute video**. Narration is in `DEMO_SCRIPT.md` (target about 4:00). No video is in this repository.
+Nav: **Queue** → **Record** → **Briefing**.
 
-In the running app:
+1. Queue shows issued / housing queue / reviewed / open, plus a spotlight row for `BDA-2024-05307`.
+2. Record is the permit description on the left and a human review form on the right. Save, or mark insufficient evidence.
+3. Briefing prints or downloads CSV of **reviewed** evidence only.
 
-1. Open Overview. The question is: inspect a permit description, decide what is supported, export a follow-up note. The four cards count **issued permit records**, not homes built.
-2. Click **Explore a real example** (`BDA-2024-05307`). It is Commercial class with “TOTAL OF 12 DWELLING UNITS ABOVE.”
-3. Treat that sentence as proposed-unit language on an issued permit, not occupancy. A labeled keyword/work-type discovery aid explains why the record is in the queue; it is not model output.
-4. This deployment is **source-review**: there is no runtime key and no saved genuine model response. Use **Save source review** or **Insufficient evidence**. Accept/Reject appear only if a proposal exists.
-5. Open Export briefing. Print/CSV covers **reviewed** evidence only, with the current filter scope named on the page. There is no citywide homes-built total. The record list is paginated (25 per page); search still covers the full matching set.
+This repository’s working path is **source-review**: no runtime model key, `data/public/saved-extractions.json` is empty. Displayed findings are deterministic snapshot metrics or human-entered reviews. Cursor is not used at runtime.
 
-## Libraries, frameworks, APIs, and tools
+## Libraries and tools
 
-Names below describe what this repository uses. They are **not endorsements** by those projects, vendors, the City of Pittsburgh, WPRDC, OpenAI, Cursor, xAI, or the event organizers.
+Names describe what this repository uses. They are **not endorsements**.
 
-| Name | Role in HomeSignal |
+| Name | Role |
 |---|---|
-| Next.js 15 (App Router) | Web application framework, routing, production build |
-| React 19 | UI components (overview, review workspace, export) |
-| TypeScript | Typed application and library code |
-| Zod | Schema validation for extraction proposals |
-| Node.js 22 and npm | Runtime, package install, `node:test` + `tsx` test runner |
-| WPRDC / CKAN | Public catalog and CSV dump of City of Pittsburgh PLI Permits (data API/download, not a paid product API) |
-| Optional OpenAI-compatible Chat Completions HTTP endpoint | Server-side extraction only when `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` are set. **Not configured in this repository.** Not used in the working demo path. |
-| Cursor (Grok 4.6) | Implementation assistance during the authorized build window beginning 2026-09-26 09:00 America/New_York. Not a runtime model for visitors. Coding credits are not an extraction API key. |
-| Electron + electron-builder | Optional unsigned Windows desktop wrapper around the same Next.js app. Not required to run in a browser. |
+| Next.js 15, React 19, TypeScript, Zod | Web app |
+| Node.js 22 / npm | Install, tests, production server |
+| WPRDC / CKAN | PLI Permits dump (not a paid API) |
+| Optional OpenAI-compatible Chat Completions | Server `POST /api/extract` **only if** `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` are set. **Not configured here.** |
+| Cursor | Software-development assistance only (coding, debugging, testing, documentation editing) during the authorized build window beginning 2026-09-26 09:00 America/New_York. **Not a runtime model.** |
+| Electron + electron-builder | Unsigned Windows NSIS and macOS DMG/ZIP wrappers around the same Next standalone app |
 
-Python 3 is used only for the optional ingest script `scripts/ingest_pli.py`. The committed snapshot is enough to run the app. Vercel is a documented optional host (`vercel.json`); **no deployment is claimed**.
-
-## Architecture
-
-- Next.js 15 App Router + React 19 + TypeScript.
-- Sanitized 2025 PLI snapshot in `data/public/permits-2025.json` (copied to `public/data/` for static serving).
-- Deterministic metrics and filters in `src/lib/metrics.ts`.
-- Optional server-side extraction at `POST /api/extract` (`src/lib/extractClient.ts`). Quote/schema validation in `src/lib/extraction.ts`.
-- Human reviews persist in **this browser’s** `localStorage` for the current snapshot version only.
-- Export: print briefing + formula-neutralized CSV (`src/lib/briefing.ts`, `src/lib/csv.ts`).
-- Optional unsigned Windows wrapper (`electron/main.cjs`) starts the Next standalone server on 127.0.0.1 using Electron’s bundled Node (`ELECTRON_RUN_AS_NODE`). GitHub Actions builds `HomeSignal-Setup.exe`.
+Python 3 is used only for optional ingest (`scripts/ingest_pli.py`). The committed snapshot is enough to run. `vercel.json` exists; **no hosted deployment is claimed**.
 
 ## Data provenance
 
@@ -66,46 +53,43 @@ Python 3 is used only for the optional ingest script `scripts/ingest_pli.py`. Th
 |---|---|
 | Source | City of Pittsburgh PLI Permits via WPRDC |
 | Resource | `f4d1177a-f597-4c32-8cbf-7885f56253f6` |
-| Retrieval | 2026-09-26 CKAN dump (65,378 rows; catalog HTML preview still listed 49,255) |
+| Retrieval | 2026-09-26 CKAN dump (65,378 rows; catalog HTML preview listed 49,255) |
 | License | Creative Commons Attribution |
 | Product cohort | 2025 issue dates, `BUILDING` or `Building & Development Application` |
-| Unique IDs in snapshot | 4,243 |
-| Potential housing candidates | 727 (keyword / work-type discovery, including commercial class) |
-| Snapshot version | `pli-2025-bda-v1` |
+| Unique IDs | 4,243 |
+| Housing queue (keyword / work-type discovery) | 727 |
+| Snapshot | `pli-2025-bda-v1` |
 
 See `SOURCES.md` and `DATA_DICTIONARY.md`.
 
-## Privacy treatment
+Pittsburgh zoning code, zoning map, and zoning dataset pages are listed on Sources as **context only**. They are not ingested and are not a feasibility engine.
 
-Owner names, contractor names, street addresses, parcel identifiers, coordinates, project value, and contact fields are **not** in the public snapshot, UI types, extraction prompt payload, or CSV/print export.
+## Privacy
 
-On ingest, descriptions are scanned for emails, phones, owner/contractor/contact phrases, and house-number street patterns. Matching street patterns are replaced with `[REDACTED_ADDRESS]` (21 records on 2026-09-26). Residual personal data would exclude a record rather than invent replacement prose (0 exclusions). Automated redaction is incomplete.
+Owner names, contractor names, street addresses, parcel identifiers, coordinates, project value, and contact fields are not in the public snapshot, UI types, extraction prompt payload, or CSV/print export.
 
-## AI behavior
+On ingest, descriptions are scanned for emails, phones, owner/contractor/contact phrases, and house-number street patterns. Matching street patterns became `[REDACTED_ADDRESS]` (21 records on 2026-09-26). Residual personal data would exclude a record (0 exclusions). Automated redaction is incomplete.
 
-- Cursor coding credits are **not** a runtime API key.
-- Without `EXTRACTION_API_KEY` + `EXTRACTION_MODEL`, mode is **source-review**. The review action does not pretend a live request is in flight.
-- `data/public/saved-extractions.json` is empty in this repository. No genuine saved model responses are claimed.
-- When a key is later configured, extraction is limited to the 120-record allowlist, must quote source text, and is rejected if it invents counts or citation IDs.
+## AI at runtime
 
-## Human-in-the-loop safeguards
+- Cursor coding assistance is **not** a visitor API key and is **not** used while the app runs.
+- Without `EXTRACTION_API_KEY` + `EXTRACTION_MODEL`, mode is source-review. The UI does not invent a live model answer.
+- `saved-extractions.json` is `[]`. No genuine saved model responses are claimed.
+- `data/evaluation/adversarial-synthetic.json` is labeled **synthetic_adversarial**. Those strings are not City records, are not shown in the queue, and are excluded from factual metrics.
 
-- Manual review works with no model output.
-- Accept is disabled in practice when there is no proposal; Correct / Insufficient evidence / Reject still work.
-- Reviews are labeled as local reviewer, not City determinations.
-- Metrics never sum unit mentions into a citywide homes-built total.
-- Decision support only: verify with the responsible public authority (OneStopPGH / PLI).
+## Human review
+
+Manual review works with no model output. Reviews stay in this browser’s `localStorage` for the snapshot version. They are not City determinations. Metrics never sum unit mentions into a citywide homes-built total.
 
 ## Limitations (short)
 
-No construction-start, completion, or occupancy inference. No proposed→issued→completed funnel. Blank descriptions: 2,417 of 4,243 cohort records. No accuracy percentage: the labeling sheet is unlabeled. Details: `LIMITATIONS.md`, `EVALUATION.md`, `AI_DISCLOSURE.md`.
+No construction-start, completion, or occupancy inference. No proposed→issued→completed funnel. Blank descriptions: 2,417 of 4,243 cohort records. No accuracy percentage: the labeling sheet is unlabeled. No zoning feasibility. Details: `LIMITATIONS.md`, `EVALUATION.md`, `AI_DISCLOSURE.md`.
 
 ## Run locally
 
-Requires Node.js 22+ (this repo can use `.tools/node` if Node is not on PATH). The sanitized snapshot is already committed.
+Requires Node.js 22+ (or `export PATH="$PWD/.tools/node/bin:$PATH"`).
 
 ```bash
-export PATH="$PWD/.tools/node/bin:$PATH"   # only if Node is not on PATH
 npm install
 npm test
 npx tsc --noEmit
@@ -114,21 +98,20 @@ npm run dev
 
 Open http://localhost:3000
 
-Optional live extraction (server-side only): copy `.env.example` to `.env.local`. Never commit keys.
-
 ```bash
 npm run build
 npm start
 ```
 
-## Vercel (configuration only)
+Optional live extraction: copy `.env.example` to `.env.local`. Never commit keys.
 
-This repository includes `vercel.json` (`framework: nextjs`, `npm ci`, `npm run build`). **No Vercel deployment was performed or verified in this event-window pass.** If you import the GitHub repo in Vercel yourself:
+Desktop packages (unsigned):
 
-1. Framework: Next.js, Node 22.
-2. Do **not** add `EXTRACTION_API_KEY` unless you intend a paid live-extraction demo.
-3. After import, confirm Overview, one record review, Sources, and Export yourself. Do not treat this README as proof that a host is live.
+```bash
+npm run desktop:win      # Windows NSIS (CI on windows-latest)
+npm run desktop:mac      # macOS DMG+ZIP for arm64 and x64
+```
 
 ## License and attribution
 
-Application code is provided for the hackathon submission. Permit data remains a City of Pittsburgh dataset published by WPRDC under Creative Commons Attribution. Do not treat prototype review as an official City determination.
+Application code is provided for the hackathon submission. Permit data remains a City of Pittsburgh dataset published by WPRDC under Creative Commons Attribution. Prototype review is not an official City determination.

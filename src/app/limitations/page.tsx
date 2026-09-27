@@ -14,7 +14,7 @@ export default function LimitationsPage() {
           <li>A permit record is not a housing unit. This product has no aggregate housing-unit total.</li>
           <li>An issued permit is not evidence that construction started, finished, passed inspection, or became occupied.</li>
           <li>Source status is a current label, not a historical timeline.</li>
-          <li>This source alone cannot support a proposed → issued → completed funnel.</li>
+          <li>This product does not interpret Pittsburgh zoning or score zoning feasibility.</li>
           <li>Unit numbers in text may describe existing units, proposed totals, additions, removals, or unrelated work.</li>
           <li>Stories, bedrooms, and valuations are not unit counts.</li>
           <li>Residential and commercial are administrative classes. Commercial records can include housing.</li>

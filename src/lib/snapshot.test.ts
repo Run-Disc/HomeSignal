@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SNAPSHOT_VERSION } from "./constants";
@@ -72,6 +73,28 @@ describe("snapshot privacy and schema", () => {
     const blanks = records.filter((r) => r.qualityFlags.includes("blank_description"));
     assert.ok(blanks.length > 0);
     assert.ok(blanks.every((r) => !r.workDescriptionSanitized));
+  });
+
+  it("stores no genuine saved model responses in the public snapshot", () => {
+    const saved = JSON.parse(
+      readFileSync(join(process.cwd(), "data/public/saved-extractions.json"), "utf8"),
+    ) as unknown[];
+    assert.deepEqual(saved, []);
+  });
+
+  it("does not treat synthetic evaluation fixtures as City permit records", () => {
+    const adversarial = JSON.parse(
+      readFileSync(join(process.cwd(), "data/evaluation/adversarial-synthetic.json"), "utf8"),
+    ) as { cases: Array<{ id: string; label: string; text: string }>; note: string };
+    assert.match(adversarial.note, /not City of Pittsburgh permit records/i);
+    assert.ok(adversarial.cases.every((c) => c.label === "synthetic_adversarial"));
+    const ids = new Set(records.map((r) => r.recordId));
+    const texts = new Set(records.map((r) => r.workDescriptionSanitized));
+    for (const item of adversarial.cases) {
+      assert.equal(ids.has(item.id), false, item.id);
+      assert.equal(ids.has(`pli:${item.id}`), false, item.id);
+      assert.equal(texts.has(item.text), false, item.id);
+    }
   });
 
   it("includes the documented flagship commercial example", () => {

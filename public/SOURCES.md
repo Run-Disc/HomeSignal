@@ -27,6 +27,18 @@ The WPRDC resource HTML page displayed a Data Use Agreement. It was not accepted
 - Permit classifications: https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/Permitting
 - OneStopPGH permit center (human follow-up): https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/OneStopPGH-Permit-Center
 
+## Zoning context only (not used by HomeSignal)
+
+These pages were supplied in the event catalog. HomeSignal does **not** ingest them, join parcels to districts, interpret the code, or claim zoning feasibility.
+
+| Resource | URL |
+|---|---|
+| Pittsburgh Zoning Code | https://pittsburghpa.gov/dcp/zoning-code |
+| Pittsburgh Zoning Districts (map / GIS) | https://data.wprdc.org/dataset/pittsburgh-zoning |
+| WPRDC zoning dataset page | https://data.wprdc.org/dataset/zoning |
+
+The catalog’s older zoning URL was reported stale in pre-event notes; the WPRDC zoning dataset page is listed as the checked alternative. Neither is a data source for Queue metrics.
+
 ## Optional ACS rent
 
 Not included. The master specification allows one citywide ACS 2020–2024 median gross rent card only after the core works and the value is verified. It was not added in this build.

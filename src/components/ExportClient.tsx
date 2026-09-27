@@ -68,18 +68,7 @@ export function ExportClient(props: {
     <div className="shell">
       <AppHeader snapshotDate={props.snapshotDate} modeLabel={props.mode} current="export" />
       <main id="main" className="prose briefing-page">
-        <p className="page-kicker">Step 3 of 3 · Export</p>
-        <h1>Evidence briefing</h1>
-        <p className="print-hide">
-          Print → Save as PDF for a one-page follow-up note. CSV contains local reviewed evidence only,
-          formula-neutralized. Unreviewed candidates are not exported as findings.
-        </p>
-        <p>
-          Export scope: year {filters.year}; neighborhood {filters.neighborhood}; review state{" "}
-          {filters.reviewState}; universe{" "}
-          {filters.candidatesOnly ? "potential housing candidates" : "full selected cohort"}. Featured
-          example ID: {featuredRecordId.replace("pli:", "")}.
-        </p>
+        <h1>Briefing</h1>
         <div className="print-actions print-hide">
           <button type="button" className="btn" onClick={() => window.print()}>
             Print / Save as PDF
@@ -88,7 +77,7 @@ export function ExportClient(props: {
             Download reviewed CSV
           </button>
           <Link className="btn-secondary" href="/">
-            Back to overview
+            Queue
           </Link>
         </div>
         <pre className="source-text briefing-text">{text}</pre>

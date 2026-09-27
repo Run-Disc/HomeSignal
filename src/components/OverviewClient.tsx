@@ -2,20 +2,11 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import {
-  AMBIGUOUS_PERMIT_ID,
-  AMBIGUOUS_RECORD_ID,
-  FLAGSHIP_PERMIT_ID,
-  FLAGSHIP_RECORD_ID,
-  PAGE_SIZE,
-  SNAPSHOT_VERSION,
-} from "@/lib/constants";
-import { DISCOVERY_CAVEAT, explainDiscovery } from "@/lib/discovery";
-import { filtersToSearchParams } from "@/lib/filters";
+import { FLAGSHIP_PERMIT_ID, FLAGSHIP_RECORD_ID, PAGE_SIZE } from "@/lib/constants";
+import { explainDiscovery } from "@/lib/discovery";
 import {
   loadFailedIds,
   loadReviews,
-  resetLocalState,
 } from "@/lib/clientStore";
 import { applyFilters, computeMetrics, defaultFilters } from "@/lib/metrics";
 import type { ClientPermit } from "@/lib/types";
@@ -36,8 +27,8 @@ export function OverviewClient(props: {
   retrievedAt: string;
 }) {
   const [filters, setFilters] = useState<Filters>(defaultFilters());
-  const [reviews, setReviews] = useState(loadReviews);
-  const [failed, setFailed] = useState(loadFailedIds);
+  const [reviews] = useState(loadReviews);
+  const [failed] = useState(loadFailedIds);
   const [sortKey, setSortKey] = useState<"issueDate" | "sourcePermitId" | "neighborhood">("issueDate");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -74,7 +65,7 @@ export function OverviewClient(props: {
   const pageRows = tableRows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
   const from = tableRows.length === 0 ? 0 : safePage * PAGE_SIZE + 1;
   const to = Math.min(tableRows.length, (safePage + 1) * PAGE_SIZE);
-  const exportHref = `/export?${filtersToSearchParams(filters, FLAGSHIP_RECORD_ID)}`;
+  const featured = props.records.find((r) => r.recordId === FLAGSHIP_RECORD_ID);
 
   function updateFilter<K extends keyof Filters>(key: K, value: Filters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -83,85 +74,43 @@ export function OverviewClient(props: {
 
   return (
     <>
-      <section className="card decision-card" aria-labelledby="decision-heading">
-        <p className="page-kicker">Start the demo here</p>
-        <h2 id="decision-heading">Inspect one issued permit, then export a note</h2>
-        <p>
-          Find a Pittsburgh PLI permit that may describe housing, inspect what the source actually says, decide
-          what is supported, and export a traceable follow-up. An issued permit is not construction start,
-          completion, or occupancy.
-        </p>
-        <div className="nav-row">
-          <Link className="btn" href={`/review/${encodeURIComponent(FLAGSHIP_RECORD_ID)}`}>
-            Explore a real example ({FLAGSHIP_PERMIT_ID})
-          </Link>
-          <Link className="btn-secondary" href={`/review/${encodeURIComponent(AMBIGUOUS_RECORD_ID)}`}>
-            Ambiguous case ({AMBIGUOUS_PERMIT_ID})
-          </Link>
-        </div>
-        <p className="metric-def">
-          {FLAGSHIP_PERMIT_ID} (Middle Hill, Commercial, New Construction) includes “TOTAL OF 12 DWELLING UNITS
-          ABOVE.” That is proposed-unit language on an issued record, not twelve completed homes.
-        </p>
-      </section>
-
       <section aria-labelledby="metrics-heading">
         <h2 id="metrics-heading" className="visually-hidden">
-          Record-based metrics
+          Queue totals
         </h2>
         <div className="metrics">
           <article className="card">
-            <h3>Issued permit records</h3>
+            <h3>Issued</h3>
             <div className="metric-value">{metrics.permitRecordsInCohort}</div>
-            <p className="metric-def">Building/BDA records matching year and neighborhood. Not housing units.</p>
           </article>
           <article className="card">
-            <h3>Potential housing records</h3>
+            <h3>Housing queue</h3>
             <div className="metric-value">{metrics.potentialHousingRecords}</div>
-            <p className="metric-def">Keyword or new/conversion/demolition work-type discovery. Includes commercial class.</p>
           </article>
           <article className="card">
-            <h3>Reviewed records</h3>
+            <h3>Reviewed</h3>
             <div className="metric-value">{metrics.reviewedRecords}</div>
-            <p className="metric-def">Local accept/correct/reject/insufficient decisions for snapshot {SNAPSHOT_VERSION}.</p>
           </article>
           <article className="card">
-            <h3>Needs review</h3>
+            <h3>Open</h3>
             <div className="metric-value">{metrics.needsReview}</div>
-            <p className="metric-def">
-              Candidates without a final review. Insufficient {metrics.insufficientEvidence}; failed
-              extractions {metrics.failedExtractions}.
-            </p>
           </article>
         </div>
-        <details className="defs">
-          <summary>What these counts mean</summary>
-          <ul>
-            <li>Issued permit records, potential housing records, reviewed records, and needs-review counts are record counts, not homes built.</li>
-            <li>An issued or “Completed” source status is not proof that construction finished or a home is occupied.</li>
-            <li>Potential housing records are selected by a project keyword/work-type list. A record excluded by the filter is not proven to contain no housing.</li>
-            <li>
-              Records with an explicit proposed-unit mention (reviewed housing records only):{" "}
-              {metrics.recordsWithExplicitProposedUnitMention}. This counts records, not units. There is no
-              citywide homes-built total.
-            </li>
-            <li>
-              Workflow coverage {metrics.extractionCoverageNumerator} / {metrics.extractionCoverageDenominator}{" "}
-              candidates. Blank descriptions in this cohort: {metrics.blankDescriptions}. Coverage is not source
-              completeness or model accuracy.
-            </li>
-            <li>Source: City of Pittsburgh PLI Permits via WPRDC, retrieved {props.retrievedAt.slice(0, 10)}.</li>
-          </ul>
-        </details>
       </section>
+      {featured ? (
+        <Link className="spotlight" href={`/review/${encodeURIComponent(featured.recordId)}`}>
+          <strong>{featured.sourcePermitId}</strong>
+          <span>{featured.neighborhood}</span>
+          <span>{featured.sourceStatusRaw}</span>
+          <span className="spotlight-go">Open</span>
+        </Link>
+      ) : null}
 
-      <section className="card panel" aria-labelledby="find-heading">
-        <h2 id="find-heading">Find a record</h2>
-        <form className="filters" aria-label="Cohort filters">
+      <form className="filters" aria-label="Filters">
         <div>
           <label htmlFor="year">Issue year</label>
           <select id="year" value={filters.year} onChange={(e) => updateFilter("year", e.target.value)}>
-            <option value="2025">2025 (downloaded cohort)</option>
+            <option value="2025">2025</option>
           </select>
         </div>
         <div>
@@ -171,7 +120,7 @@ export function OverviewClient(props: {
             value={filters.neighborhood}
             onChange={(e) => updateFilter("neighborhood", e.target.value)}
           >
-            <option value="all">All neighborhoods in cohort</option>
+            <option value="all">All</option>
             {props.neighborhoods.map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -180,7 +129,7 @@ export function OverviewClient(props: {
           </select>
         </div>
         <div>
-          <label htmlFor="reviewState">Review state</label>
+          <label htmlFor="reviewState">Status</label>
           <select
             id="reviewState"
             value={filters.reviewState}
@@ -196,18 +145,18 @@ export function OverviewClient(props: {
           </select>
         </div>
         <div>
-          <label htmlFor="universe">Table universe</label>
+          <label htmlFor="universe">Queue</label>
           <select
             id="universe"
             value={filters.candidatesOnly ? "candidates" : "cohort"}
             onChange={(e) => updateFilter("candidatesOnly", e.target.value === "candidates")}
           >
-            <option value="candidates">Potential housing candidates</option>
-            <option value="cohort">Full selected cohort</option>
+            <option value="candidates">Housing</option>
+            <option value="cohort">All issued</option>
           </select>
         </div>
         <div>
-          <label htmlFor="query">Find permit ID or neighborhood</label>
+          <label htmlFor="query">Search</label>
           <input
             id="query"
             value={query}
@@ -232,51 +181,9 @@ export function OverviewClient(props: {
           </button>
         </div>
       </form>
-      </section>
 
-      <details className="chart card defs" aria-labelledby="monthly-heading">
-        <summary id="monthly-heading">Monthly issued-record activity (not housing production)</summary>
-        <p className="metric-def">
-          Counts issued records in the selected cohort by <code>issue_date</code> month. This is not a housing
-          production chart.
-        </p>
-        <div role="img" aria-label="Bar chart of issued records by month">
-          {metrics.monthlyIssued.map((row) => {
-            const max = Math.max(...metrics.monthlyIssued.map((m) => m.count), 1);
-            return (
-              <div className="bar-row" key={row.month}>
-                <span>{row.month.slice(5)}</span>
-                <div className="bar">
-                  <span style={{ width: `${(row.count / max) * 100}%` }} />
-                </div>
-                <span>{row.count}</span>
-              </div>
-            );
-          })}
-        </div>
-        <table className="print-hide" style={{ minWidth: 0, marginTop: 12 }}>
-          <caption className="metric-def">Text equivalent of the monthly chart</caption>
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Issued records</th>
-            </tr>
-          </thead>
-          <tbody>
-            {metrics.monthlyIssued.map((row) => (
-              <tr key={row.month}>
-                <td>{row.month}</td>
-                <td>{row.count}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </details>
-
-      <p id="table-count" role="status" aria-live="polite">
-        Showing {from}–{to} of {tableRows.length} matching records (page {safePage + 1} of {pageCount}). Metric
-        cards above use the full selected cohort, not this page. Search, sort, and filters still cover every
-        matching record.
+      <p id="table-count" className="metric-def" role="status" aria-live="polite">
+        {from}–{to} of {tableRows.length}
       </p>
       <div className="nav-row print-hide" aria-label="Record list pagination">
         <button type="button" className="btn-secondary" disabled={safePage === 0} onClick={() => setPage(safePage - 1)}>
@@ -298,7 +205,6 @@ export function OverviewClient(props: {
           pageRows.map((row) => {
             const review = reviews[row.recordId];
             const state = (review?.state ?? "unreviewed") as ReviewState;
-            const discovery = explainDiscovery(row);
             return (
               <li key={`card-${row.recordId}`} className="card record-card">
                 <Link className="record-card-link" href={`/review/${encodeURIComponent(row.recordId)}`}>
@@ -307,7 +213,6 @@ export function OverviewClient(props: {
                     {row.issueDate} · {row.neighborhood} · {row.sourceClassRaw ?? "Unknown"}
                   </span>
                   <span className={statusClass(state)}>{state.replaceAll("_", " ")}</span>
-                  <span className="metric-def">{discovery.summary}</span>
                 </Link>
               </li>
             );
@@ -336,9 +241,9 @@ export function OverviewClient(props: {
               </th>
               <th>Source class</th>
               <th>Suggested scope</th>
-              <th>Proposed-unit mention</th>
-              <th>Why in queue</th>
-              <th>Review</th>
+              <th>Units</th>
+              <th>Match</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -352,7 +257,7 @@ export function OverviewClient(props: {
                 const state = (review?.state ?? "unreviewed") as ReviewState;
                 const discovery = explainDiscovery(row);
                 return (
-                  <tr key={row.recordId}>
+                  <tr key={row.recordId} className={row.recordId === FLAGSHIP_RECORD_ID ? "row-featured" : undefined}>
                     <td className="record-id">
                       <Link href={`/review/${encodeURIComponent(row.recordId)}`}>{row.sourcePermitId}</Link>
                     </td>
@@ -365,7 +270,7 @@ export function OverviewClient(props: {
                         ? String(review.finalFields.proposedTotalUnitCount)
                         : "Unknown"}
                     </td>
-                    <td>{discovery.summary}</td>
+                    <td>{discovery.keywordHits.slice(0, 2).join(", ") || discovery.workTypeHits[0] || "—"}</td>
                     <td>
                       <span className={statusClass(state)}>{state.replaceAll("_", " ")}</span>
                     </td>
@@ -375,26 +280,6 @@ export function OverviewClient(props: {
             )}
           </tbody>
         </table>
-      </div>
-      <p className="metric-def">{DISCOVERY_CAVEAT}</p>
-
-      <div className="nav-row print-hide">
-        <Link className="btn" href={exportHref}>
-          Open export with current filters and local reviews
-        </Link>
-        <button
-          type="button"
-          className="btn-danger"
-          onClick={() => {
-            if (window.confirm("Reset local reviews and cached extractions on this browser?")) {
-              resetLocalState();
-              setReviews({});
-              setFailed([]);
-            }
-          }}
-        >
-          Reset demo (local only)
-        </button>
       </div>
     </>
   );

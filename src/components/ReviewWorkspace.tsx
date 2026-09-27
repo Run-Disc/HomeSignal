@@ -10,8 +10,7 @@ import {
   saveFailedIds,
   saveReviews,
 } from "@/lib/clientStore";
-import { COUNT_LABELS, DECISION_SUPPORT, SCOPE_LABELS } from "@/lib/constants";
-import { DISCOVERY_CAVEAT, explainDiscovery } from "@/lib/discovery";
+import { COUNT_LABELS, SCOPE_LABELS } from "@/lib/constants";
 import { reviewerLabel } from "@/lib/briefing";
 import {
   SOURCE_REVIEW_STATUS,
@@ -76,7 +75,7 @@ export function ReviewWorkspace(props: {
     aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null,
   );
   const [waiting, setWaiting] = useState(false);
-  const [selectedField, setSelectedField] = useState<string | null>(null);
+  const [selectedField] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReviewedFields>(emptyFields);
   const [reason, setReason] = useState("");
   const [quote, setQuote] = useState("");
@@ -88,8 +87,6 @@ export function ReviewWorkspace(props: {
   const current = reviews[record.recordId];
   const stale = Boolean(current && current.sanitizedInputHash !== record.inputHash);
   const blank = record.qualityFlags.includes("blank_description") || !record.workDescriptionSanitized;
-  const discovery = useMemo(() => explainDiscovery(record), [record]);
-  const sourceReviewMode = aiMode === "source-review" && !proposal;
 
   useEffect(() => {
     setProposal(loadCachedProposal(record.recordId, record.inputHash));
@@ -308,161 +305,58 @@ export function ReviewWorkspace(props: {
 
   return (
     <div>
-      <p className="page-kicker">Step 2 of 3 · Review</p>
-      <p className="crumb">
-        <Link href="/">Overview</Link>
-        {" / "}
-        <strong>{record.sourcePermitId}</strong>
-        {" / "}
-        <Link href={`/export?example=${encodeURIComponent(record.recordId)}`}>Export</Link>
-      </p>
-      <p className="banner">{props.modeDescription}</p>
       {stale ? (
         <p className="banner error">
           This browser’s saved review was recorded against a different source-text hash. Re-read the description
           and save again before treating the old decision as current.
         </p>
       ) : null}
-      <div className="nav-row">
-        <Link className="btn-secondary" href="/">
-          Back to overview
-        </Link>
-        {props.neighbors.prev ? (
-          <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.prev)}`}>
-            Previous
-          </Link>
-        ) : null}
-        {props.neighbors.next ? (
-          <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.next)}`}>
-            Next
-          </Link>
-        ) : null}
-        <Link className="btn" href={`/export?example=${encodeURIComponent(record.recordId)}`}>
-          Export with this example
-        </Link>
-      </div>
       <div className="workspace">
         <section className="card" aria-labelledby="source-heading">
-          <h2 id="source-heading">Sanitized source record</h2>
-          <p>
-            <strong>{record.sourcePermitId}</strong> · {record.issueDate} · {record.neighborhood}
-          </p>
-          <p>
-            Source class: {record.sourceClassRaw ?? "Unknown"} (administrative, not a housing determination)
-          </p>
-          <p>Permit type: {record.permitTypeRaw ?? "Unknown"}</p>
-          <p>Work type: {record.workTypeRaw ?? "Unknown"}</p>
-          <p>
-            Source status: {record.sourceStatusRaw ?? "Unknown"} — current status only, not a completion timeline.
-          </p>
-          <p>
-            Citation: {record.citationId} · snapshot {record.snapshotVersion}
-          </p>
-          <h3>Work description</h3>
-          <p className="source-text">{highlight || "(blank description)"}</p>
+          <h2 id="source-heading">{record.sourcePermitId}</h2>
           <p className="metric-def">
-            Street address, owner, and contractor fields were excluded. Automated redaction is incomplete.
+            {record.neighborhood} · {record.issueDate} · {record.sourceClassRaw ?? "—"} ·{" "}
+            {record.workTypeRaw ?? "—"} · {record.sourceStatusRaw ?? "—"}
           </p>
-          <h3>Why this record is in the queue</h3>
-          <p>{discovery.summary}</p>
-          <p className="metric-def">{DISCOVERY_CAVEAT}</p>
+          <p className="source-text">{highlight || "No description"}</p>
         </section>
         <section className="card" aria-labelledby="review-heading">
-          <h2 id="review-heading">Record human source review</h2>
-          {sourceReviewMode ? (
-            <p className="metric-def">
-              No model proposal is loaded. Mark what the source supports. Do not invent a count if the text is
-              blank or ambiguous.
-            </p>
-          ) : null}
-          <p>
-            <button
-              type="button"
-              className={aiMode === "source-review" ? "btn-secondary" : "btn"}
-              disabled={waiting}
-              aria-describedby="extract-status"
-              onClick={() => void requestExtract()}
-            >
-              {extractionButtonLabel(aiMode, waiting)}
-            </button>
-          </p>
-          <p
-            id="extract-status"
-            className={message && /timed out/i.test(message) ? "banner error" : "banner"}
-            role="status"
-            aria-live="polite"
-          >
-            {message ?? "No AI proposal loaded. You can still complete a manual source review."}
-          </p>
-          {proposal ? (
-            <div>
-              <p>
-                {proposal.originLabel === "previously_generated" ? "Previously generated" : "Proposal"} ·{" "}
-                {proposal.modelId} · {proposal.generatedAt}
-              </p>
-              <p>
-                <button type="button" className="btn-secondary" onClick={() => setSelectedField("relevance")}>
-                  Relevance: {SCOPE_LABELS[proposal.housingRelevance]}
-                </button>{" "}
-                <button type="button" className="btn-secondary" onClick={() => setSelectedField("scope")}>
-                  Scope: {SCOPE_LABELS[proposal.proposedScope]}
-                </button>
-              </p>
-              {COUNT_KEYS.map((key) => (
-                <p key={key}>
-                  <button type="button" className="btn-secondary" onClick={() => setSelectedField(key)}>
-                    {COUNT_LABELS[key]}: {proposal[key] == null ? "Unknown" : proposal[key]}
-                  </button>
-                  {proposal.countEvidence[key] ? (
-                    <span> — “{proposal.countEvidence[key]?.quote}”</span>
-                  ) : (
-                    <span> — no explicit count evidence</span>
-                  )}
-                </p>
-              ))}
-              <p>{proposal.explanation}</p>
-              <p>
-                Next: {proposal.followUpRole} — {proposal.followUpQuestion}
-              </p>
-            </div>
-          ) : null}
-
+          <h2 id="review-heading">Review</h2>
           {blank ? (
             <p className="banner">
-              The source description is blank. Prefer <strong>Insufficient evidence</strong> instead of entering a
-              unit count.
+              Description is blank. Use Insufficient evidence instead of a count.
             </p>
           ) : null}
 
           <p>
-            Current status:{" "}
+            Status:{" "}
             <strong>{current?.state.replaceAll("_", " ") ?? "unreviewed"}</strong>
-            {current ? ` · ${reviewerLabel(current.reviewerRole)} · ${current.timestamp}` : null}
+            {current ? ` · ${current.timestamp}` : null}
           </p>
-          <label htmlFor="rel">Housing relevance</label>
+          <label htmlFor="rel">Housing</label>
           <select
             id="rel"
             value={draft.housingRelevance}
             onChange={(e) => setDraft({ ...draft, housingRelevance: e.target.value as HousingRelevance })}
           >
-            <option value="housing">housing</option>
-            <option value="not_housing">not_housing</option>
-            <option value="uncertain">uncertain</option>
+            <option value="housing">Housing-related</option>
+            <option value="not_housing">Not housing-related</option>
+            <option value="uncertain">Uncertain</option>
           </select>
-          <label htmlFor="scope">Proposed scope (project labels)</label>
+          <label htmlFor="scope">Scope</label>
           <select
             id="scope"
             value={draft.proposedScope}
             onChange={(e) => setDraft({ ...draft, proposedScope: e.target.value as ProposedScope })}
           >
-            <option value="new_building">new_building</option>
-            <option value="conversion">conversion</option>
-            <option value="addition_or_alteration">addition_or_alteration</option>
-            <option value="demolition">demolition</option>
-            <option value="other">other</option>
-            <option value="uncertain">uncertain</option>
+            <option value="new_building">{SCOPE_LABELS.new_building}</option>
+            <option value="conversion">{SCOPE_LABELS.conversion}</option>
+            <option value="addition_or_alteration">{SCOPE_LABELS.addition_or_alteration}</option>
+            <option value="demolition">{SCOPE_LABELS.demolition}</option>
+            <option value="other">{SCOPE_LABELS.other}</option>
+            <option value="uncertain">{SCOPE_LABELS.uncertain}</option>
           </select>
-          <label htmlFor="countField">Count role to source (optional)</label>
+          <label htmlFor="countField">Count type</label>
           <select id="countField" value={countKey} onChange={(e) => setCountKey(e.target.value as CountField)}>
             {COUNT_KEYS.map((k) => (
               <option key={k} value={k}>
@@ -470,7 +364,7 @@ export function ReviewWorkspace(props: {
               </option>
             ))}
           </select>
-          <label htmlFor="countVal">Count (blank = unknown, not zero)</label>
+          <label htmlFor="countVal">Count</label>
           <input
             id="countVal"
             value={countValue}
@@ -487,7 +381,7 @@ export function ReviewWorkspace(props: {
               {fieldError.error}
             </p>
           ) : null}
-          <label htmlFor="quote">Exact supporting excerpt from the description</label>
+          <label htmlFor="quote">Quote from description</label>
           <textarea
             id="quote"
             rows={3}
@@ -504,7 +398,7 @@ export function ReviewWorkspace(props: {
               {fieldError.error}
             </p>
           ) : null}
-          <label htmlFor="reason">Follow-up question or short reason</label>
+          <label htmlFor="reason">Notes</label>
           <textarea id="reason" rows={2} value={reason} onChange={(e) => setReason(e.target.value)} />
           <div className="nav-row">
             {proposal ? (
@@ -513,8 +407,11 @@ export function ReviewWorkspace(props: {
               </button>
             ) : null}
             <button type="button" className="btn" onClick={saveSourceReview}>
-              Save source review
+              Save
             </button>
+            <Link className="btn-secondary" href={`/export?example=${encodeURIComponent(record.recordId)}`}>
+              Briefing
+            </Link>
             {proposal ? (
               <button type="button" className="btn-secondary" onClick={reject}>
                 Reject proposal
@@ -523,11 +420,39 @@ export function ReviewWorkspace(props: {
             <button type="button" className="btn-secondary" onClick={insufficient}>
               Insufficient evidence
             </button>
-            <button type="button" className="btn-danger" onClick={undo}>
-              Undo this review
+            <button type="button" className="btn-secondary" onClick={undo}>
+              Undo
             </button>
           </div>
-          <p className="metric-def">{DECISION_SUPPORT}</p>
+          {props.neighbors.prev || props.neighbors.next ? (
+            <p className="nav-row">
+              {props.neighbors.prev ? (
+                <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.prev)}`}>
+                  Previous
+                </Link>
+              ) : null}
+              {props.neighbors.next ? (
+                <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.next)}`}>
+                  Next
+                </Link>
+              ) : null}
+            </p>
+          ) : null}
+          <details className="defs">
+            <summary>Extract</summary>
+            <p>
+              <button
+                type="button"
+                className="btn-secondary"
+                disabled={waiting}
+                onClick={() => void requestExtract()}
+              >
+                {extractionButtonLabel(aiMode, waiting)}
+              </button>
+            </p>
+            {message ? <p className="metric-def">{message}</p> : null}
+            {proposal ? <p className="metric-def">{proposal.explanation}</p> : null}
+          </details>
         </section>
       </div>
     </div>

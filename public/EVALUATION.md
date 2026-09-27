@@ -29,9 +29,9 @@ See `heldOut` in the labeling sheet. Keep them unseen during prompt development 
 
 File: `data/evaluation/adversarial-synthetic.json`
 
-These strings are **not** City records and must not be shown in the product as Pittsburgh permits. They exist to test validator/reviewer behavior: two stories, three bedrooms, repair of existing apartments, explicit 1→3 conversion, embedded instructions, bogus citation IDs.
+**Label: `synthetic_adversarial`.** These strings are **not** City of Pittsburgh permit records. They must not appear in the Queue, Record, or Briefing as real permits. They are excluded from factual metrics. They exist only to test validator/reviewer behavior in unit tests (two stories, three bedrooms, repair of existing apartments, explicit 1→3 conversion, embedded instructions, bogus citation IDs).
 
-Automated validator tests live in `src/lib/extraction.test.ts` and currently check schema/evidence rejection on a fixture string, not live model output.
+Automated validator tests live in `src/lib/extraction.test.ts` and currently check schema/evidence rejection on a fixture string. That fixture is a test double, not a live model response. Do not present it as API output.
 
 ## What has been measured in code
 

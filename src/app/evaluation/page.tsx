@@ -17,8 +17,10 @@ export default function EvaluationPage() {
           columns on purpose. Until those labels exist, housing-relevance agreement is not measured.
         </p>
         <p>
-          Synthetic adversarial strings in <code>data/evaluation/adversarial-synthetic.json</code> are not City
-          records and are not shown in the overview table.
+          Synthetic strings in <code>data/evaluation/adversarial-synthetic.json</code> are labeled{" "}
+          <strong>synthetic_adversarial</strong>. They are not City of Pittsburgh permits, they are not shown
+          in the queue, and they are excluded from factual metrics. They only test validator behavior in
+          unit tests.
         </p>
         <p>
           Automated checks currently cover metrics, CSV safety, snapshot privacy, and extraction-schema

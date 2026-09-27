@@ -26,11 +26,15 @@ export function currentAiMode(): AiMode {
 }
 
 export function modeDescription(mode: AiMode): string {
-  if (mode === "live") return "Live AI extraction is enabled for the small review-corpus allowlist.";
-  if (mode === "saved") {
-    return "New paid generation is disabled. Previously generated responses may replay with their original timestamp. Local review remains enabled.";
+  const runtime =
+    "Cursor, Grok, and other coding assistants are not used at runtime. Queue totals come from the local snapshot; reviews are human-entered.";
+  if (mode === "live") {
+    return `Live AI extraction is enabled for the small review-corpus allowlist. ${runtime}`;
   }
-  return "Source-review mode: real permit text is available. Live AI extraction has not been configured (no runtime API key). Manual review still works.";
+  if (mode === "saved") {
+    return `New paid generation is disabled. Previously generated responses may replay with their original timestamp. ${runtime}`;
+  }
+  return `No runtime model key is configured. Displayed findings are deterministic snapshot metrics or human-entered reviews. ${runtime}`;
 }
 
 async function callProvider(record: PermitRecord, inputHash: string): Promise<unknown> {

@@ -38,6 +38,8 @@ Parcel numbers, owner names, contractor names, and street addresses are not publ
 
 Proposed total is not net addition.
 
+Synthetic strings in `data/evaluation/adversarial-synthetic.json` are test fixtures, not snapshot records.
+
 ## ReviewDecision
 
 | State | Meaning |

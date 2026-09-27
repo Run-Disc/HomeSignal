@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HomeSignal — Housing permit evidence, ready for review",
-  description:
-    "Pittsburgh PLI permit evidence observatory. Issued permits are not completed homes.",
+  title: "HomeSignal",
+  description: "Permit review workspace for Pittsburgh PLI building records.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

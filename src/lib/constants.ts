@@ -20,6 +20,10 @@ export const CITY_PERMIT_GUIDANCE =
   "https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/Permitting";
 export const ONESTOP =
   "https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/OneStopPGH-Permit-Center";
+/** Contextual City / WPRDC zoning pages. HomeSignal does not ingest these or score zoning feasibility. */
+export const ZONING_CODE = "https://pittsburghpa.gov/dcp/zoning-code";
+export const ZONING_MAP = "https://data.wprdc.org/dataset/pittsburgh-zoning";
+export const ZONING_PAGE = "https://data.wprdc.org/dataset/zoning";
 
 export const SCOPE_LABELS: Record<string, string> = {
   new_building: "New building (project label)",

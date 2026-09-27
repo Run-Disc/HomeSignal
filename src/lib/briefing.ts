@@ -93,7 +93,7 @@ export function briefingText(args: {
       : null;
 
   const lines: string[] = [];
-  lines.push("HomeSignal evidence brief — what decision can you make next?");
+  lines.push("HomeSignal briefing");
   lines.push(`Prepared: ${preparedAt}`);
   lines.push(`Source snapshot: ${snapshotVersion} (sha256 ${snapshotHash})`);
   lines.push(`WPRDC resource last_modified: ${sourceUpdateDate}`);

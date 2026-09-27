@@ -1,10 +1,10 @@
 # HomeSignal BUILD_STATUS
 
-Updated: 2026-09-26 (final sprint judge-path pass)
+Updated: 2026-09-26 (desktop packages + product/docs pass)
 
 ## Stage
 
-Judge-path and source-review UX on public `main` (parent `f58235f`). Runtime remains **source-review**: no `.env.local`, no process extraction key, `saved-extractions.json` is `[]`. No demo video, hosted URL, identity, or form submission is claimed.
+Public `main` product UI: Queue / Record / Briefing. Runtime **source-review**: no `.env.local`, no process extraction key, `saved-extractions.json` is `[]`. No demo video, hosted URL, identity, or form submission is claimed.
 
 Deadline: Sunday 2026-09-27 23:59 ET.
 
@@ -16,27 +16,33 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 - Snapshot version: `pli-2025-bda-v1`
 - Snapshot sha256: `283a311a5dde72bacf863a8dfe638ca62f624e45af17d97d0c3b4218a9dabf3d`
 
-## Product changes in this pass
+## Product
 
-- Overview leads with the analyst decision, one-click flagship example `BDA-2024-05307`, an ambiguous-case link, and paginated records (25 per page). Metric denominators still use the full selected cohort.
-- Review workspace leads with **Record human source review**. Accept/Reject are hidden until a proposal exists. Counts become sourced only with an exact matching quote.
-- Keyword/work-type **discovery aid** is labeled as fallible, not as model output.
-- Export names filter scope, featured example, and reviewed-only evidence; print CSS hides controls.
-- Unsigned Windows Electron wrapper: local Next standalone server on 127.0.0.1, no bundled API key. GitHub Actions workflow `.github/workflows/windows-desktop.yml` builds `HomeSignal-Setup.exe`. This Mac packaged a Windows unpacked tree (`HomeSignal.exe` + `resources/standalone` with snapshot JSON, no `.env`) but could not spawn NSIS `makensis` (error -86). The public installer comes from Actions on `windows-latest` (x64).
+- Header: HomeSignal + Queue / Record / Briefing. Snapshot date and Docs are quiet links.
+- Queue: compact metrics, spotlight `BDA-2024-05307`, filters, table. Lecture copy is in `VIDEO_SCRIPT.md`, not on the screen.
+- Record: source text + review form. Extract is collapsed. No fabricated model pane.
+- Briefing: print / CSV of reviewed evidence.
+- Zoning URLs on Sources are context only.
+
+## Desktop
+
+- Unsigned Windows NSIS: `HomeSignal-Setup.exe` (SmartScreen expected). Workflow job `windows` on `windows-latest`.
+- Unsigned macOS DMG + ZIP for **arm64** and **x64**: `HomeSignal-mac-{arch}.dmg|.zip` (Gatekeeper expected; not notarized). Workflow job `macos` on `macos-latest`.
+- Tagged `v*` builds attach those files to a GitHub Release.
+- Mac binaries are not stored in the git root.
 
 ## Checks
 
-- `npx tsc --noEmit`: pass.
-- `npm run build`: pass (Next.js 15.5.26).
-- Unit tests: `tsx --test` fails in this sandbox with `listen EPERM` on a tsx IPC pipe. Fallback `tsc` emit to `.tmp/test-js` + `node --test`: **30/30 pass**.
-- Browser on production `http://127.0.0.1:3020`: Overview showed the analyst decision, flagship button, and “1–25 of 727” pagination. Review of `BDA-2024-05307` showed the 12-dwelling-unit quote, **Save source review** / **Insufficient evidence**, no Accept/Reject, and the discovery-aid caveat. Export named filter scope and featured example `BDA-2024-05307`. A stale `next dev` on :3000 mixed with `.next` and 500’d `/review` (`vendor-chunks/zod.js`); restart against a clean `.next` before recording.
-- `POST /api/extract` remains unconfigured (no runtime key). No genuine saved model responses.
+- `npx tsc --noEmit`: pass
+- `npm test` (`tsx --test`): **32/32 pass**
+- `npm run build`: pass (Next.js 15.5.26). ESLint unused-var on review workspace was removed.
+- `node scripts/validate-electron.cjs`: pass (syntax + mac DMG/ZIP + win NSIS config; `identity: null`)
+- `node scripts/prepare-standalone.cjs` + `validate-standalone.cjs`: pass (no `.env`, no parcel fields)
+- Local unsigned macOS package on Darwin: `HomeSignal-mac-arm64.dmg|.zip` and `HomeSignal-mac-x64.dmg|.zip` in `dist-desktop/` (gitignored). Signing skipped (`identity` null). First dual-arch DMG pass hit a transient `hdiutil detach` on `/Volumes/HomeSignal`; retry of arm64 DMG succeeded. GitHub Actions `macos-latest` rebuilds these for artifacts/releases.
+- Windows NSIS remains CI-built on `windows-latest` (`HomeSignal-Setup.exe`). SmartScreen and Gatekeeper warnings are expected for unsigned files.
+
+`POST /api/extract` remains unconfigured. No genuine saved model responses. Synthetic evaluation strings stay out of the snapshot.
 
 ## Builder-only remaining actions
 
-1. Record and publish the 3–5 minute video using `DEMO_SCRIPT.md`; paste the URL on the live form.
-2. Fill Team Name, Member #1 name/email/affiliation; complete over-18 attestation; submit the form yourself.
-3. Optional independent labels on `data/evaluation/blind-label-worksheet.md`.
-4. Optional separate runtime extraction key in `.env.local` only — never commit it.
-5. If the local review route 500s, restart the app after `npm run build` so `.next` is not shared with a stale dev server.
-6. After this Windows workflow succeeds on GitHub Actions, download **HomeSignal-Setup.exe** from the artifact (or a `v*` Release).
+See `FINAL_ACTIONS.md`.

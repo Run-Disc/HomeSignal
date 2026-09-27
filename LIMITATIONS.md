@@ -4,6 +4,7 @@
 - An issued permit is not evidence that construction started, finished, passed inspection, or became occupied.
 - Source `status` is a current label, not a historical timeline. A source value of Completed is not proof of occupied housing.
 - This source alone cannot support a proposed → issued → completed funnel.
+- HomeSignal does not ingest Pittsburgh zoning layers or the zoning code and does not score zoning feasibility. Code, map, and dataset URLs are listed on Sources as unused context.
 - Unit numbers in descriptions may refer to existing units, proposed totals, additions, removals, or unrelated work. Those roles are kept separate.
 - Story counts, bedroom counts, and valuations are not unit counts.
 - Residential and commercial are administrative classes. Pittsburgh commercial records can include housing.
@@ -19,5 +20,5 @@
 - No causal claim that permitting changed rents; no neighborhood appreciation forecast; no landlord or resident scoring.
 - Automated redaction of free text is incomplete. Builder inspection of the review corpus is still required before sending text to an external model or publishing screenshots.
 - Local reviews persist in browser storage for this snapshot version only. They do not change City data or other users’ views.
-- Live AI extraction is unavailable until a separate runtime API key is configured. No genuine saved model responses are stored in this repository yet.
+- Live AI extraction is unavailable until a separate runtime API key is configured. No genuine saved model responses are stored in this repository. Cursor was used only for software-development assistance and is not called at runtime.
 - Decision support only. Verify project details and completion with the responsible public authority.

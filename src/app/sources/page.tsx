@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/AppHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { CITY_PERMIT_GUIDANCE, ONESTOP, SOURCE_DUMP, SOURCE_LANDING, SOURCE_RESOURCE } from "@/lib/constants";
+import { CITY_PERMIT_GUIDANCE, ONESTOP, SOURCE_DUMP, SOURCE_LANDING, SOURCE_RESOURCE, ZONING_CODE, ZONING_MAP, ZONING_PAGE } from "@/lib/constants";
 import { currentAiMode, modeDescription, readSavedExamples } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
@@ -63,7 +63,7 @@ export default function SourcesPage() {
           CONVERSION, CHANGE OF USE, or DEMOLITION. All administrative classes are retained. This is a
           project choice, not an official City classification, and is not labeled “all housing permits.”
         </p>
-        <h2>Official context (not ingested as metrics)</h2>
+        <h2>Official permit context (not ingested as metrics)</h2>
         <ul>
           <li>
             City permit classifications: <a href={CITY_PERMIT_GUIDANCE}>{CITY_PERMIT_GUIDANCE}</a>
@@ -72,10 +72,27 @@ export default function SourcesPage() {
             OneStopPGH permit center: <a href={ONESTOP}>{ONESTOP}</a>
           </li>
         </ul>
+        <h2>Zoning context only (not used by this app)</h2>
+        <p>
+          HomeSignal does not load zoning layers, interpret the zoning code, or score whether a permit is
+          feasible under zoning. These pages are listed so an analyst can open them separately:
+        </p>
+        <ul>
+          <li>
+            Pittsburgh Zoning Code: <a href={ZONING_CODE}>{ZONING_CODE}</a>
+          </li>
+          <li>
+            Pittsburgh Zoning Districts (map / GIS): <a href={ZONING_MAP}>{ZONING_MAP}</a>
+          </li>
+          <li>
+            WPRDC zoning dataset page: <a href={ZONING_PAGE}>{ZONING_PAGE}</a>
+          </li>
+        </ul>
         <h2>Model role</h2>
         <p>
-          Optional server-side extraction for the 120-record review corpus. Saved genuine examples in this
-          snapshot: {readSavedExamples().length}. If that number is 0, no live model call has been stored.
+          Optional server-side extraction exists in code for a 120-record allowlist when a separate runtime
+          key is configured. Saved genuine examples in this snapshot: {readSavedExamples().length}. Zero
+          means no live model call has been stored. Cursor is not a runtime model.
         </p>
         <p>
           <Link href="/limitations">Limitations</Link> · <Link href="/evaluation">Evaluation</Link> ·{" "}

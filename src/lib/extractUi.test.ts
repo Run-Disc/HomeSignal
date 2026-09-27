@@ -9,8 +9,8 @@ import {
 describe("extraction UI for keyless deployments", () => {
   it("does not call the API or claim a live request in source-review mode", () => {
     assert.equal(shouldCallExtractionApi("source-review"), false);
-    assert.equal(extractionButtonLabel("source-review", false), "Why AI extraction is unavailable");
-    assert.equal(extractionButtonLabel("source-review", true), "Why AI extraction is unavailable");
+    assert.equal(extractionButtonLabel("source-review", false), "Extraction status");
+    assert.equal(extractionButtonLabel("source-review", true), "Extraction status");
     assert.equal(countsAsFailedLiveExtraction("source-review", "unavailable"), false);
   });
 

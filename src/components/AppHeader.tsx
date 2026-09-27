@@ -14,10 +14,10 @@ export function AppHeader(props: {
   const TitleTag = props.isHome ? "h1" : "p";
   const reviewHref = props.reviewHref ?? `/review/${encodeURIComponent(FLAGSHIP_RECORD_ID)}`;
   const exportHref = props.exportHref ?? "/export";
-  const steps = [
-    { id: "overview" as const, href: "/", n: "1", label: "Overview" },
-    { id: "review" as const, href: reviewHref, n: "2", label: "Review" },
-    { id: "export" as const, href: exportHref, n: "3", label: "Export" },
+  const items = [
+    { id: "overview" as const, href: "/", label: "Queue" },
+    { id: "review" as const, href: reviewHref, label: "Record" },
+    { id: "export" as const, href: exportHref, label: "Briefing" },
   ];
 
   return (
@@ -32,39 +32,30 @@ export function AppHeader(props: {
             </Link>
           )}
         </TitleTag>
-        <p className="brand-tag">Pittsburgh PLI permit evidence · records, not homes built</p>
       </div>
-      <div className="header-meta">
-        <span className="meta-pill">Snapshot {props.snapshotDate}</span>
-        <span className="mode-pill">{props.modeLabel}</span>
-      </div>
-      <nav className="step-nav" aria-label="Demo path">
-        {steps.map((step) => {
-          const current = props.current === step.id;
+      <nav className="app-nav" aria-label="App">
+        {items.map((item) => {
+          const current = props.current === item.id;
           return (
             <Link
-              key={step.id}
-              className={current ? "step-link current" : "step-link"}
-              href={step.href}
+              key={item.id}
+              className={current ? "app-nav-link current" : "app-nav-link"}
+              href={item.href}
               aria-current={current ? "page" : undefined}
             >
-              <span className="step-num">{step.n}</span>
-              {step.label}
+              {item.label}
             </Link>
           );
         })}
       </nav>
-      <nav className="doc-links" aria-label="Background">
-        <Link href="/sources" aria-current={props.current === "sources" ? "page" : undefined}>
-          Sources
+      <div className="header-meta">
+        <Link className="quiet-link" href="/sources">
+          {props.snapshotDate}
         </Link>
-        <Link href="/limitations" aria-current={props.current === "limitations" ? "page" : undefined}>
-          Limitations
+        <Link className="quiet-link" href="/limitations">
+          Docs
         </Link>
-        <Link href="/evaluation" aria-current={props.current === "evaluation" ? "page" : undefined}>
-          Evaluation
-        </Link>
-      </nav>
+      </div>
     </header>
   );
 }
