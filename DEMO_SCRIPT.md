@@ -111,7 +111,7 @@
 
 **KEY FEATURES:** Review-gated export, citations, printable briefing, CSV, and a clear verification owner.
 
-## 8. 3:35–4:20 — Safety, limitations, and next step
+## 8. 3:35–4:30 — Who benefits, who could be harmed, and what is missing
 
 **EXACT ACTIONS:**
 1. Keep **Before this informs a housing decision** visible.
@@ -119,9 +119,11 @@
 3. Point to **Open official permit guidance ↗** without clicking it.
 4. Deliver the closing, pause for two seconds, then stop recording.
 
-> HomeSignal is decision support—not a City determination or legal, financial, or zoning guidance. Missing descriptions and keyword errors can create false negatives or false positives. Owner, contractor, street-address, contact, and parcel fields are excluded, although free-text redaction may still be incomplete. Any consequential use requires checking current official records with City staff.
+> HomeSignal benefits planners, housing advocates, and journalists who need inspectable permit evidence. But people and neighborhoods could be harmed if a false positive stigmatizes a place, a false negative hides activity, or an agency redirects resources using an incomplete picture. Missing descriptions and keyword rules can cause both kinds of error.
 >
-> Next, I would test the workflow with housing practitioners, measure review time and correction rates, and evaluate a live model against this source-bound process. HomeSignal's core value is simple: make housing evidence easier to find, easier to verify, and harder to overstate.
+> We don't have reliable linked data on construction completion, occupancy, affordability, displacement, or household flow. So HomeSignal does not claim to measure delivered homes, displacement, or whether permits caused rent changes. Sensitive structured fields are excluded, but free-text redaction may still miss something. Consequential use requires City verification.
+>
+> Next, I would test with housing practitioners, measure correction rates, and evaluate a live model against this source-bound process. HomeSignal makes evidence easier to find and harder to overstate.
 
 ## If time runs short
 
