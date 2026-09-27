@@ -1,7 +1,23 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/AppHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { CITY_PERMIT_GUIDANCE, ONESTOP, SOURCE_DUMP, SOURCE_LANDING, SOURCE_RESOURCE, ZONING_CODE, ZONING_MAP, ZONING_PAGE } from "@/lib/constants";
+import {
+  AFFORDABLE_HOUSING_EXPLORER,
+  AFFORDABLE_HOUSING_EXPLORER_NEWS,
+  CITY_GIS_MAPS,
+  CITY_PERMIT_GUIDANCE,
+  CONTROLLER_IZ_REPORT,
+  ONESTOP,
+  SOURCE_DUMP,
+  SOURCE_LANDING,
+  SOURCE_RESOURCE,
+  ZONING_CODE,
+  ZONING_CODE_CATALOG,
+  ZONING_FAQ,
+  ZONING_MAP,
+  ZONING_MAP_CATALOG,
+  ZONING_PAGE,
+} from "@/lib/constants";
 import { currentAiMode, modeDescription, readSavedExamples } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
@@ -63,6 +79,25 @@ export default function SourcesPage() {
           CONVERSION, CHANGE OF USE, or DEMOLITION. All administrative classes are retained. This is a
           project choice, not an official City classification, and is not labeled “all housing permits.”
         </p>
+        <h2>Related Pittsburgh tools (not this product)</h2>
+        <p>
+          Pittsburgh already publishes project and dashboard tools. HomeSignal does not replace them. It is a
+          privacy-reduced review of permit descriptions: exact quotes, records kept separate from proposed units.
+        </p>
+        <ul>
+          <li>
+            Affordable Housing Development Project Explorer:{" "}
+            <a href={AFFORDABLE_HOUSING_EXPLORER}>{AFFORDABLE_HOUSING_EXPLORER}</a>
+          </li>
+          <li>
+            City announcement (17 April 2025):{" "}
+            <a href={AFFORDABLE_HOUSING_EXPLORER_NEWS}>{AFFORDABLE_HOUSING_EXPLORER_NEWS}</a>
+          </li>
+          <li>
+            City Controller June 2025 report (recommends a broader housing-development dashboard):{" "}
+            <a href={CONTROLLER_IZ_REPORT}>{CONTROLLER_IZ_REPORT}</a>
+          </li>
+        </ul>
         <h2>Official permit context (not ingested as metrics)</h2>
         <ul>
           <li>
@@ -72,20 +107,33 @@ export default function SourcesPage() {
             OneStopPGH permit center: <a href={ONESTOP}>{ONESTOP}</a>
           </li>
         </ul>
-        <h2>Zoning context only (not used by this app)</h2>
+        <h2>Zoning — future verification links only</h2>
         <p>
-          HomeSignal does not load zoning layers, interpret the zoning code, or score whether a permit is
-          feasible under zoning. These pages are listed so an analyst can open them separately:
+          Not ingested. Not current feasibility output. City pages state that districts regulate potential uses,
+          that approval processes vary by project type, scope, and location, and that most building permits
+          require zoning approval (ROZA).
         </p>
         <ul>
           <li>
-            Pittsburgh Zoning Code: <a href={ZONING_CODE}>{ZONING_CODE}</a>
+            City Zoning page: <a href={ZONING_PAGE}>{ZONING_PAGE}</a>
           </li>
           <li>
-            Pittsburgh Zoning Districts (map / GIS): <a href={ZONING_MAP}>{ZONING_MAP}</a>
+            Zoning FAQ: <a href={ZONING_FAQ}>{ZONING_FAQ}</a>
           </li>
           <li>
-            WPRDC zoning dataset page: <a href={ZONING_PAGE}>{ZONING_PAGE}</a>
+            Zoning Code, Title 9 (eCode360): <a href={ZONING_CODE}>{ZONING_CODE}</a>
+          </li>
+          <li>
+            Catalog-supplied code URL (404 as of 2026-09-26): {ZONING_CODE_CATALOG}
+          </li>
+          <li>
+            Zoning districts / map download (WPRDC): <a href={ZONING_MAP}>{ZONING_MAP}</a>
+          </li>
+          <li>
+            Catalog-supplied map URL (404 as of 2026-09-26): {ZONING_MAP_CATALOG}
+          </li>
+          <li>
+            City GIS maps directory: <a href={CITY_GIS_MAPS}>{CITY_GIS_MAPS}</a>
           </li>
         </ul>
         <h2>Model role</h2>
@@ -96,7 +144,7 @@ export default function SourcesPage() {
         </p>
         <p>
           <Link href="/limitations">Limitations</Link> · <Link href="/evaluation">Evaluation</Link> ·{" "}
-          <Link href="/">Overview</Link>
+          <Link href="/">Queue</Link>
         </p>
       </main>
       <SiteFooter />

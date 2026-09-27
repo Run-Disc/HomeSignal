@@ -22,7 +22,7 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 - Queue: compact metrics, spotlight `BDA-2024-05307`, filters, table. Lecture copy is in `VIDEO_SCRIPT.md`, not on the screen.
 - Record: source text + review form. Extract is collapsed. No fabricated model pane.
 - Briefing: print / CSV of reviewed evidence.
-- Zoning URLs on Sources are context only.
+- Zoning and comparable City tools: Sources lists the Affordable Housing Development Project Explorer, the June 2025 Controller dashboard recommendation, and zoning code/map/page as unused future links.
 
 ## Desktop
 

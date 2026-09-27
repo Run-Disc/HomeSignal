@@ -21,9 +21,20 @@ export const CITY_PERMIT_GUIDANCE =
 export const ONESTOP =
   "https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/OneStopPGH-Permit-Center";
 /** Contextual City / WPRDC zoning pages. HomeSignal does not ingest these or score zoning feasibility. */
-export const ZONING_CODE = "https://pittsburghpa.gov/dcp/zoning-code";
-export const ZONING_MAP = "https://data.wprdc.org/dataset/pittsburgh-zoning";
-export const ZONING_PAGE = "https://data.wprdc.org/dataset/zoning";
+export const ZONING_CODE_CATALOG = "https://pittsburghpa.gov/dcp/zoning-code";
+export const ZONING_CODE = "https://ecode360.com/45474054";
+export const ZONING_MAP_CATALOG = "https://data.wprdc.org/dataset/pittsburgh-zoning";
+export const ZONING_MAP = "https://data.wprdc.org/dataset/zoning";
+export const ZONING_PAGE = "https://www.pittsburghpa.gov/Business-Development/City-Planning/Zoning";
+export const ZONING_FAQ = "https://www.pittsburghpa.gov/Business-Development/Zoning/Zoning-FAQ";
+export const CITY_GIS_MAPS =
+  "https://www.pittsburghpa.gov/Business-Development/Geographic-Information-Systems-Mapping-Open-Data/Geographic-Information-System-GIS-Mapping/Interactive-Apps-Maps-Dashboards";
+export const AFFORDABLE_HOUSING_EXPLORER =
+  "https://www.arcgis.com/apps/dashboards/603c22bb04ba4a478ad91d0758b7c262";
+export const AFFORDABLE_HOUSING_EXPLORER_NEWS =
+  "https://www.pittsburghpa.gov/News-articles/Homepage/KEEP-PITTSBURGH-HOME-Mayor-Ed-Gainey-Launches-Data-Transparency-Tool-Showing-Progress-on-Delivering-1600-units-of-Affordable-Housing-for-Pittsburghers";
+export const CONTROLLER_IZ_REPORT =
+  "https://www.pittsburghpa.gov/files/assets/city/v/1/controller/documents/special-report-inclusionary-zoning-6.10.25.pdf";
 
 export const SCOPE_LABELS: Record<string, string> = {
   new_building: "New building (project label)",

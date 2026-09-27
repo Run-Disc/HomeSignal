@@ -14,13 +14,13 @@ Do not say the City validated this, that a model is accurate, that Cursor is ana
 
 Show Queue. Point at Issued / Housing queue / Reviewed / Open.
 
-“I’m **[your name]**. This is HomeSignal for the AI for Housing Hackathon. It’s a review workspace for Pittsburgh building permits. An analyst opens a description, records what the text actually supports, and exports a note. These numbers are issued permit records, not homes built. An issued permit is not a completed or occupied home.”
+“I’m **[your name]**. This is HomeSignal for the AI for Housing Hackathon. Pittsburgh already has tools like the Affordable Housing Development Project Explorer, and a 2025 Controller report asked for a broader housing-development dashboard. This is a different job: a privacy-reduced review of issued permit descriptions. An analyst opens the text, keeps exact quotes, and does not treat a permit record as a finished home.”
 
 **0:35–1:05 — Where the data came from**
 
 Click the date in the header (Sources) if you want the list on screen; you can also stay on Queue.
 
-“The source is City of Pittsburgh PLI Permits on WPRDC, Creative Commons Attribution, downloaded 2026-09-26. The dump had 65,378 rows; the catalog preview still showed 49,255. We used the dump. The cohort is 2025 Building or Building and Development Application: 4,243 IDs. 727 sit in the housing queue because of a keyword or work-type rule, including commercial class. 2,417 descriptions are blank. Pittsburgh’s zoning code and zoning map are listed on Sources if someone wants to look them up — this app does not do zoning feasibility.”
+“The source is City of Pittsburgh PLI Permits on WPRDC, Creative Commons Attribution, downloaded 2026-09-26. The dump had 65,378 rows; the catalog preview still showed 49,255. We used the dump. The cohort is 2025 Building or Building and Development Application: 4,243 IDs. 727 sit in the housing queue because of a keyword or work-type rule, including commercial class. 2,417 descriptions are blank. Zoning code and map are listed on Sources for later lookup — most building permits need zoning approval, and rules vary by location — but this app does not score zoning.”
 
 **1:05–2:00 — One real record**
 

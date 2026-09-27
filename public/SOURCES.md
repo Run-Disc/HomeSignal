@@ -27,17 +27,31 @@ The WPRDC resource HTML page displayed a Data Use Agreement. It was not accepted
 - Permit classifications: https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/Permitting
 - OneStopPGH permit center (human follow-up): https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/OneStopPGH-Permit-Center
 
-## Zoning context only (not used by HomeSignal)
+## Related Pittsburgh tools (not this product)
 
-These pages were supplied in the event catalog. HomeSignal does **not** ingest them, join parcels to districts, interpret the code, or claim zoning feasibility.
+HomeSignal does **not** claim that no comparable tools exist. These are different jobs.
 
-| Resource | URL |
-|---|---|
-| Pittsburgh Zoning Code | https://pittsburghpa.gov/dcp/zoning-code |
-| Pittsburgh Zoning Districts (map / GIS) | https://data.wprdc.org/dataset/pittsburgh-zoning |
-| WPRDC zoning dataset page | https://data.wprdc.org/dataset/zoning |
+| Resource | What it is | URL |
+|---|---|---|
+| Pittsburgh Affordable Housing Development Project Explorer | City interactive maps, charts, and tables of affordable developments completed, under construction, in process, or in the pipeline (city announcement 17 April 2025). Not a PLI description-review workspace. | https://www.arcgis.com/apps/dashboards/603c22bb04ba4a478ad91d0758b7c262 |
+| City announcement of the Explorer | Official press page for the tool | https://www.pittsburghpa.gov/News-articles/Homepage/KEEP-PITTSBURGH-HOME-Mayor-Ed-Gainey-Launches-Data-Transparency-Tool-Showing-Progress-on-Delivering-1600-units-of-Affordable-Housing-for-Pittsburghers |
+| Office of the City Controller, *Special Report: Inclusionary Zoning and Affordable Housing Financing* (June 2025) | Recommends a City of Pittsburgh Housing Development Dashboard, or building on the Explorer, with citywide and neighborhood completed-unit and affordable-inventory metrics. HomeSignal does not implement that dashboard. | https://www.pittsburghpa.gov/files/assets/city/v/1/controller/documents/special-report-inclusionary-zoning-6.10.25.pdf |
 
-The catalog’s older zoning URL was reported stale in pre-event notes; the WPRDC zoning dataset page is listed as the checked alternative. Neither is a data source for Queue metrics.
+HomeSignal’s job is a **privacy-reduced, evidence-first permit-description review**: keep exact quotes, keep permit records distinct from proposed units, and export a briefing. It is complementary to project maps and any future city housing dashboard.
+
+## Zoning as future verification only (not ingested, not current output)
+
+Checked 2026-09-26. HomeSignal does **not** load zoning layers, interpret Title 9, or score whether a permit is feasible. An analyst could open these later. Official pages state that Pittsburgh is divided into zoning districts that regulate potential uses; approval processes vary by project type, scope of work, and location; and **most building permits require zoning approval** (Record of Zoning Approval / ROZA), including some interior renovations that change use.
+
+| Role | URL | Check |
+|---|---|---|
+| City Zoning page (Department of City Planning) | https://www.pittsburghpa.gov/Business-Development/City-Planning/Zoning | Fetched 200. Districts regulate potential uses; processes vary by type, scope, and location. |
+| Zoning FAQ (ROZA) | https://www.pittsburghpa.gov/Business-Development/Zoning/Zoning-FAQ | Fetched 200. “Most building permits… require zoning approval… ROZA.” |
+| Zoning Code (Title 9 on eCode360) | https://ecode360.com/45474054 | City FAQ: obtain the code on eCode360, Title Nine. Direct fetch is Cloudflare-gated; URL is the Title 9 landing from search/City guidance. |
+| Catalog-supplied code URL (event packet) | https://pittsburghpa.gov/dcp/zoning-code | Fetched **404**. Kept as the supplied link; use the City Zoning page and eCode360 Title 9 instead. |
+| Zoning map / districts (WPRDC) | https://data.wprdc.org/dataset/zoning | Fetched 200. Page title “Pittsburgh Zoning Districts.” GIS download, not used in HomeSignal metrics. |
+| Catalog-supplied map URL (event packet) | https://data.wprdc.org/dataset/pittsburgh-zoning | Fetched **404**. The working WPRDC districts page above is the replacement. |
+| City GIS interactive maps directory (includes Pittsburgh Zoning) | https://www.pittsburghpa.gov/Business-Development/Geographic-Information-Systems-Mapping-Open-Data/Geographic-Information-System-GIS-Mapping/Interactive-Apps-Maps-Dashboards | Fetched 200. Directory of maps; not ingested. |
 
 ## Optional ACS rent
 

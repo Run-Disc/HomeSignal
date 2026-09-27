@@ -4,7 +4,8 @@
 - An issued permit is not evidence that construction started, finished, passed inspection, or became occupied.
 - Source `status` is a current label, not a historical timeline. A source value of Completed is not proof of occupied housing.
 - This source alone cannot support a proposed → issued → completed funnel.
-- HomeSignal does not ingest Pittsburgh zoning layers or the zoning code and does not score zoning feasibility. Code, map, and dataset URLs are listed on Sources as unused context.
+- HomeSignal is not the City Affordable Housing Development Project Explorer and is not the housing-development dashboard recommended in the City Controller’s June 2025 special report. Those tools (and that recommendation) already exist; this product is permit-description review.
+- HomeSignal does not ingest Pittsburgh zoning layers or the zoning code and does not score zoning feasibility. Official pages say district/use rules vary by location and project scope, and most building permits require zoning approval (ROZA). Code, map, and zoning URLs on Sources are **future verification links only**.
 - Unit numbers in descriptions may refer to existing units, proposed totals, additions, removals, or unrelated work. Those roles are kept separate.
 - Story counts, bedroom counts, and valuations are not unit counts.
 - Residential and commercial are administrative classes. Pittsburgh commercial records can include housing.

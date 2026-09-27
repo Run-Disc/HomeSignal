@@ -4,9 +4,11 @@ HomeSignal is a permit-review workspace for Pittsburgh PLI building records (AI 
 
 It helps a housing analyst inspect an issued permit description, record what the text supports, and export a briefing. Queue totals are **permit records**, not homes built.
 
+Pittsburgh already has project and dashboard tools. The City’s [Affordable Housing Development Project Explorer](https://www.arcgis.com/apps/dashboards/603c22bb04ba4a478ad91d0758b7c262) (announced 17 April 2025) maps affordable developments completed, under construction, in process, or in the pipeline. The City Controller’s June 2025 special report on inclusionary zoning recommended a broader Pittsburgh housing-development dashboard, or expanding that Explorer. HomeSignal is not that city dashboard and does not replace it. It is a **privacy-reduced, evidence-first permit-description review** workflow: exact quotes stay attached to counts, and issued records stay separate from proposed units.
+
 **Public repository:** https://github.com/Run-Disc/HomeSignal
 
-A permit record is not a housing unit. An issued permit is not a completed or occupied home. HomeSignal does not score zoning feasibility.
+A permit record is not a housing unit. An issued permit is not a completed or occupied home. HomeSignal does not score zoning feasibility. Official zoning sources say district and use rules vary by location and project scope, and that most building permits require zoning approval (ROZA). Code, map, and zoning pages are listed on Sources as **future verification links**, not as ingested data.
 
 ## Download (no Node.js)
 
@@ -60,9 +62,7 @@ Python 3 is used only for optional ingest (`scripts/ingest_pli.py`). The committ
 | Housing queue (keyword / work-type discovery) | 727 |
 | Snapshot | `pli-2025-bda-v1` |
 
-See `SOURCES.md` and `DATA_DICTIONARY.md`.
-
-Pittsburgh zoning code, zoning map, and zoning dataset pages are listed on Sources as **context only**. They are not ingested and are not a feasibility engine.
+See `SOURCES.md` and `DATA_DICTIONARY.md`. Zoning code, map, and City zoning pages stay unused context for later lookup.
 
 ## Privacy
 

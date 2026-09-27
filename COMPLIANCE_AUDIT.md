@@ -47,7 +47,7 @@ Fields currently required on that form, mapped to this repo:
 | Project description (including what is next) | Prepared | Draft in `SUBMISSION_CHECKLIST.md`. Includes working path and next steps. Confirm the live box still asks for “what is next.” |
 | Demo Video link | Builder action required | Public 3–5 minute recording using `VIDEO_SCRIPT.md`. Not in this repo. |
 | Public repository link | Prepared | https://github.com/Run-Disc/HomeSignal |
-| Data sources | Prepared | `SOURCES.md` (and the Sources page). |
+| Data sources | Prepared | `SOURCES.md` (PLI dump plus related City tools and unused zoning links). |
 | AI disclosure | Prepared | `AI_DISCLOSURE.md`. |
 | Over-18 attestation | Builder action required | Human only. |
 
