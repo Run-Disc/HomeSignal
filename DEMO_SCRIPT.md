@@ -1,70 +1,85 @@
-# HomeSignal — Natan's recording script
+# HomeSignal — judge demo script
 
-**Target: 4:00–4:30. Hard limit: 5:00.** Read only the quoted paragraphs. Actions and timing are not narration. This script uses eight stops; do not improvise a tour of every control.
+**Target: 4:00–4:30. Hard limit: 5:00.** Read the quoted narration. The action notes are not spoken.
 
-## Before pressing Record
+## Before recording
 
-- Open **http://localhost:3090/**, the current production build. The older 3093 tab is not the recording target.
-- Use 100% zoom and a wide browser window. Close developer panels and keep this script beside the recording window.
-- Start with **2025 / All / All / Housing**, an empty search, **0 Human reviewed**, and **727 Needs review**. Use a fresh browser session if your own reviews are present; do not erase work you need.
-- Rehearse once without recording. Record the actual application during the event weekend. Keep the finished video public, as required by the participant packet.
-- Start a timer. Speak at a calm pace; pause during clicks. Timing is an estimate, not a guarantee.
+- Open **http://localhost:3090/** at 100% zoom in a wide window.
+- Start with **2025 / All / All / Housing**, an empty search, **0 Human reviewed**, and **727 Needs review**.
+- Rehearse once. Pause after clicks so each result is visible.
 
-## 1. 0:00–0:25 — Introduce the problem
+## 1. 0:00–0:25 — Problem and value
 
-**ACTION:** Keep the Queue at the top. Start recording. Move the pointer away from the text.
+**ACTION:** Begin at the top of the Queue.
 
-> I'm Natan, the solo builder of HomeSignal for the AI for Housing Hackathon, Track 2. Planners, advocates, and journalists need to understand housing activity. But permit lists bury useful evidence in descriptions. HomeSignal turns those records into a cited review workflow.
+> I'm Natan, the solo builder of HomeSignal for the AI for Housing Hackathon, Track 2. Public permit data can reveal possible housing activity, but the useful evidence is buried in thousands of descriptions. HomeSignal turns that data into a searchable, cited workflow where a person reviews every finding before it can be exported.
 
-## 2. 0:25–0:50 — Show discovery
+**KEY FEATURE:** Evidence discovery without presenting permits as completed housing.
 
-**ACTION:** Scroll to **Queue totals** and the monthly chart. Point to **4,243**, then **727**. Do not change filters.
+## 2. 0:25–0:55 — Transparent housing queue
 
-> Here are 4,243 Pittsburgh building-permit records issued in 2025. Transparent keyword and work-type rules identify 727 candidates for housing review. Search, neighborhood filters, and monthly activity help people explore the snapshot. These are permit records, not completed homes.
+**ACTION:** Show **Queue totals**, the monthly chart, and the filters. Point to **4,243** issued records and **727** potential housing records.
 
-## 3. 0:50–1:20 — Show the observatory context
+> This frozen 2025 Pittsburgh snapshot contains 4,243 issued permit records. Transparent keyword and work-type rules narrow them to 727 potential housing records. Judges can inspect the full issued cohort, filter by neighborhood and review status, search permit IDs, and see monthly administrative activity. These are permit records—not construction starts, completed homes, or occupancy.
 
-**ACTION:** Expand **Housing context: rents & community**. Briefly show the Zillow and Census cards. Scroll to **How we reconcile the sources**, then collapse the panel.
+**KEY FEATURES:** Reproducible candidate rules, filters, search, and clearly defined metrics.
 
-> Zillow adds monthly metro rent context; Census adds city rent and residential-stability estimates. Different geographies, periods, and definitions stay visible. We don't force these into one measure or claim permits caused rent changes. We lack reliable linked household-flow data, so we don't claim to measure it.
+## 3. 0:55–1:20 — Housing context without false comparisons
 
-## 4. 1:20–1:55 — Extract evidence
+**ACTION:** Expand **Housing context: rents & community**. Show the Zillow and Census cards and **How we reconcile the sources**, then collapse the section.
 
-**ACTION:** Click the **Example record BDA-2024-05307 — Open record** card. Point at **12 DWELLING UNITS** in the source. Click **Extract demo evidence** and wait for the count and quote.
+> HomeSignal keeps permit evidence beside relevant housing context. Zillow provides a monthly Pittsburgh-metro rent index, while Census provides city estimates for gross rent and residential stability. Their geography, period, and definition remain visible. HomeSignal does not combine unlike measures, attribute metro rents to neighborhoods, or claim permits caused rent changes.
 
-> This record mentions twelve dwelling units. Extract demo evidence proposes the count with its exact quote, ready for review. The snapshot, filters, review, and export work. The extraction and analysis here are deterministic simulations; no external AI model is called. Coding assistants helped develop the application.
+**KEY FEATURE:** Multiple sources remain separate, cited, and definition-aware.
 
-## 5. 1:55–2:35 — Show what the analysis supports
+## 4. 1:20–1:55 — Source-bound extraction
 
-**ACTION:** Scroll to **What this record supports**. Click **Analyze this record**. Wait for the three decision-support lists. Point to each heading without reading every bullet.
+**ACTION:** Open **Example record BDA-2024-05307**. Point to **12 DWELLING UNITS** in the public description. Click **Extract demo evidence** and wait for the proposed count and quote.
 
-> The analysis separates what the record establishes, what it does not establish, and what to verify next. Twelve units mentioned does not prove twelve homes were built or occupied. Evidence coverage names missing information instead of inventing confidence scores. The simulated provider demonstrates the intended workflow behind a working API.
-
-## 6. 2:35–3:05 — Verify and accept
-
-**ACTION:** Under **Evidence coverage**, click **Show in source** beside **Dwelling-unit language**. Let the page scroll to the highlighted quote. In the Review card, click **Accept supported demo fields**. Point at **Accepted by reviewer**.
-
-> Show in source takes me back to the supporting words. I inspect the description, then accept the fields. That decision belongs to the reviewer. The analysis cannot approve a record for me.
-
-## 7. 3:05–3:30 — Show the useful output
-
-**ACTION:** Click **Briefing** in the navigation or review actions. Show the **12**, quotation, source citation, and the **Print / Save as PDF** and **Download reviewed CSV** buttons. Do not open a print dialog while recording.
-
-> The briefing turns reviewed evidence into a handoff: the count, quote, citation, and verification steps. It can be printed or exported as reviewed CSV. Unreviewed candidates never become findings, and unit mentions are never summed into a citywide homes-built total.
-
-## 8. 3:30–4:15 — Explain risks and the next step
-
-**ACTION:** Scroll to **Before this informs a housing decision**. Keep the City verification link visible. Finish speaking, pause for two seconds, and stop recording.
-
-> Missing descriptions and keyword errors can distort the picture. Misreading it could stigmatize neighborhoods or misdirect resources. Owner, contractor, address, and parcel fields are excluded; free-text redaction can still be incomplete. Consequential decisions require verification with City staff. This is decision support, not legal, financial, or zoning advice.
+> The source description explicitly mentions twelve dwelling units. The extraction proposes a structured count and preserves the exact supporting quote, but it does not call that number homes built. The reviewer can compare every proposed field directly with the source text.
 >
-> Next, I'd test with housing practitioners, measure review time and corrections, then evaluate a live model. HomeSignal makes housing evidence easier to inspect—and its limits harder to miss.
+> In a live deployment, this extraction endpoint could connect to an AI API. For this demo, it uses a deterministic local simulation and does not retrieve live AI information.
 
-## If the timer runs long
+**KEY FEATURES:** Structured extraction, exact quotations, and visible provenance.
 
-- At **3:45**, move directly to Briefing if you are not there already. Skip further clicking and read the closing.
-- Do not open Technical details, read every finding, demonstrate all filters, or add unscripted explanations.
-- If a button fails, say “That action isn't responding in this recording,” show the source and working review path, and continue. Do not imply it succeeded.
-- Optional follow-up questions and Copy record summary are additional controls, but are outside this timed recording path.
+## 5. 1:55–2:35 — Decision support with explicit limits
 
-**Suggested video title:** HomeSignal | From Permit Records to Reviewed Housing Evidence | AI for Housing Hackathon
+**ACTION:** Scroll to **What this record supports**. Click **Analyze this record**. Point to the three columns and the evidence-coverage rows.
+
+> The evidence brief separates three questions: what this record establishes, what it does not establish, and what must be verified next. It correctly says that a mention of twelve units does not prove construction, completion, or occupancy. Evidence coverage also identifies missing checks, including related permits, instead of inventing certainty.
+>
+> In a live deployment, this analysis endpoint could use an AI API. In this demo, no external model is called and no live information is retrieved.
+
+**KEY FEATURES:** Source-bound claims, non-claims, verification steps, and no fabricated confidence score.
+
+## 6. 2:35–3:05 — Human review and citation tracing
+
+**ACTION:** Click **Show in source** beside **Dwelling-unit language**. Let the quote scroll into view. Click **Accept supported demo fields** and show **Accepted by reviewer**.
+
+> Show in source returns directly to the cited words. I verify the quote and meaning, then accept the supported fields. Only a person can save that decision; the extraction and evidence brief cannot approve a record. Rejected and insufficient-evidence outcomes are also available.
+
+**KEY FEATURES:** Citation tracing, human-in-the-loop approval, and auditable review states.
+
+## 7. 3:05–3:35 — Briefing and export
+
+**ACTION:** Open **Briefing**. Show the count, quote, citation, verification section, **Print / Save as PDF**, and **Download reviewed CSV**.
+
+> The briefing converts reviewed evidence into a practical handoff: the permit ID, structured count, exact quote, source citation, limitations, and who should verify the record next. It can be printed or downloaded as reviewed CSV. Unreviewed candidates are excluded, and unit mentions are never summed into a citywide homes-built total.
+
+**KEY FEATURES:** Review-gated export, citations, printable briefing, CSV, and a clear verification owner.
+
+## 8. 3:35–4:20 — Safety, limitations, and next step
+
+**ACTION:** Keep **Before this informs a housing decision** and the official City guidance link visible.
+
+> HomeSignal is decision support—not a City determination or legal, financial, or zoning guidance. Missing descriptions and keyword errors can create false negatives or false positives. Owner, contractor, street-address, contact, and parcel fields are excluded, although free-text redaction may still be incomplete. Any consequential use requires checking current official records with City staff.
+>
+> Next, I would test the workflow with housing practitioners, measure review time and correction rates, and evaluate a live model against this source-bound process. HomeSignal's core value is simple: make housing evidence easier to find, easier to verify, and harder to overstate.
+
+## If time runs short
+
+- At **3:40**, move to **Briefing** and deliver the final two sections.
+- Do not read every bullet, open technical details, or demonstrate every filter.
+- If an action fails, state that it did not respond and continue with the visible source and review path.
+
+**Suggested title:** HomeSignal | From Permit Records to Reviewed Housing Evidence | AI for Housing Hackathon
