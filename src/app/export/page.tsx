@@ -5,6 +5,8 @@ import { ExportClient } from "@/components/ExportClient";
 import { currentAiMode, modeDescription } from "@/lib/extractClient";
 import { loadPermits, snapshotFilePath, sourceManifest, toClientPermit } from "@/lib/loadSnapshot";
 
+export const metadata = { title: "Briefing · HomeSignal" };
+
 export default function ExportPage() {
   const permits = loadPermits().map(toClientPermit);
   const snapshotBytes = readFileSync(snapshotFilePath());

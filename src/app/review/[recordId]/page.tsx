@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/AppHeader";
 import { ReviewWorkspace } from "@/components/ReviewWorkspace";
@@ -6,6 +7,12 @@ import { currentAiMode, modeDescription } from "@/lib/extractClient";
 import { loadPermits, sourceManifest, toClientPermit } from "@/lib/loadSnapshot";
 import { filtersFromSearchParams, filtersToSearchParams, pageSearchParams } from "@/lib/filters";
 import { applyFilters } from "@/lib/metrics";
+
+export async function generateMetadata({ params }: { params: Promise<{ recordId: string }> }): Promise<Metadata> {
+  const { recordId } = await params;
+  const record = loadPermits().find((p) => p.recordId === decodeURIComponent(recordId));
+  return { title: record ? `${record.sourcePermitId} · Record review · HomeSignal` : "Record not found · HomeSignal" };
+}
 
 export default async function ReviewPage({
   params,
@@ -44,6 +51,7 @@ export default async function ReviewPage({
         exportHref={`/export?${briefingQuery}`}
       />
       <main id="main">
+        <h1 className="sr-only">Review permit record {record.sourcePermitId}</h1>
         <ReviewWorkspace
           record={record}
           neighbors={{ prev, next }}

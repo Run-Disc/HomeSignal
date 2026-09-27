@@ -100,7 +100,7 @@ export function buildDecisionSupport(record: PermitRecord): {
   const statusSaysComplete = /complet|final|closed/i.test(record.sourceStatusRaw ?? "");
 
   const establishes: string[] = [
-    `An issued ${record.workTypeRaw ?? "permit"} record, ${record.sourcePermitId}, is listed in the ${record.snapshotVersion} snapshot with issue date ${record.issueDate} in ${record.neighborhood}.`,
+    `Permit ${record.sourcePermitId}${record.workTypeRaw ? ` (${record.workTypeRaw})` : ""} was issued ${record.issueDate} in ${record.neighborhood}.`,
   ];
   if (blank) {
     establishes.push("The public work description for this row is blank.");

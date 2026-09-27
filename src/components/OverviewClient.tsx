@@ -87,33 +87,21 @@ export function OverviewClient(props: {
       <main id="main">
       <section className="product-intro" aria-labelledby="product-heading">
         <div>
-          <p className="eyebrow">Pittsburgh permit evidence workspace</p>
           <h2 id="product-heading">Turn an issued-permit list into a reviewable housing signal.</h2>
           <p className="product-lede">
-            For housing analysts who need to know what a permit record actually says before it goes into a production memo: every fact is quoted from the public record, every gap is named, and only what a person reviews is exported.
+            Pittsburgh’s 2025 issued building permits, with the exact quote behind every number. Only human-reviewed facts are exported.
           </p>
         </div>
         <ol className="workflow" aria-label="HomeSignal workflow">
-          <li><strong>1. Find</strong><span>Filter the housing review queue.</span></li>
-          <li><strong>2. Verify</strong><span>Read the source, extract quoted evidence, and save a decision.</span></li>
-          <li><strong>3. Check limits</strong><span>See what the record establishes, what it does not, and what to verify next.</span></li>
-          <li><strong>4. Brief</strong><span>Export reviewed facts with sources and limits.</span></li>
+          <li><strong>1. Find</strong><span>Filter the housing queue.</span></li>
+          <li><strong>2. Verify</strong><span>Quote the source and save a decision.</span></li>
+          <li><strong>3. Check limits</strong><span>What the record does and does not establish.</span></li>
+          <li><strong>4. Brief</strong><span>Export reviewed facts with citations.</span></li>
         </ol>
       </section>
-      <section className="manual-compare" aria-labelledby="compare-heading">
-        <h2 id="compare-heading" className="sr-only">Manual review compared with HomeSignal</h2>
-        <div>
-          <p className="layer-label">Manual today</p>
-          <p>Download thousands of permit rows, keyword-search descriptions in a spreadsheet, retype unit counts by hand, and separately guard against treating stories, parking spaces, or issued permits as finished homes.</p>
-        </div>
-        <div>
-          <p className="layer-label">With HomeSignal</p>
-          <p>Start from a narrowed queue, see the exact quote behind each number, record a human decision, and export a brief that states what the permit does not prove.</p>
-        </div>
-      </section>
       <p className="integrity-note">
-        <strong>Decision support:</strong> queue totals and activity bars count permit records, not homes built. Structured address,
-        owner, contractor, and parcel fields are excluded; free-text redaction may be incomplete.
+        <strong>Decision support only.</strong> Counts are permit records, not homes built. Owner, contractor, address,
+        and parcel fields are excluded; free-text redaction may be incomplete.
       </p>
       <section aria-labelledby="metrics-heading">
         <h2 id="metrics-heading" className="visually-hidden">
@@ -123,35 +111,29 @@ export function OverviewClient(props: {
           <article className="card">
             <h3>Issued permit records</h3>
             <div className="metric-value">{metrics.permitRecordsInCohort}</div>
-            <p className="metric-def">Current year and neighborhood selection.</p>
+            <p className="metric-def">Current filters.</p>
           </article>
           <article className="card">
             <h3>Potential housing records</h3>
             <div className="metric-value">{metrics.potentialHousingRecords}</div>
-            <p className="metric-def">Flagged by transparent terms or work type.</p>
+            <p className="metric-def">Keyword or work-type match.</p>
           </article>
           <article className="card">
             <h3>Human reviewed</h3>
             <div className="metric-value">{metrics.reviewedRecords}</div>
-            <p className="metric-def">Saved decisions in this browser.</p>
+            <p className="metric-def">Saved in this browser.</p>
           </article>
           <article className="card">
             <h3>Needs review</h3>
             <div className="metric-value">{metrics.needsReview}</div>
-            <p className="metric-def">Potential records without a decision.</p>
+            <p className="metric-def">Housing records without a decision.</p>
           </article>
         </div>
       </section>
       <section className="activity-panel" aria-labelledby="activity-heading">
         <div className="section-heading-row">
-          <div>
-            <p className="eyebrow">One-year source pattern</p>
-            <h2 id="activity-heading">Issued permit activity by month</h2>
-          </div>
-          <p>
-            {filters.neighborhood === "all" ? "All Pittsburgh neighborhoods" : filters.neighborhood} · permit
-            records, not homes built
-          </p>
+          <h2 id="activity-heading">Issued permit records by month</h2>
+          <p>{filters.neighborhood === "all" ? "All Pittsburgh neighborhoods" : filters.neighborhood} · 2025</p>
         </div>
         <ol className="monthly-bars" aria-label="Monthly issued permit record counts">
           {metrics.monthlyIssued.map((row) => {
@@ -171,17 +153,16 @@ export function OverviewClient(props: {
           })}
         </ol>
         <p className="activity-note">
-          Issue dates show administrative activity during 2025. They do not establish construction starts,
-          completions, occupancy, or housing production.
+          Issue dates are administrative activity, not construction starts, completions, or occupancy.
         </p>
       </section>
       <HousingContext />
       {featured ? (
         <Link className="spotlight" href={recordHref(featured.recordId)}>
-          <span><span className="eyebrow">Start the guided demo</span><strong>{featured.sourcePermitId}</strong></span>
+          <span><span className="eyebrow">Example record</span><strong>{featured.sourcePermitId}</strong></span>
           <span>{featured.neighborhood}</span>
           <span>{featured.sourceStatusRaw}</span>
-          <span className="spotlight-go">Review this record’s evidence →</span>
+          <span className="spotlight-go">Open record →</span>
         </Link>
       ) : null}
 

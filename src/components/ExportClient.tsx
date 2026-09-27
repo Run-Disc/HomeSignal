@@ -90,10 +90,7 @@ export function ExportClient(props: {
         exportHref={`/export?${contextQuery}`} />
       <main id="main" className="prose briefing-page">
         <h1>Briefing</h1>
-        <p>
-          A source-cited handoff for the current queue selection. It includes local human reviews and explicit
-          unknowns; unreviewed candidates are never presented as findings.
-        </p>
+        <p>Cited handoff of human-reviewed records. Unreviewed candidates are never presented as findings.</p>
         <p className="briefing-scope"><strong>Export scope:</strong> {filters.year} · {filters.neighborhood === "all" ? "All Pittsburgh neighborhoods" : filters.neighborhood} · {filters.candidatesOnly ? "Housing candidates" : "All issued records"}
           {` · Status: ${filters.reviewState.replaceAll("_", " ")}`}{filters.search ? ` · Search: ${filters.search}` : ""}</p>
         {reviewedRows.length === 0 ? (
@@ -138,8 +135,8 @@ export function ExportClient(props: {
               <p className="briefing-unknown-count">No source-supported proposed total unit count was saved for this review.</p>
             )}
             <p className="briefing-feature-limit">
-              This is a reviewed permit description, not proof that homes were built. Construction start, completion,
-              and occupancy require verification with the responsible public authority.
+              Reviewed permit text, not proof that homes were built. Verify construction, completion, and occupancy
+              with the City.
             </p>
             <p className="briefing-citation">Citation: {featured.citationId} · <a href={SOURCE_RESOURCE} target="_blank" rel="noreferrer">City of Pittsburgh / WPRDC PLI Permits</a> · Snapshot retrieved {props.snapshotDate}</p>
           </section>
@@ -148,7 +145,6 @@ export function ExportClient(props: {
           <section className="ai-panel" aria-labelledby="briefing-ai-heading">
             <p className="layer-label">AI interpretation — simulated, non-authoritative</p>
             <h2 id="briefing-ai-heading">Evidence brief for {aiBrief.sourcePermitId}</h2>
-            <p>{aiBrief.brief.summary}</p>
             <div className="decision-grid">
               <section>
                 <h3>What the record establishes</h3>
@@ -164,7 +160,7 @@ export function ExportClient(props: {
               </section>
             </div>
             <p className="metric-def">
-              This section is a local demo analysis of the snapshot row. It is not mixed into queue totals and is not a live vendor result ({aiBrief.requestId}).
+              Simulated provider; no external model was called. Not mixed into queue totals. Request {aiBrief.requestId}.
             </p>
           </section>
         ) : null}
@@ -186,7 +182,11 @@ export function ExportClient(props: {
             Queue
           </Link>
         </div>
-        <pre className="source-text briefing-text">{text}</pre>
+        <details className="defs print-hide">
+          <summary>Plain-text briefing (included when printed)</summary>
+          <pre className="source-text briefing-text">{text}</pre>
+        </details>
+        <pre className="source-text briefing-text print-only" aria-hidden="true">{text}</pre>
       </main>
       <SiteFooter />
     </div>

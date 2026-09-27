@@ -21,6 +21,23 @@ const COVERAGE_TEXT: Record<CoverageItem["status"], string> = {
   not_checked: "Not checked",
 };
 
+const REQUEST_TIMEOUT_MS = 15000;
+
+async function postJson(url: string, body: unknown): Promise<Response> {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    return await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
 function EvidenceButtons(props: { evidence: EvidenceRef[]; onShowSource: (ev: EvidenceRef) => void }) {
   if (props.evidence.length === 0) {
     return <p className="metric-def">No additional quote on this snapshot row.</p>;
@@ -54,6 +71,7 @@ export function RecordAiPanel(props: {
   const { record, onShowSource } = props;
   const [copyNote, setCopyNote] = useState<string | null>(null);
   const [brief, setBrief] = useState<RuntimeAiSuccess | null>(null);
+  const dwellingRef = brief?.brief.findings.find((f) => f.id === "dwelling-count")?.evidence[0] ?? null;
   const [answer, setAnswer] = useState<RuntimeAskSuccess | null>(null);
   const [waiting, setWaiting] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -104,24 +122,29 @@ export function RecordAiPanel(props: {
       setStatus(STATUS_STEPS[step]);
     }, 420);
     try {
-      const res = await fetch("/api/ai/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recordId: record.recordId }),
-      });
+      const res = await postJson("/api/ai/analyze", { recordId: record.recordId });
       const data = (await res.json()) as RuntimeAiSuccess | { success: false; error?: string };
       if (gen.current !== ticket) return;
       if (!data.success) {
         setError(data.error || "Runtime analysis is unavailable. Source review still works.");
         setBrief(null);
+        setStatus(null);
         return;
       }
       setBrief(data);
-      saveCachedBrief(data, record.inputHash);
-      setStatus(null);
-    } catch {
+      setStatus(
+        saveCachedBrief(data, record.inputHash)
+          ? null
+          : "Brief shown but not saved: browser storage is unavailable, so it will not appear on Briefing.",
+      );
+    } catch (err) {
       if (gen.current !== ticket) return;
-      setError("Runtime analysis is unavailable. Source review still works.");
+      setStatus(null);
+      setError(
+        err instanceof DOMException && err.name === "AbortError"
+          ? `Runtime analysis timed out after ${REQUEST_TIMEOUT_MS / 1000} seconds. Source review still works.`
+          : "Runtime analysis is unavailable. Source review still works.",
+      );
     } finally {
       window.clearInterval(timer);
       if (gen.current === ticket) setWaiting(false);
@@ -135,21 +158,18 @@ export function RecordAiPanel(props: {
     setError(null);
     setStatus("Answering from this record’s evidence…");
     try {
-      const res = await fetch("/api/ai/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recordId: record.recordId, questionId }),
-      });
+      const res = await postJson("/api/ai/ask", { recordId: record.recordId, questionId });
       const data = (await res.json()) as RuntimeAskSuccess | { success: false; error?: string };
       if (gen.current !== ticket) return;
+      setStatus(null);
       if (!data.success) {
         setError(data.error || "Follow-up is unavailable.");
         return;
       }
       setAnswer(data);
-      setStatus(null);
     } catch {
       if (gen.current !== ticket) return;
+      setStatus(null);
       setError("Follow-up is unavailable.");
     } finally {
       if (gen.current === ticket) setWaiting(false);
@@ -178,22 +198,20 @@ export function RecordAiPanel(props: {
         </div>
       </div>
       <p className="metric-def">
-        Simulated AI provider for this demonstration: it reads this one snapshot row and no external model is
-        called. Decision support only, not a City determination or legal, zoning, or permitting advice.
+        Simulated provider reading this row only; no external model is called. Not a City determination or legal,
+        zoning, or permitting advice.
       </p>
       <p className="ai-reviewer-line">
-        Reviewer decision: <strong>{props.reviewLabel}</strong>. The AI brief does not change it.
+        Reviewer decision: <strong>{props.reviewLabel}</strong> <span className="metric-def">(set only by a person)</span>
       </p>
       {copyNote ? (
         <p className="review-message" role="status">
           {copyNote}
         </p>
       ) : null}
-      {waiting ? (
-        <p className="review-message" role="status" aria-live="polite">
-          {status}
-        </p>
-      ) : null}
+      <p className={status ? "review-message" : "sr-only"} role="status" aria-live="polite">
+        {status}
+      </p>
       {error ? (
         <p className="banner error" role="alert">
           {error}
@@ -201,7 +219,6 @@ export function RecordAiPanel(props: {
       ) : null}
       {brief ? (
         <div>
-          <p className="ai-summary">{brief.brief.summary}</p>
           <div className="decision-grid">
             <section aria-labelledby="ds-est">
               <h4 id="ds-est">What the record establishes</h4>
@@ -235,21 +252,31 @@ export function RecordAiPanel(props: {
                 <dt>{item.label}</dt>
                 <dd>
                   <strong>{COVERAGE_TEXT[item.status]}</strong> <span>{item.detail}</span>
+                  {item.status === "explicit" && dwellingRef ? (
+                    <>
+                      {" "}
+                      <button type="button" className="link-btn" onClick={() => onShowSource(dwellingRef)}>
+                        Show in source
+                      </button>
+                    </>
+                  ) : null}
                 </dd>
               </div>
             ))}
           </dl>
-          <h4>Findings and citations</h4>
-          <ul className="ai-findings">
-            {brief.brief.findings.map((finding) => (
-              <li key={finding.id}>
-                <strong>{finding.title}</strong>
-                <span className={`ai-kind ${finding.kind}`}>{finding.kind}</span>
-                <p>{finding.explanation}</p>
-                <EvidenceButtons evidence={finding.evidence} onShowSource={onShowSource} />
-              </li>
-            ))}
-          </ul>
+          <details className="defs ai-findings-details">
+            <summary>Findings and citations ({brief.brief.findings.length})</summary>
+            <ul className="ai-findings">
+              {brief.brief.findings.map((finding) => (
+                <li key={finding.id}>
+                  <strong>{finding.title}</strong>
+                  <span className={`ai-kind ${finding.kind}`}>{finding.kind}</span>
+                  <p>{finding.explanation}</p>
+                  <EvidenceButtons evidence={finding.evidence} onShowSource={onShowSource} />
+                </li>
+              ))}
+            </ul>
+          </details>
           <h4>Ask about this record</h4>
           <div className="nav-row">
             {FOLLOW_UP_QUESTIONS.map((q) => (

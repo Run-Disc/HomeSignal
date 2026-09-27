@@ -10,7 +10,7 @@ export function HousingContext() {
   return (
     <details className="activity-panel housing-context">
       <summary><strong>Housing context: rents & community</strong><span>Compare definitions before comparing numbers</span></summary>
-      <p>Three lenses on housing, with different coverage. These fixed regional and city indicators do not change when you filter the permit queue by neighborhood.</p>
+      <p>Fixed metro and city indicators. They do not change with the neighborhood filter.</p>
       <div className="context-grid">
         <article className="card">
           <p className="eyebrow">Market · Pittsburgh metro</p>

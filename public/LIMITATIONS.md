@@ -22,6 +22,7 @@
 - Automated redaction of free text is incomplete. Builder inspection of the review corpus is still required before sending text to an external model or publishing screenshots.
 - Local reviews persist in browser storage for this snapshot version only. They do not change City data or other users’ views.
 - Live vendor extraction is unavailable until a separate runtime API key is configured. Hackathon mode instead uses a **simulated local provider** for record briefs and labeled demo extraction. Those outputs demonstrate the intended production workflow; they are not live vendor results and are not mixed into citywide permit metrics. Cursor is not called at runtime. Before the build window, AI consultation supported public-source research and early sketches; during the build window Cursor and Codex assisted software development, documentation, and demo preparation.
+- The record brief's establishes / does-not-establish / verify-next lists and evidence coverage come from fixed rules over one row. They can miss meaning that a person would catch. "Related permits: Not checked" is always true because HomeSignal never links records.
 - Decision support only. Verify project details and completion with the responsible public authority.
 
 ## Who benefits and who could be harmed

@@ -69,19 +69,28 @@ export function loadCachedBrief(recordId: string, inputHash: string): RuntimeAiS
   }
 }
 
-export function saveCachedBrief(brief: RuntimeAiSuccess, inputHash: string): void {
-  const raw = window.localStorage.getItem(AI_BRIEF_CACHE_KEY);
-  const parsed = raw ? (JSON.parse(raw) as Record<string, RuntimeAiSuccess>) : {};
-  parsed[`${brief.recordId}:${inputHash}`] = brief;
-  window.localStorage.setItem(AI_BRIEF_CACHE_KEY, JSON.stringify(parsed));
+export function saveCachedBrief(brief: RuntimeAiSuccess, inputHash: string): boolean {
+  try {
+    const raw = window.localStorage.getItem(AI_BRIEF_CACHE_KEY);
+    const parsed = raw ? (JSON.parse(raw) as Record<string, RuntimeAiSuccess>) : {};
+    parsed[`${brief.recordId}:${inputHash}`] = brief;
+    window.localStorage.setItem(AI_BRIEF_CACHE_KEY, JSON.stringify(parsed));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function clearCachedBrief(recordId: string, inputHash: string): void {
-  const raw = window.localStorage.getItem(AI_BRIEF_CACHE_KEY);
-  if (!raw) return;
-  const parsed = JSON.parse(raw) as Record<string, RuntimeAiSuccess>;
-  delete parsed[`${recordId}:${inputHash}`];
-  window.localStorage.setItem(AI_BRIEF_CACHE_KEY, JSON.stringify(parsed));
+  try {
+    const raw = window.localStorage.getItem(AI_BRIEF_CACHE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as Record<string, RuntimeAiSuccess>;
+    delete parsed[`${recordId}:${inputHash}`];
+    window.localStorage.setItem(AI_BRIEF_CACHE_KEY, JSON.stringify(parsed));
+  } catch {
+    // Storage unavailable: nothing cached to clear.
+  }
 }
 
 export function resetLocalState(): void {

@@ -4,6 +4,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
+export const metadata = { title: "Evaluation · HomeSignal" };
+
 export default function EvaluationPage() {
   const m = sourceManifest();
   return (

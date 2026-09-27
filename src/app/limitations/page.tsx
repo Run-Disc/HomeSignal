@@ -3,6 +3,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
+export const metadata = { title: "Limitations · HomeSignal" };
+
 export default function LimitationsPage() {
   const m = sourceManifest();
   return (

@@ -22,6 +22,8 @@ import {
 import { currentAiMode, modeDescription, readSavedExamples } from "@/lib/extractClient";
 import { sourceManifest } from "@/lib/loadSnapshot";
 
+export const metadata = { title: "Sources · HomeSignal" };
+
 export default function SourcesPage() {
   const m = sourceManifest();
   const mode = currentAiMode();

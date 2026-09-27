@@ -87,9 +87,7 @@ export function ReviewWorkspace(props: {
   const { record, aiMode } = props;
   const [reviews, setReviews] = useState<ReturnType<typeof loadReviews>>({});
   const [proposal, setProposal] = useState<ExtractionProposal | null>(null);
-  const [message, setMessage] = useState<string | null>(
-    aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null,
-  );
+  const [message, setMessage] = useState<string | null>(null);
   const [waiting, setWaiting] = useState(false);
   const [selectedField] = useState<string | null>(null);
   const [draft, setDraft] = useState<ReviewedFields>(emptyFields);
@@ -130,7 +128,7 @@ export function ReviewWorkspace(props: {
           : null
         : cached;
     setProposal(usableCache);
-    setMessage(aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null);
+    setMessage(null);
     setWaiting(false);
     setCited(null);
     setDraft(emptyFields());
@@ -145,6 +143,10 @@ export function ReviewWorkspace(props: {
       setCountValue(existing.finalFields.proposedTotalUnitCount?.toString() ?? "");
       setQuote(existing.finalFields.countEvidence.proposedTotalUnitCount?.quote ?? "");
       setReason(existing.reason);
+    } else if (usableCache) {
+      setDraft(fieldsFromProposal(usableCache));
+      setCountValue(usableCache.proposedTotalUnitCount?.toString() ?? "");
+      setQuote(usableCache.countEvidence.proposedTotalUnitCount?.quote ?? "");
     }
   }, [record.recordId, record.inputHash, aiMode]);
 
@@ -159,8 +161,8 @@ export function ReviewWorkspace(props: {
     setWaiting(true);
     setMessage(
       aiMode === "source-review"
-        ? "Preparing a labeled synthetic demo extraction. No live model is called. You can still review the source text on the left."
-        : "Waiting for a model response. You can still review the source text on the left.",
+        ? "Preparing labeled demo extraction…"
+        : "Waiting for a model response…",
     );
     try {
       const cached = loadCachedProposal(record.recordId, record.inputHash);
@@ -177,7 +179,7 @@ export function ReviewWorkspace(props: {
         setCountKey("proposedTotalUnitCount");
         setCountValue(usableCache.proposedTotalUnitCount?.toString() ?? "");
         setQuote(usableCache.countEvidence.proposedTotalUnitCount?.quote ?? "");
-        setMessage(proposalStatusLabel(usableCache));
+        setMessage(null);
         return;
       }
       const controller = new AbortController();
@@ -207,7 +209,7 @@ export function ReviewWorkspace(props: {
         setCountKey("proposedTotalUnitCount");
         setCountValue(data.proposal.proposedTotalUnitCount?.toString() ?? "");
         setQuote(data.proposal.countEvidence.proposedTotalUnitCount?.quote ?? "");
-        setMessage(proposalStatusLabel(data.proposal));
+        setMessage(null);
       } else {
         if (countsAsFailedLiveExtraction(aiMode, data.status)) {
           const ids = new Set(loadFailedIds());
@@ -438,20 +440,21 @@ export function ReviewWorkspace(props: {
               <button type="button" className="btn-secondary" onClick={useSelectedSourceText}>
                 Use selected text as quote
               </button>
-              <span>Select the exact words that support a number, then use this button.</span>
             </div>
           ) : null}
         </section>
         <section className="card" aria-labelledby="review-heading">
           <h2 id="review-heading">Review</h2>
-          <p className="review-guidance">
-            Read the public description first. Optionally extract labeled demo evidence, then classify only what
-            the source supports. Text matching checks the quote; you confirm what the number means.
-          </p>
           <section className="extraction-panel" aria-labelledby="extract-heading">
             <p className="layer-label">2 · Extracted evidence</p>
             <h3 id="extract-heading">Structured extraction</h3>
-            <p className="metric-def">{props.modeDescription}</p>
+            <p className="metric-def">
+              {aiMode === "source-review"
+                ? "Labeled demo extraction. No live model is called."
+                : aiMode === "saved"
+                  ? "Replays previously generated responses with their original timestamp."
+                  : "Live model extraction for the review-corpus allowlist."}
+            </p>
             <p>
               <button
                 type="button"
@@ -471,13 +474,21 @@ export function ReviewWorkspace(props: {
                     Quote: “{proposal.countEvidence.proposedTotalUnitCount.quote}”. Not homes built or occupied.
                   </p>
                 ) : null}
-                <p>
-                  <span className={`status-chip ${chip.tone}`}>{chip.label}</span>
-                </p>
-                <p className="banner">{proposalStatusLabel(proposal)}</p>
-                <p className="metric-def">{proposal.explanation}</p>
+                {proposal.originLabel !== "synthetic_demo" ? (
+                  <p className="metric-def">{proposalStatusLabel(proposal)}</p>
+                ) : null}
               </>
             ) : null}
+            <details className="defs">
+              <summary>About this extraction</summary>
+              {proposal ? <p className="metric-def">{proposalStatusLabel(proposal)}</p> : null}
+              {proposal ? <p className="metric-def">{proposal.explanation}</p> : null}
+              <p className="metric-def">{props.modeDescription}</p>
+              <p className="metric-def">
+                Text matching checks that a quote exists in the source. You confirm what the number means. To quote
+                manually, select words in the description and choose Use selected text as quote.
+              </p>
+            </details>
           </section>
           {blank ? (
             <p className="banner">
