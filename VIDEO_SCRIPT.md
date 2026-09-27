@@ -76,7 +76,7 @@ That quote is the safeguard. A reviewer can immediately challenge the interpreta
 
 ## 2:55–3:30 — From evidence to an actionable briefing
 
-**On screen:** Click **Briefing**. Point to the record ID, classification, count type, count, and supporting quote. Briefly point to **Print briefing** and **Download reviewed CSV**.
+**On screen:** Click **Briefing**. Briefly point to **Print / Save as PDF** and **Download reviewed CSV**, then scroll to **Reviewed example**. Point to the record ID, classification, count type, count, and supporting quote.
 
 **Say:**
 
@@ -86,7 +86,7 @@ Only saved human reviews enter this output. Unreviewed records do not silently b
 
 ## 3:30–4:05 — Responsible AI and limitations
 
-**On screen:** Click **Methods & limits**. Pause on the human-review and limitations sections.
+**On screen:** Click **Sources, snapshot retrieved 2026-09-26**. Pause on the no-runtime-model statement while delivering the first paragraph. Then click **Methods & limits** and show the limitations list during the second paragraph.
 
 **Say:**
 
