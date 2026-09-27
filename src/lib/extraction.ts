@@ -46,7 +46,7 @@ export const extractionProposalSchema = z
     promptVersion: z.string(),
     schemaVersion: z.string(),
     generatedAt: z.string(),
-    originLabel: z.enum(["live", "previously_generated", "unavailable"]),
+    originLabel: z.enum(["live", "previously_generated", "synthetic_demo", "unavailable"]),
   })
   .strict();
 

@@ -7,11 +7,12 @@ import { AppHeader } from "@/components/AppHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { briefingCsv, briefingText } from "@/lib/briefing";
 import { FLAGSHIP_RECORD_ID, ONESTOP, SNAPSHOT_VERSION, SOURCE_RESOURCE } from "@/lib/constants";
-import { loadFailedIds, loadReviews } from "@/lib/clientStore";
+import { loadFailedIds, loadReviews, loadCachedBrief } from "@/lib/clientStore";
 import { filtersFromSearchParams, filtersToSearchParams } from "@/lib/filters";
 import { currentReviewsForRecords } from "@/lib/reviewLogic";
 import { applyFilters, computeMetrics } from "@/lib/metrics";
 import type { ClientPermit } from "@/lib/types";
+import type { RuntimeAiSuccess } from "@/lib/ai/schema";
 
 export function ExportClient(props: {
   records: ClientPermit[];
@@ -22,6 +23,7 @@ export function ExportClient(props: {
 }) {
   const searchParams = useSearchParams();
   const [storedReviews, setStoredReviews] = useState<ReturnType<typeof loadReviews>>({});
+  const [aiBrief, setAiBrief] = useState<RuntimeAiSuccess | null>(null);
   useEffect(() => setStoredReviews(loadReviews()), []);
   const reviews = useMemo(() => currentReviewsForRecords(props.records, storedReviews), [props.records, storedReviews]);
   const [failed] = useState(loadFailedIds);
@@ -49,6 +51,13 @@ export function ExportClient(props: {
   const contextQuery = filtersToSearchParams(filters);
   const recordHref = (id: string) => `/review/${encodeURIComponent(id)}?${contextQuery}`;
   const featuredReview = featured ? reviews[featured.recordId] : undefined;
+  useEffect(() => {
+    if (!featured) {
+      setAiBrief(null);
+      return;
+    }
+    setAiBrief(loadCachedBrief(featured.recordId, featured.inputHash));
+  }, [featured]);
   const proposedCount = featuredReview?.finalFields?.proposedTotalUnitCount;
   const countQuote = featuredReview?.finalFields?.countEvidence.proposedTotalUnitCount?.quote;
   const text = briefingText({
@@ -133,6 +142,30 @@ export function ExportClient(props: {
               and occupancy require verification with the responsible public authority.
             </p>
             <p className="briefing-citation">Citation: {featured.citationId} · <a href={SOURCE_RESOURCE} target="_blank" rel="noreferrer">City of Pittsburgh / WPRDC PLI Permits</a> · Snapshot retrieved {props.snapshotDate}</p>
+          </section>
+        ) : null}
+        {aiBrief ? (
+          <section className="ai-panel" aria-labelledby="briefing-ai-heading">
+            <p className="layer-label">AI interpretation — simulated, non-authoritative</p>
+            <h2 id="briefing-ai-heading">Evidence brief for {aiBrief.sourcePermitId}</h2>
+            <p>{aiBrief.brief.summary}</p>
+            <div className="decision-grid">
+              <section>
+                <h3>What the record establishes</h3>
+                <ul>{aiBrief.brief.decisionSupport.establishes.map((s) => <li key={s}>{s}</li>)}</ul>
+              </section>
+              <section>
+                <h3>What it does not establish</h3>
+                <ul>{aiBrief.brief.decisionSupport.doesNotEstablish.map((s) => <li key={s}>{s}</li>)}</ul>
+              </section>
+              <section>
+                <h3>What to verify next</h3>
+                <ul>{aiBrief.brief.decisionSupport.verifyNext.map((s) => <li key={s}>{s}</li>)}</ul>
+              </section>
+            </div>
+            <p className="metric-def">
+              This section is a local demo analysis of the snapshot row. It is not mixed into queue totals and is not a live vendor result ({aiBrief.requestId}).
+            </p>
           </section>
         ) : null}
         <section className="verification-handoff" aria-labelledby="verification-heading">

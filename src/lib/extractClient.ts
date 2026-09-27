@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from "node:fs";
 import { PROMPT_VERSION, SCHEMA_VERSION, SNAPSHOT_VERSION } from "./constants";
+import { buildDemoProposal } from "./demoExtraction";
 import { EXTRACTION_SYSTEM_PROMPT, validateProposal } from "./extraction";
 import { sanitizedInputHash } from "./hash";
 import { allowlistedForExtraction, savedExtractionsPath } from "./loadSnapshot";
@@ -34,7 +35,7 @@ export function modeDescription(mode: AiMode): string {
   if (mode === "saved") {
     return `New paid generation is disabled. Previously generated responses may replay with their original timestamp. ${runtime}`;
   }
-  return `No runtime model key is configured. Displayed findings are deterministic snapshot metrics or human-entered reviews. ${runtime}`;
+  return `No runtime model key is configured. Review-corpus records can show a labeled synthetic demo extraction, and any record can run a simulated evidence brief. Neither is a live vendor model call, and neither is mixed into citywide permit metrics. Displayed findings remain deterministic snapshot metrics or human-entered reviews. ${runtime}`;
 }
 
 async function callProvider(record: PermitRecord, inputHash: string): Promise<unknown> {
@@ -101,13 +102,13 @@ export async function extractForRecord(
   | { status: "unavailable"; message: string }
 > {
   const inputHash = sanitizedInputHash(record);
-  if (!allowlistedForExtraction(record)) {
+  const mode = currentAiMode();
+  if (!allowlistedForExtraction(record) && mode === "live") {
     return {
       status: "unavailable",
-      message: "AI extraction is limited to the small sanitized review corpus. Source review still works.",
+      message: "Live AI extraction is limited to the small sanitized review corpus. Source review still works.",
     };
   }
-  const mode = currentAiMode();
   const saved = readSavedExamples().find(
     (item) =>
       item.targetRecordId === record.recordId &&
@@ -121,6 +122,14 @@ export async function extractForRecord(
         originLabel: "previously_generated",
       });
       if (checked.ok) return { status: "ok", proposal: checked.value };
+    }
+    if (mode === "source-review") {
+      const demo = buildDemoProposal(record, inputHash);
+      if (demo.ok) return { status: "ok", proposal: demo.value };
+      return {
+        status: "unavailable",
+        message: `Labeled demo extraction could not be validated for this record (${demo.error}). Source review still works. No live model was called.`,
+      };
     }
     if (mode !== "live") {
       return {

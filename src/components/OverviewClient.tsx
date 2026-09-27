@@ -90,15 +90,26 @@ export function OverviewClient(props: {
           <p className="eyebrow">Pittsburgh permit evidence workspace</p>
           <h2 id="product-heading">Turn an issued-permit list into a reviewable housing signal.</h2>
           <p className="product-lede">
-            HomeSignal helps planners, housing nonprofits, and reporters find likely housing records, inspect the
-            exact public description, and carry only human-reviewed facts into a briefing.
+            For housing analysts who need to know what a permit record actually says before it goes into a production memo: every fact is quoted from the public record, every gap is named, and only what a person reviews is exported.
           </p>
         </div>
         <ol className="workflow" aria-label="HomeSignal workflow">
           <li><strong>1. Find</strong><span>Filter the housing review queue.</span></li>
-          <li><strong>2. Verify</strong><span>Read the source description and record a decision.</span></li>
-          <li><strong>3. Brief</strong><span>Export reviewed facts with sources and limits.</span></li>
+          <li><strong>2. Verify</strong><span>Read the source, extract quoted evidence, and save a decision.</span></li>
+          <li><strong>3. Check limits</strong><span>See what the record establishes, what it does not, and what to verify next.</span></li>
+          <li><strong>4. Brief</strong><span>Export reviewed facts with sources and limits.</span></li>
         </ol>
+      </section>
+      <section className="manual-compare" aria-labelledby="compare-heading">
+        <h2 id="compare-heading" className="sr-only">Manual review compared with HomeSignal</h2>
+        <div>
+          <p className="layer-label">Manual today</p>
+          <p>Download thousands of permit rows, keyword-search descriptions in a spreadsheet, retype unit counts by hand, and separately guard against treating stories, parking spaces, or issued permits as finished homes.</p>
+        </div>
+        <div>
+          <p className="layer-label">With HomeSignal</p>
+          <p>Start from a narrowed queue, see the exact quote behind each number, record a human decision, and export a brief that states what the permit does not prove.</p>
+        </div>
       </section>
       <p className="integrity-note">
         <strong>Decision support:</strong> queue totals and activity bars count permit records, not homes built. Structured address,
@@ -170,7 +181,7 @@ export function OverviewClient(props: {
           <span><span className="eyebrow">Start the guided demo</span><strong>{featured.sourcePermitId}</strong></span>
           <span>{featured.neighborhood}</span>
           <span>{featured.sourceStatusRaw}</span>
-          <span className="spotlight-go">Review source →</span>
+          <span className="spotlight-go">Review this record’s evidence →</span>
         </Link>
       ) : null}
 
@@ -268,7 +279,10 @@ export function OverviewClient(props: {
       </div>
       <ul className="record-cards">
         {pageRows.length === 0 ? (
-          <li className="card">No records match these filters. Reset filters or choose another neighborhood.</li>
+          <li className="card">
+            No permit records match these filters in the currently loaded 2025 Building/BDA snapshot. Reset filters
+            or choose another neighborhood.
+          </li>
         ) : (
           pageRows.map((row) => {
             const review = reviews[row.recordId];
@@ -317,7 +331,10 @@ export function OverviewClient(props: {
           <tbody>
             {pageRows.length === 0 ? (
               <tr>
-                <td colSpan={8}>No records match these filters. Reset filters or choose another neighborhood.</td>
+                <td colSpan={8}>
+                  No permit records match these filters in the currently loaded snapshot. Reset filters or choose
+                  another neighborhood.
+                </td>
               </tr>
             ) : (
               pageRows.map((row) => {

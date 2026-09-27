@@ -23,9 +23,9 @@ export default function EvaluationPage() {
           unit tests.
         </p>
         <p>
-          Automated checks currently cover metrics, CSV safety, snapshot privacy, and extraction-schema
-          validation on fixtures. Live-model agreement has not been measured because no runtime key is
-          configured and no saved genuine responses exist.
+          Automated checks currently cover metrics, CSV safety, snapshot privacy, extraction-schema
+          validation, labeled demo extraction, and simulated runtime-AI grounding. Live-vendor agreement has not been measured because no runtime key is
+          configured and no saved genuine vendor responses exist.
         </p>
         <p>
           <Link href="/">Overview</Link> · <Link href="/sources">Sources</Link>

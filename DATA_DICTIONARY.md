@@ -34,9 +34,11 @@ Parcel numbers, owner names, contractor names, and street addresses are not publ
 | proposedScope | `new_building`, `conversion`, `addition_or_alteration`, `demolition`, `other`, `uncertain` |
 | existingUnitCount / proposedTotalUnitCount / explicitAddedUnitCount / explicitRemovedUnitCount | Nonnegative integers or null. Null means unknown, not zero. |
 | countEvidence | Exact quote from the work description for each non-null count |
-| originLabel | `live`, `previously_generated`, or `unavailable` |
+| originLabel | `live`, `previously_generated`, `synthetic_demo`, or `unavailable` |
 
 Proposed total is not net addition.
+
+`synthetic_demo` extraction and `POST /api/ai/analyze` briefs are labeled simulated runtime output. They must not be mixed into factual citywide metrics.
 
 Synthetic strings in `data/evaluation/adversarial-synthetic.json` are test fixtures, not snapshot records.
 

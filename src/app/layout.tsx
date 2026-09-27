@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "HomeSignal",
-  description: "Permit review workspace for Pittsburgh PLI building records.",
+  description:
+    "Pittsburgh permit-evidence workspace: review issued PLI descriptions, run a labeled runtime-AI demo, and export cited briefings. Not homes built.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

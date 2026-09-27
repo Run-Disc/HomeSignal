@@ -16,7 +16,7 @@ export type ReviewState =
   | "rejected"
   | "insufficient_evidence";
 
-export type ReviewOrigin = "ai_assisted_review" | "manual_source_review";
+export type ReviewOrigin = "ai_assisted_review" | "manual_source_review" | "demo_extraction_review";
 
 export type CountField =
   | "existingUnitCount"
@@ -78,7 +78,7 @@ export type ExtractionProposal = {
   promptVersion: string;
   schemaVersion: string;
   generatedAt: string;
-  originLabel: "live" | "previously_generated" | "unavailable";
+  originLabel: "live" | "previously_generated" | "synthetic_demo" | "unavailable";
 };
 
 export type ReviewedFields = {

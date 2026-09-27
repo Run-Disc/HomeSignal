@@ -1,5 +1,7 @@
 # Sources
 
+Permit metrics come from the PLI snapshot below. Zillow and Census figures are separate context. Simulated runtime AI interprets one open permit row; it is not a data source and is not mixed into those metrics.
+
 ## PLI Permits (primary)
 
 | Field | Value |
@@ -19,6 +21,12 @@
 | Product cohort | 4,243 unique 2025 Building / Building & Development Application records |
 | Unique ID used | `permit_id` (string). Package notes mention `ext_file_num`; that field was not in the retrieved schema. No conflicting duplicate IDs in the 2025 Building/BDA subset. |
 | Attribution | City of Pittsburgh PLI permit records published by WPRDC. |
+| Fields kept | permit ID, permit type, source class, work type, issue date, current status, neighborhood, work description (privacy-reduced) |
+| Transformations | Filter to 2025 issue dates and Building / BDA types; drop owner, contractor, address, parcel, coordinate, value, and contact fields; redact house-number street patterns in descriptions to `[REDACTED_ADDRESS]`; flag blank descriptions; mark keyword/work-type housing-queue candidates. Snapshot version `pli-2025-bda-v1`. When the app loads the snapshot, it hashes each sanitized record so saved reviews can be flagged stale if source text changes. |
+
+**What one PLI row establishes:** the City issued a permit with this ID, type, class, work type, date, and neighborhood; the public description text; and the administrative status at retrieval.
+
+**What it does not establish:** construction start or completion, occupancy, affordability or rents, net unit change, or whether several permits describe one project. Status is the current label, not a history of inspections.
 
 The WPRDC resource HTML page displayed a Data Use Agreement. It was not accepted by the implementation agent. CKAN JSON API and dump retrieval used for this snapshot did not present an interactive accept step. If a browser terms gate appears for you, review it yourself before using that path.
 

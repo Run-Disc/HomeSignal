@@ -9,6 +9,12 @@ export const AMBIGUOUS_PERMIT_ID = "BDA-2025-01572";
 export const REVIEW_STORAGE_KEY = `homesignal.reviews.${SNAPSHOT_VERSION}`;
 export const EXTRACTION_CACHE_KEY = `homesignal.extractionCache.${SNAPSHOT_VERSION}`;
 export const FAILED_EXTRACTION_KEY = `homesignal.failedExtractions.${SNAPSHOT_VERSION}`;
+export const AI_BRIEF_CACHE_KEY = `homesignal.aiBrief.${SNAPSHOT_VERSION}`;
+export const RUNTIME_AI_MODEL_ID = "homesignal-demo-runtime-v1";
+export const RUNTIME_AI_PROMPT_VERSION = "homesignal-runtime-ai-v1";
+export const DEMO_EXTRACT_MODEL_ID = "homesignal-demo-extract-v1";
+export const DEMO_EXTRACT_GENERATED_AT = "2026-09-27T00:00:00.000Z";
+export const TARGET_RUNTIME_PROVIDER = "openai-compatible-chat-completions";
 
 export const SOURCE_LANDING = "https://data.wprdc.org/dataset/pli-permits";
 export const SOURCE_RESOURCE =
