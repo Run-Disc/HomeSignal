@@ -38,7 +38,7 @@ export function demoRequestId(parts: string[]): string {
     hash ^= raw.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
   }
-  return `demo_req_${(hash >>> 0).toString(16).padStart(8, "0")}`;
+  return `sim_req_${(hash >>> 0).toString(16).padStart(8, "0")}`;
 }
 
 export async function simulateLatency(seed: string, options?: ProviderOptions): Promise<number> {

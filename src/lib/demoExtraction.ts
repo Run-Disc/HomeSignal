@@ -147,7 +147,7 @@ export function buildDemoProposal(
       proposedScope: scope.evidence,
     },
     explanation:
-      "SYNTHETIC DEMO FIXTURE — no live model was called. A deterministic quote matcher filled only fields with an exact excerpt from this record. Bedroom, story, parking, and accessibility-unit numbers are ignored. This is a workflow demonstration, not model output, and it is not a City determination.",
+      "SIMULATED EXTRACTION — no external model was called. A deterministic quote matcher filled only fields with an exact excerpt from this record. Bedroom, story, parking, and accessibility-unit numbers are ignored. This is not model output or a City determination.",
     missingEvidence,
     followUpRole: "City permit/inspection staff",
     followUpQuestion:

@@ -28,7 +28,7 @@ function permit(over: Partial<PermitRecord> = {}): PermitRecord {
   };
 }
 
-describe("labeled demo extraction", () => {
+describe("simulated extraction", () => {
   it("quotes dwelling units from the description and labels the origin as synthetic", () => {
     const result = buildDemoProposal(permit(), "hash-1");
     assert.equal(result.ok, true);
@@ -37,8 +37,8 @@ describe("labeled demo extraction", () => {
     assert.equal(result.value.schemaVersion, SCHEMA_VERSION);
     assert.equal(result.value.proposedTotalUnitCount, 12);
     assert.equal(result.value.countEvidence.proposedTotalUnitCount?.quote.includes("12 DWELLING UNITS"), true);
-    assert.match(result.value.explanation, /SYNTHETIC DEMO/);
-    assert.equal(result.value.modelId.includes("demo"), true);
+    assert.match(result.value.explanation, /SIMULATED EXTRACTION/);
+    assert.equal(result.value.modelId.includes("simulated"), true);
   });
 
   it("does not treat parking, stories, years, or accessibility units as dwelling counts", () => {

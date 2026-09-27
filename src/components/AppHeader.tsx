@@ -57,8 +57,8 @@ export function AppHeader(props: {
         })}
       </nav>
       <div className="header-meta">
-        <span className="mode-indicator" title={`${props.modeLabel} Simulated runtime provider for the hackathon demonstration.`}>
-          <span className="mode-dot" aria-hidden="true" /> Runtime AI · Demo
+        <span className="mode-indicator" title={`${props.modeLabel} Local simulated provider; no external model is called.`}>
+          <span className="mode-dot" aria-hidden="true" /> Runtime AI · Simulated
         </span>
         <Link className="quiet-link" href="/sources" aria-label={`Sources, snapshot retrieved ${props.snapshotDate}`}>
           Sources

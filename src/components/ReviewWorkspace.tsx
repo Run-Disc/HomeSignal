@@ -161,7 +161,7 @@ export function ReviewWorkspace(props: {
     setWaiting(true);
     setMessage(
       aiMode === "source-review"
-        ? "Preparing labeled demo extraction…"
+        ? "Preparing simulated extraction…"
         : "Waiting for a model response…",
     );
     try {
@@ -450,7 +450,7 @@ export function ReviewWorkspace(props: {
             <h3 id="extract-heading">Structured extraction</h3>
             <p className="metric-def">
               {aiMode === "source-review"
-                ? "Labeled demo extraction. No live model is called."
+                ? "Simulated extraction; no external model is called."
                 : aiMode === "saved"
                   ? "Replays previously generated responses with their original timestamp."
                   : "Live model extraction for the review-corpus allowlist."}
@@ -575,9 +575,7 @@ export function ReviewWorkspace(props: {
           <div className="nav-row review-actions">
             {proposal ? (
               <button type="button" className="btn" onClick={accept}>
-                {proposal.originLabel === "synthetic_demo"
-                  ? "Accept supported demo fields"
-                  : "Accept supported fields"}
+                Accept supported fields
               </button>
             ) : null}
             <button type="button" className="btn" onClick={saveSourceReview}>

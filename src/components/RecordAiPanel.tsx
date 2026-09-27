@@ -101,12 +101,12 @@ export function RecordAiPanel(props: {
     }
   }
 
-  function resetDemo() {
+  function clearAnalysis() {
     clearCachedBrief(record.recordId, record.inputHash);
     setBrief(null);
     setAnswer(null);
     setError(null);
-    setStatus("Demo brief cleared for this record. Source review is unchanged.");
+    setStatus("Analysis cleared for this record. Source review is unchanged.");
   }
 
   async function analyze() {
@@ -191,8 +191,8 @@ export function RecordAiPanel(props: {
             Copy record summary
           </button>
           {brief ? (
-            <button type="button" className="btn-secondary" disabled={waiting} onClick={resetDemo}>
-              Clear demo brief
+            <button type="button" className="btn-secondary" disabled={waiting} onClick={clearAnalysis}>
+              Clear analysis
             </button>
           ) : null}
         </div>
@@ -305,7 +305,7 @@ export function RecordAiPanel(props: {
               <dt>Mode</dt>
               <dd>Simulated</dd>
               <dt>Provider</dt>
-              <dd>Demo provider</dd>
+              <dd>Local deterministic provider</dd>
               <dt>Target integration</dt>
               <dd>{brief.targetProvider}</dd>
               <dt>Request ID</dt>

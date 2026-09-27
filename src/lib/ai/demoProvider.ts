@@ -284,7 +284,7 @@ export function assembleRecordBrief(record: PermitRecord): RecordBrief {
         id: "no-housing-phrase",
         title: "No explicit housing phrase was matched",
         explanation:
-          "This description does not contain an explicit dwelling, apartment, or residential phrase used by the demo matcher. Do not invent housing activity for it.",
+          "This description does not contain an explicit dwelling, apartment, or residential phrase used by the local matcher. Do not invent housing activity for it.",
         kind: "gap",
         evidence: [],
       });
@@ -329,7 +329,7 @@ export function assembleRecordBrief(record: PermitRecord): RecordBrief {
 
   const summary = blank
     ? `${record.sourcePermitId} is in the 2025 Building/BDA snapshot for ${record.neighborhood}, issued ${record.issueDate}, but the public description is blank. No dwelling count or occupancy conclusion is supported.`
-    : `${record.sourcePermitId} is an issued ${record.workTypeRaw ?? "permit"} record in ${record.neighborhood} dated ${record.issueDate}. The demo analysis uses only this row’s public fields and does not add other permits, addresses, or a homes-built total.`;
+    : `${record.sourcePermitId} is an issued ${record.workTypeRaw ?? "permit"} record in ${record.neighborhood} dated ${record.issueDate}. The simulated analysis uses only this row’s public fields and does not add other permits, addresses, or a homes-built total.`;
 
   const { decisionSupport, coverage } = buildDecisionSupport(record);
 
@@ -397,7 +397,7 @@ export function answerFromEvidence(record: PermitRecord, questionId: FollowUpQue
     if (!dwelling) {
       return {
         answer:
-          "No explicit “N DWELLING UNIT(S)” phrase was found in this description. The demo provider will not invent a unit count. Stories, bedrooms, parking, and accessibility units stay uncounted.",
+          "No explicit “N DWELLING UNIT(S)” phrase was found in this description. The local provider will not invent a unit count. Stories, bedrooms, parking, and accessibility units stay uncounted.",
         evidence: [],
       };
     }
@@ -432,7 +432,7 @@ export class DemoAIProvider implements RuntimeAiProvider {
     if (demo.ok) return { status: "ok" as const, proposal: demo.value };
     return {
       status: "unavailable" as const,
-      message: `Labeled demo extraction could not be validated for this record (${demo.error}). Source review still works. No live model was called.`,
+      message: `Simulated extraction could not be validated for this record (${demo.error}). Source review still works. No external model was called.`,
     };
   }
 

@@ -25,7 +25,7 @@ export function reviewStatusChip(
 }
 
 export const SOURCE_REVIEW_STATUS =
-  "No runtime model key is configured. You can extract labeled demo evidence on review-corpus records and run a simulated AI brief on this record. Those outputs are not live vendor results.";
+  "No runtime model key is configured. You can run a simulated extraction and evidence brief. Neither output is a live model result.";
 
 export function shouldCallExtractionApi(mode: AiMode): boolean {
   return mode === "live" || mode === "saved" || mode === "source-review";
@@ -34,10 +34,10 @@ export function shouldCallExtractionApi(mode: AiMode): boolean {
 export function extractionButtonLabel(mode: AiMode, waiting: boolean): string {
   if (waiting) {
     return mode === "source-review"
-      ? "Preparing labeled demo extraction…"
+      ? "Preparing simulated extraction…"
       : "Waiting for the model (up to 15 seconds)…";
   }
-  if (mode === "source-review") return "Extract demo evidence";
+  if (mode === "source-review") return "Extract evidence";
   if (mode === "saved") return "Look up a saved extraction";
   return "Ask AI to extract evidence";
 }
@@ -48,7 +48,7 @@ export function countsAsFailedLiveExtraction(mode: AiMode, status: string): bool
 
 export function proposalStatusLabel(proposal: ExtractionProposal): string {
   if (proposal.originLabel === "synthetic_demo") {
-    return `Labeled synthetic demo extraction · ${proposal.modelId} · not a live model result`;
+    return `Simulated extraction · ${proposal.modelId} · no external model called`;
   }
   if (proposal.originLabel === "previously_generated") {
     return `Previously generated ${proposal.generatedAt} · ${proposal.modelId}`;

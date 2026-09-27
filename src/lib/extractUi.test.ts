@@ -8,10 +8,10 @@ import {
 } from "./extractUi";
 
 describe("extraction UI for keyless deployments", () => {
-  it("can call the extract API in source-review for labeled demo extraction", () => {
+  it("can call the extract API in source-review for simulated extraction", () => {
     assert.equal(shouldCallExtractionApi("source-review"), true);
-    assert.equal(extractionButtonLabel("source-review", false), "Extract demo evidence");
-    assert.equal(extractionButtonLabel("source-review", true), "Preparing labeled demo extraction…");
+    assert.equal(extractionButtonLabel("source-review", false), "Extract evidence");
+    assert.equal(extractionButtonLabel("source-review", true), "Preparing simulated extraction…");
     assert.equal(countsAsFailedLiveExtraction("source-review", "unavailable"), false);
   });
 

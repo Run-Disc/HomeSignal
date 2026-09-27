@@ -42,7 +42,7 @@ describe("simulated runtime AI provider", () => {
     assert.equal(parsed.success, true);
     assert.equal(result.runtimeMode, "simulated");
     assert.equal(result.provider, "demo");
-    assert.match(result.requestId, /^demo_req_/);
+    assert.match(result.requestId, /^sim_req_/);
     assert.match(result.brief.summary, /TEST-1/);
     assert.match(result.brief.summary, /2025-04-23/);
     assert.equal(result.brief.findings.some((f) => f.explanation.includes("12 DWELLING UNITS")), true);

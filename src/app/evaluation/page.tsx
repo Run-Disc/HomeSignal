@@ -26,7 +26,7 @@ export default function EvaluationPage() {
         </p>
         <p>
           Automated checks currently cover metrics, CSV safety, snapshot privacy, extraction-schema
-          validation, labeled demo extraction, and simulated runtime-AI grounding. Live-vendor agreement has not been measured because no runtime key is
+          validation, simulated extraction, and source-bound runtime analysis. Live-vendor agreement has not been measured because no runtime key is
           configured and no saved genuine vendor responses exist.
         </p>
         <p>
