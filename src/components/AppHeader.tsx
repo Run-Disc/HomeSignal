@@ -25,16 +25,22 @@ export function AppHeader(props: {
       <div className="brand">
         <TitleTag className="brand-title">
           {props.isHome ? (
-            "HomeSignal"
+            <span className="brand-lockup">
+              <span className="brand-mark" aria-hidden="true">H</span>
+              <span><span className="brand-name">HomeSignal</span><span className="brand-subtitle">Permit evidence workspace</span></span>
+            </span>
           ) : (
             <Link href="/" className="brand-link">
-              HomeSignal
+              <span className="brand-lockup">
+                <span className="brand-mark" aria-hidden="true">H</span>
+                <span><span className="brand-name">HomeSignal</span><span className="brand-subtitle">Permit evidence workspace</span></span>
+              </span>
             </Link>
           )}
         </TitleTag>
       </div>
       <nav className="app-nav" aria-label="App">
-        {items.map((item) => {
+        {items.map((item, index) => {
           const current = props.current === item.id;
           return (
             <Link
@@ -43,17 +49,21 @@ export function AppHeader(props: {
               href={item.href}
               aria-current={current ? "page" : undefined}
             >
+              <span className="nav-index" aria-hidden="true">{index + 1}</span>
               {item.label}
             </Link>
           );
         })}
       </nav>
       <div className="header-meta">
-        <Link className="quiet-link" href="/sources">
-          {props.snapshotDate}
+        <span className="mode-indicator" title={props.modeLabel}>
+          <span className="mode-dot" aria-hidden="true" /> Source review
+        </span>
+        <Link className="quiet-link" href="/sources" aria-label={`Sources, snapshot retrieved ${props.snapshotDate}`}>
+          Snapshot {props.snapshotDate}
         </Link>
         <Link className="quiet-link" href="/limitations">
-          Docs
+          Methods & limits
         </Link>
       </div>
     </header>
