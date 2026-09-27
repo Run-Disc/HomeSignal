@@ -12,6 +12,7 @@ export type ReviewState =
   | "unreviewed"
   | "accepted"
   | "corrected"
+  | "source_reviewed"
   | "rejected"
   | "insufficient_evidence";
 

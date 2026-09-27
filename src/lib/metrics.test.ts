@@ -52,7 +52,7 @@ describe("metrics", () => {
         sanitizedInputHash: "x",
         origin: "manual_source_review",
         proposalVersion: null,
-        state: "accepted",
+        state: "source_reviewed",
         reviewerRole: "local_reviewer",
         timestamp: "2026-09-26T00:00:00Z",
         finalFields: {

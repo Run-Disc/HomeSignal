@@ -253,7 +253,7 @@ export function ReviewWorkspace(props: {
       sanitizedInputHash: record.inputHash,
       origin: proposal ? "ai_assisted_review" : "manual_source_review",
       proposalVersion: proposal ? `${proposal.modelId}:${proposal.generatedAt}` : null,
-      state: "corrected",
+      state: proposal ? "corrected" : "source_reviewed",
       reviewerRole: "local_reviewer",
       timestamp: new Date().toISOString(),
       finalFields: result.fields,

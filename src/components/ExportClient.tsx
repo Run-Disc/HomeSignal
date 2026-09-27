@@ -41,6 +41,10 @@ export function ExportClient(props: {
     () => applyFilters(neighborhoodCohort, filters, reviews),
     [neighborhoodCohort, filters, reviews],
   );
+  const featured = rows.find((record) => record.recordId === featuredRecordId);
+  const featuredReview = featured ? reviews[featured.recordId] : undefined;
+  const proposedCount = featuredReview?.finalFields?.proposedTotalUnitCount;
+  const countQuote = featuredReview?.finalFields?.countEvidence.proposedTotalUnitCount?.quote;
   const text = briefingText({
     preparedAt: new Date().toISOString(),
     filters,
@@ -86,11 +90,42 @@ export function ExportClient(props: {
           </aside>
         ) : (
           <p className="reviewed-summary" role="status">
-            <strong>{metrics.reviewedRecords}</strong> reviewed record{metrics.reviewedRecords === 1 ? "" : "s"} in
-            this browser; <strong>{metrics.needsReview}</strong> potential record{metrics.needsReview === 1 ? "" : "s"}
-            still need review.
+            <strong>{metrics.reviewedRecords}</strong>
+            {` reviewed record${metrics.reviewedRecords === 1 ? "" : "s"} in this browser; `}
+            <strong>{metrics.needsReview}</strong>
+            {` potential record${metrics.needsReview === 1 ? "" : "s"} still need review.`}
           </p>
         )}
+        {featured && featuredReview?.finalFields && featuredReview.state !== "unreviewed" ? (
+          <section className="briefing-feature" aria-labelledby="briefing-feature-heading">
+            <div className="briefing-feature-head">
+              <div>
+                <p className="eyebrow">Featured human-reviewed evidence</p>
+                <h2 id="briefing-feature-heading">Permit {featured.sourcePermitId}</h2>
+                <p>{featured.neighborhood} · issued {featured.issueDate} · {featured.sourceClassRaw ?? "Unknown source class"} source label</p>
+              </div>
+              <Link className="btn-secondary print-hide" href={`/review/${encodeURIComponent(featured.recordId)}`}>
+                Open record
+              </Link>
+            </div>
+            {proposedCount != null && countQuote ? (
+              <div className="briefing-evidence-row">
+                <div className="briefing-count">
+                  <strong>{proposedCount}</strong>
+                  <span>Proposed total units mentioned in permit text</span>
+                </div>
+                <blockquote>“{countQuote}”</blockquote>
+              </div>
+            ) : (
+              <p className="briefing-unknown-count">No source-supported proposed total unit count was saved for this review.</p>
+            )}
+            <p className="briefing-feature-limit">
+              This is a reviewed permit description, not proof that homes were built. Construction start, completion,
+              and occupancy require verification with the responsible public authority.
+            </p>
+            <p className="briefing-citation">Citation: {featured.citationId}</p>
+          </section>
+        ) : null}
         <div className="print-actions print-hide">
           <button type="button" className="btn" onClick={() => window.print()}>
             Print / Save as PDF

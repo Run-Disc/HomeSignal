@@ -45,7 +45,7 @@ export function computeMetrics(
   );
   const reviewedHousing = reviewed.filter(
     (d) =>
-      (d.state === "accepted" || d.state === "corrected") &&
+      (d.state === "accepted" || d.state === "corrected" || d.state === "source_reviewed") &&
       d.finalFields?.housingRelevance === "housing",
   );
   const needsReview = candidates.filter((r) => {

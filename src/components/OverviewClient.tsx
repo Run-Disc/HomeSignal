@@ -14,7 +14,7 @@ import type { Filters, ReviewState } from "@/lib/types";
 
 function statusClass(state: string): string {
   if (state === "unreviewed" || state === "insufficient_evidence") return "status amber";
-  if (state === "accepted" || state === "corrected") return "status teal";
+  if (state === "accepted" || state === "corrected" || state === "source_reviewed") return "status teal";
   return "status";
 }
 
@@ -127,7 +127,10 @@ export function OverviewClient(props: {
             <p className="eyebrow">One-year source pattern</p>
             <h2 id="activity-heading">Issued permit activity by month</h2>
           </div>
-          <p>Selected neighborhood · permit records, not homes built</p>
+          <p>
+            {filters.neighborhood === "all" ? "All Pittsburgh neighborhoods" : filters.neighborhood} · permit
+            records, not homes built
+          </p>
         </div>
         <ol className="monthly-bars" aria-label="Monthly issued permit record counts">
           {metrics.monthlyIssued.map((row) => {
@@ -194,6 +197,7 @@ export function OverviewClient(props: {
             <option value="unreviewed">Unreviewed</option>
             <option value="accepted">Accepted</option>
             <option value="corrected">Corrected</option>
+            <option value="source_reviewed">Source reviewed</option>
             <option value="rejected">Rejected</option>
             <option value="insufficient_evidence">Insufficient evidence</option>
           </select>

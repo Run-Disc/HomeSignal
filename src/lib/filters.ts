@@ -25,6 +25,7 @@ export function filtersFromSearchParams(params: URLSearchParams | { get(name: st
     reviewState === "unreviewed" ||
     reviewState === "accepted" ||
     reviewState === "corrected" ||
+    reviewState === "source_reviewed" ||
     reviewState === "rejected" ||
     reviewState === "insufficient_evidence"
   ) {

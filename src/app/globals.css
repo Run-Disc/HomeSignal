@@ -196,6 +196,18 @@ a.meta-pill:hover, a.meta-pill:focus-visible {
 .empty-briefing { margin: 18px 0; padding: 20px; border: 1px solid var(--line); border-left: 5px solid var(--teal); border-radius: 10px; background: var(--paper); box-shadow: var(--shadow-sm); }
 .empty-briefing h2 { margin-top: 0; }
 .reviewed-summary { padding: 10px 12px; background: var(--teal-soft); border-left: 4px solid var(--teal); }
+.briefing-feature { margin: 18px 0; padding: clamp(18px, 3vw, 26px); border: 1px solid var(--line-strong); border-radius: 12px; background: linear-gradient(125deg, #f2faf7, #fff 55%); box-shadow: var(--shadow-sm); }
+.briefing-feature-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.briefing-feature h2 { margin: 0 0 4px; font-size: 1.5rem; }
+.briefing-feature-head p:last-child { margin: 0; color: var(--muted); }
+.briefing-evidence-row { display: grid; grid-template-columns: minmax(170px, 0.7fr) minmax(0, 2fr); gap: 18px; align-items: stretch; margin: 18px 0; }
+.briefing-count { display: flex; flex-direction: column; justify-content: center; padding: 16px; border-radius: 9px; color: white; background: var(--teal-dark); }
+.briefing-count strong { font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1; }
+.briefing-count span { margin-top: 8px; font-size: 0.88rem; line-height: 1.35; }
+.briefing-evidence-row blockquote { display: flex; align-items: center; margin: 0; padding: 16px 20px; border-left: 4px solid var(--teal); background: var(--paper); font-size: 1.07rem; line-height: 1.55; }
+.briefing-feature-limit { margin: 0 0 6px; font-weight: 600; }
+.briefing-citation { margin: 0; color: var(--muted); font-size: 0.84rem; }
+.briefing-unknown-count { margin: 16px 0; padding: 12px; background: var(--paper); border-left: 4px solid var(--amber); }
 .row-featured { background: var(--teal-soft); }
 .spotlight {
   display: flex;
@@ -387,6 +399,8 @@ footer.page-foot nav { display: flex; flex-wrap: wrap; gap: 16px; justify-conten
   footer.page-foot { flex-direction: column; }
   footer.page-foot nav { justify-content: flex-start; }
   .prose { padding: 18px; }
+  .briefing-feature-head { flex-direction: column; }
+  .briefing-evidence-row { grid-template-columns: 1fr; }
 }
 @media print {
   .skip, .top-actions, .header-meta, .filters, .print-hide, .record-cards, .nav-row, footer.page-foot {

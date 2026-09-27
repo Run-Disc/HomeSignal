@@ -31,8 +31,8 @@ The browser workflow (`npm run dev` / `npm start`) is unchanged.
 Nav: **Queue** → **Record** → **Briefing**.
 
 1. Queue shows issued / housing queue / reviewed / open, a neighborhood-responsive monthly activity chart, and a spotlight row for `BDA-2024-05307`.
-2. Record is the permit description on the left and a human review form on the right. Select exact source words to copy them into the evidence field, then save or mark insufficient evidence.
-3. Briefing prints or downloads CSV of **reviewed** evidence only.
+2. Record is the permit description on the left and a human review form on the right. Select exact source words to copy them into the evidence field, then save as **source reviewed** or mark insufficient evidence.
+3. Briefing highlights a featured source-backed count and its exact quote, then prints or downloads **reviewed** evidence only.
 
 ## Judging alignment
 
