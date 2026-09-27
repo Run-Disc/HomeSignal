@@ -13,7 +13,6 @@ const files = [
   "AI_DISCLOSURE.md",
   "EVALUATION.md",
   "FINAL_ACTIONS.md",
-  "SUBMISSION_CHECKLIST.md",
   "BUILD_STATUS.md",
   "COMPLIANCE_AUDIT.md",
   "WINDOWS_INSTALL.md",
