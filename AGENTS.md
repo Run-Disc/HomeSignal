@@ -1,6 +1,6 @@
 # HomeSignal agent boundaries
 
-HomeSignal is a Track 2 permit-evidence observatory for the AI for Housing Hackathon. Follow `outputs/CURSOR_MASTER_PROMPT.md` in the parent planning folder if available, and this repository's documentation.
+HomeSignal is a Track 2 permit-evidence observatory for the AI for Housing Hackathon. Follow this repository's documentation.
 
 ## Permanent rules
 

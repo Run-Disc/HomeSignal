@@ -74,35 +74,58 @@ export function OverviewClient(props: {
 
   return (
     <>
+      <section className="product-intro" aria-labelledby="product-heading">
+        <div>
+          <p className="eyebrow">Pittsburgh permit evidence workspace</p>
+          <h2 id="product-heading">Turn an issued-permit list into a reviewable housing signal.</h2>
+          <p className="product-lede">
+            HomeSignal helps planners, housing nonprofits, and reporters find likely housing records, inspect the
+            exact public description, and carry only human-reviewed facts into a briefing.
+          </p>
+        </div>
+        <ol className="workflow" aria-label="HomeSignal workflow">
+          <li><strong>1. Find</strong><span>Filter the housing review queue.</span></li>
+          <li><strong>2. Verify</strong><span>Read the source description and record a decision.</span></li>
+          <li><strong>3. Brief</strong><span>Export reviewed facts with sources and limits.</span></li>
+        </ol>
+      </section>
+      <p className="integrity-note">
+        <strong>Decision support:</strong> every number below counts permit records, not homes built. No address,
+        owner, contractor, parcel, or contact data is shown.
+      </p>
       <section aria-labelledby="metrics-heading">
         <h2 id="metrics-heading" className="visually-hidden">
           Queue totals
         </h2>
         <div className="metrics">
           <article className="card">
-            <h3>Issued</h3>
+            <h3>Issued permit records</h3>
             <div className="metric-value">{metrics.permitRecordsInCohort}</div>
+            <p className="metric-def">Current year and neighborhood selection.</p>
           </article>
           <article className="card">
-            <h3>Housing queue</h3>
+            <h3>Potential housing records</h3>
             <div className="metric-value">{metrics.potentialHousingRecords}</div>
+            <p className="metric-def">Flagged by transparent terms or work type.</p>
           </article>
           <article className="card">
-            <h3>Reviewed</h3>
+            <h3>Human reviewed</h3>
             <div className="metric-value">{metrics.reviewedRecords}</div>
+            <p className="metric-def">Saved decisions in this browser.</p>
           </article>
           <article className="card">
-            <h3>Open</h3>
+            <h3>Needs review</h3>
             <div className="metric-value">{metrics.needsReview}</div>
+            <p className="metric-def">Potential records without a decision.</p>
           </article>
         </div>
       </section>
       {featured ? (
         <Link className="spotlight" href={`/review/${encodeURIComponent(featured.recordId)}`}>
-          <strong>{featured.sourcePermitId}</strong>
+          <span><span className="eyebrow">Start the guided demo</span><strong>{featured.sourcePermitId}</strong></span>
           <span>{featured.neighborhood}</span>
           <span>{featured.sourceStatusRaw}</span>
-          <span className="spotlight-go">Open</span>
+          <span className="spotlight-go">Review source →</span>
         </Link>
       ) : null}
 

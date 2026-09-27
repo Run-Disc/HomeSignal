@@ -32,6 +32,19 @@ Nav: **Queue** → **Record** → **Briefing**.
 2. Record is the permit description on the left and a human review form on the right. Save, or mark insufficient evidence.
 3. Briefing prints or downloads CSV of **reviewed** evidence only.
 
+## Judging alignment
+
+| Criterion | Demonstrated behavior |
+|---|---|
+| Problem value | Converts a large issued-permit list into a focused evidence-review queue. |
+| User fit & usability | Plain-language Queue → Record → Briefing workflow; guided example; keyboard focus, large controls, mobile record cards, and print output. |
+| Technical execution | Deterministic local snapshot, validated review persistence, CSV formula protection, source-bound count checks, automated tests, and desktop packages. |
+| Data & AI integrity | Cited WPRDC snapshot; privacy-reduced fields; exact supporting excerpts; explicit unknowns; no fabricated model output; human decision required. |
+| Actionability | Produces a reviewable briefing from accepted source evidence instead of presenting an unsupported housing-production total. |
+| Continuation potential | Add independently labeled evaluation data, test with a housing practitioner, connect current permit statuses, and pilot the review/export workflow with a civic partner. |
+
+No score is guaranteed. The demo and documentation show the working evidence for each criterion so judges can evaluate it directly.
+
 This repository’s working path is **source-review**: no runtime model key, `data/public/saved-extractions.json` is empty. Displayed findings are deterministic snapshot metrics or human-entered reviews. Cursor is not used at runtime.
 
 ## Libraries and tools

@@ -2,7 +2,9 @@
 
 ## Software-development assistance
 
-Cursor was used **only** for software-development assistance: coding, debugging, testing, and documentation editing during the authorized build window beginning 2026-09-26 09:00 America/New_York. Pre-event research notes in the parent `outputs/` folder were also assisted and are not a prebuilt application.
+Before the build window, the public challenge brief, participant packet, and listed data sources were researched and planning materials were prepared. Those planning materials included AI-assisted instruction drafts. They contained no application code or reusable product. The first repository commit is timestamped 2026-09-26 09:58:27 America/New_York, after the authorized build window opened at 09:00.
+
+During the build window, Cursor was used **only** for software-development assistance: coding, debugging, testing, and documentation editing.
 
 Cursor is **not** a runtime model in HomeSignal. Grok is **not** a runtime model in HomeSignal. No Cursor, Grok, or other assistant is called while a visitor uses the queue, record, or briefing screens.
 

@@ -11,8 +11,8 @@
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
-    "start": "next start --port 3000",
-    "start:3001": "next start --port 3001",
+    "start": "node scripts/prepare-standalone.cjs && PORT=3000 node .next/standalone/server.js",
+    "start:3001": "node scripts/prepare-standalone.cjs && PORT=3001 node .next/standalone/server.js",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/lib/*.test.ts",
