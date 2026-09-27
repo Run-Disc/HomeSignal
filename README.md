@@ -57,7 +57,7 @@ Names describe what this repository uses. They are **not endorsements**.
 | Node.js 22 / npm | Install, tests, production server |
 | WPRDC / CKAN | PLI Permits dump (not a paid API) |
 | Optional OpenAI-compatible Chat Completions | Server `POST /api/extract` **only if** `EXTRACTION_API_KEY` and `EXTRACTION_MODEL` are set. **Not configured here.** |
-| Cursor | Software-development assistance only (coding, debugging, testing, documentation editing) during the authorized build window beginning 2026-09-26 09:00 America/New_York. **Not a runtime model.** |
+| Cursor | Before the build window, AI-assisted consultation supported research of public challenge materials and early sketches; no code was created. During the build window, Cursor assisted coding, debugging, testing, and documentation. **Not a runtime model.** |
 | Electron + electron-builder | Unsigned Windows NSIS and macOS DMG/ZIP wrappers around the same Next standalone app |
 
 Python 3 is used only for optional ingest (`scripts/ingest_pli.py`). The committed snapshot is enough to run. `vercel.json` exists; **no hosted deployment is claimed**.

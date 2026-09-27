@@ -2,7 +2,7 @@
 
 ## Software-development assistance
 
-Before the build window, the public challenge brief, participant packet, and listed data sources were researched and planning materials were prepared. Planning included consulting AI. They contained no application code or reusable product. The first repository commit is timestamped 2026-09-26 09:58:27 America/New_York, after the authorized build window opened at 09:00.
+Before the build window, AI-assisted consultation supported research of the public challenge materials and early sketches. No application code or reusable product existed before the build window. The first repository commit is timestamped 2026-09-26 09:58:27 America/New_York, after the authorized build window opened at 09:00.
 
 During the build window, Cursor was used **only** for software-development assistance: coding, debugging, testing, and documentation editing.
 

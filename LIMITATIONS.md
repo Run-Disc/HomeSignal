@@ -21,5 +21,5 @@
 - No causal claim that permitting changed rents; no neighborhood appreciation forecast; no landlord or resident scoring.
 - Automated redaction of free text is incomplete. Builder inspection of the review corpus is still required before sending text to an external model or publishing screenshots.
 - Local reviews persist in browser storage for this snapshot version only. They do not change City data or other users’ views.
-- Live AI extraction is unavailable until a separate runtime API key is configured. No genuine saved model responses are stored in this repository. Cursor was used only for software-development assistance and is not called at runtime.
+- Live AI extraction is unavailable until a separate runtime API key is configured. No genuine saved model responses are stored in this repository. Before the build window, AI consultation supported public-source research and early sketches; during the build window Cursor assisted software development. Cursor is not called at runtime.
 - Decision support only. Verify project details and completion with the responsible public authority.

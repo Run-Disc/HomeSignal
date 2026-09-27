@@ -21,7 +21,7 @@ Deadline stated by the event: Sunday 2026-09-27 23:59 ET (confirm on the form).
 13. Paste the public demo video URL.
 14. Paste the public repository URL: `https://github.com/Run-Disc/HomeSignal`
 15. Paste data sources from `SOURCES.md` (WPRDC PLI resource `f4d1177a-f597-4c32-8cbf-7885f56253f6`, 2026-09-26 dump). Mention zoning pages only as unused context if the form asks for other catalogs.
-16. Paste AI disclosure from `AI_DISCLOSURE.md`: Cursor was used only for software-development assistance; HomeSignal uses no Cursor, Grok, or other model at runtime in this submission.
+16. Paste AI disclosure from `AI_DISCLOSURE.md`: pre-event AI consultation supported public-source research and early sketches, with no application code; during the build window Cursor assisted software development. HomeSignal uses no Cursor, Grok, or other model at runtime in this submission.
 17. Complete the over-18 / eligibility attestation yourself. Do not ask an agent to attest.
 18. Submit the form yourself.
 19. Optional: independently fill `data/evaluation/blind-label-worksheet.md`. Do not copy model guesses into it.

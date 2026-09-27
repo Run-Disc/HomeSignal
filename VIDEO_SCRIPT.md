@@ -32,7 +32,7 @@ Click the spotlight row **BDA-2024-05307** (Open).
 
 Do not wait for a spinner. Open **Extract** only if you need to show it is empty.
 
-“Cursor helped me write the software. It is not running against these permits. There is no runtime model key and no saved model answer. What you see is the snapshot plus whatever I type.”
+“Before the build window, AI consultation helped with public-source research and early sketches, but no application code existed. During the event, Cursor helped me develop the software. It is not running against these permits. There is no runtime model key and no saved model answer. What you see is the snapshot plus whatever I type.”
 
 **2:25–3:20 — Human review**
 

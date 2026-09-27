@@ -22,7 +22,7 @@ Statuses:
 | Decision-support framing | Verified | UI and docs: prototype review is not a City determination; verify with the responsible authority. |
 | PII / privacy | Verified | Public snapshot omits owner, contractor, address, parcel ids, coordinates, contacts. Ingest privacy scan documented in `BUILD_STATUS.md` (21 address-token replacements; 0 residual exclusions). Automated redaction still incomplete. |
 | Human-in-the-loop | Verified | Manual review without a model; accept requires a proposal; localStorage reviews; extraction allowlist when a key exists. |
-| AI disclosure | Verified | `AI_DISCLOSURE.md`: Cursor used only for software-development assistance (coding, debugging, testing, documentation). No Cursor/Grok/other model at runtime in this submission; **no key and empty `saved-extractions.json`**. |
+| AI disclosure | Verified | `AI_DISCLOSURE.md`: pre-event AI consultation supported public-source research and early sketches, with no application code; during the build window Cursor assisted coding, debugging, testing, and documentation. No Cursor/Grok/other model runs in this submission; **no key and empty `saved-extractions.json`**. |
 | Team name | Builder action required | Placeholder only in `SUBMISSION_CHECKLIST.md`. Not invented here. |
 | Member #1 name / email / affiliation | Builder action required | Placeholders only. Not invented here. |
 | Over-18 / eligibility attestation | Builder action required | Live form attestation must be completed by the human submitter. Cursor must not attest. |
