@@ -2,7 +2,7 @@
 
 **Target length:** 4:00–4:30. The event limit is 3–5 minutes.
 
-This is a word-for-word narration with matching screen actions. Replace **[your name]** before recording. Speak at a calm pace and let the screen prove each claim.
+This is a word-for-word narration with matching screen actions. Replace **Natan** before recording. Speak at a calm pace and let the screen prove each claim.
 
 ## Prepare before recording
 
@@ -24,7 +24,7 @@ This is a word-for-word narration with matching screen actions. Replace **[your 
 
 “A permit description can mention twelve dwelling units. That does **not** mean Pittsburgh gained twelve completed homes. It means an analyst has a lead that still needs evidence.
 
-I’m **[your name]**, and this is HomeSignal. It turns a large public permit list into a simple workflow: find a possible housing signal, verify it against the exact source text, and brief only what a human has reviewed.”
+I’m **Natan**, and this is HomeSignal. It turns a large public permit list into a simple workflow: find a possible housing signal, verify it against the exact source text, and brief only what a human has reviewed.”
 
 ## 0:30–1:05 — Regional signal without overclaiming
 
