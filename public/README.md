@@ -17,8 +17,8 @@ Packages are **unsigned**. Windows SmartScreen and macOS Gatekeeper will warn. O
 | Platform | File | Where to get it |
 |---|---|---|
 | Windows (x64) | [HomeSignal-Setup.exe](./HomeSignal-Setup.exe) | Repository root and Code → Download ZIP. Also GitHub Releases on `v*` tags. |
-| macOS Apple Silicon | `HomeSignal-mac-arm64.dmg` and `.zip` | GitHub Actions artifact **HomeSignal-macos**, or a `v*` Release. |
-| macOS Intel | `HomeSignal-mac-x64.dmg` and `.zip` | Same as above. |
+| macOS Apple Silicon | `HomeSignal-mac-arm64.dmg` and `.zip` | GitHub Actions artifact **HomeSignal-macos-arm64**, or a `v*` Release. |
+| macOS Intel | `HomeSignal-mac-x64.dmg` and `.zip` | GitHub Actions artifact **HomeSignal-macos-x64**, or a `v*` Release. |
 
 Windows: [WINDOWS_INSTALL.md](./WINDOWS_INSTALL.md). macOS: [MAC_INSTALL.md](./MAC_INSTALL.md).
 

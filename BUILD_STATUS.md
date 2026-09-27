@@ -27,7 +27,7 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 ## Desktop
 
 - Unsigned Windows NSIS: `HomeSignal-Setup.exe` (SmartScreen expected). Workflow job `windows` on `windows-latest`.
-- Unsigned macOS DMG + ZIP for **arm64** and **x64**: `HomeSignal-mac-{arch}.dmg|.zip` (Gatekeeper expected; not notarized). Workflow job `macos` on `macos-latest`.
+- Unsigned macOS DMG + ZIP for **arm64** and **x64**: `HomeSignal-mac-{arch}.dmg|.zip` (Gatekeeper expected; not notarized). Independent `macos` matrix jobs on `macos-latest` prevent one architecture’s disk-image step from blocking the other.
 - Tagged `v*` builds attach those files to a GitHub Release.
 - Mac binaries are not stored in the git root.
 
@@ -42,6 +42,7 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 - `node scripts/prepare-standalone.cjs` + `validate-standalone.cjs`: pass (no `.env`, no parcel fields)
 - Local unsigned macOS package on Darwin: `HomeSignal-mac-arm64.dmg|.zip` and `HomeSignal-mac-x64.dmg|.zip` in `dist-desktop/` (gitignored). Signing skipped (`identity` null). First dual-arch DMG pass hit a transient `hdiutil detach` on `/Volumes/HomeSignal`; retry of arm64 DMG succeeded. GitHub Actions `macos-latest` rebuilds these for artifacts/releases.
 - Windows NSIS remains CI-built on `windows-latest` (`HomeSignal-Setup.exe`). SmartScreen and Gatekeeper warnings are expected for unsigned files.
+- The previously combined dual-architecture macOS workflow repeatedly failed even though local packaging succeeded. The final workflow builds and uploads arm64 and x64 independently.
 - Desktop renderer isolation remains enabled (`contextIsolation`, sandbox, and no Node integration). Browser permissions are denied, and external HTTP(S) links open outside the HomeSignal window.
 - Windows and macOS packages use the HomeSignal application icon rather than Electron’s generic icon.
 

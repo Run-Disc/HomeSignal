@@ -7,7 +7,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSfDK_aD-miOV3D92Bl4NOFa1Skb8_u-GTCH5j1F
 Deadline stated by the event: Sunday 2026-09-27 23:59 ET (confirm on the form).
 
 1. Confirm https://github.com/Run-Disc/HomeSignal `main` shows this latest push (README, desktop workflow, `VIDEO_SCRIPT.md`).
-2. After GitHub Actions **Desktop packages** succeeds, download `HomeSignal-Setup.exe` if the committed copy is stale, and download macOS `HomeSignal-mac-arm64` / `HomeSignal-mac-x64` DMG and ZIP from the workflow artifacts (or from a Release if you create a `v*` tag).
+2. After GitHub Actions **Desktop packages** succeeds, download `HomeSignal-Setup.exe` if the committed copy is stale, and download macOS DMG/ZIP files from the separate **HomeSignal-macos-arm64** and **HomeSignal-macos-x64** workflow artifacts (or from a Release if you create a `v*` tag).
 3. Optional: create and push an annotated tag such as `v0.1.0` so the workflow attaches Windows and macOS files to a GitHub Release. Do not rewrite git history.
 4. Record a public 3–5 minute demo using `VIDEO_SCRIPT.md` while the app is actually running. Publish it (YouTube unlisted, or whatever the form accepts).
 5. Open the live Google form yourself.
