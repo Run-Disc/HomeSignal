@@ -267,6 +267,33 @@ select:hover, input:hover, textarea:hover { border-color: #8aa9a1; }
 .card h2, .card h3 { margin: 0 0 6px; font-size: 0.95rem; font-weight: 650; }
 .metric-value { margin: 3px 0; font-size: 2rem; font-weight: 760; letter-spacing: -0.035em; color: var(--teal-dark); }
 .metric-def { color: var(--muted); font-size: 0.9rem; }
+.activity-panel {
+  margin: 16px 0;
+  padding: 18px 20px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.section-heading-row { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; }
+.section-heading-row h2 { margin: 0; font-size: 1.08rem; }
+.section-heading-row > p { margin: 0; color: var(--muted); font-size: 0.84rem; text-align: right; }
+.monthly-bars {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 7px;
+  align-items: end;
+  min-height: 150px;
+  margin: 16px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.monthly-bars li { display: grid; grid-template-rows: 1.2rem 112px 1.2rem; gap: 4px; min-width: 0; text-align: center; }
+.monthly-count { color: var(--muted); font-size: 0.72rem; font-variant-numeric: tabular-nums; }
+.monthly-track { display: flex; align-items: flex-end; overflow: hidden; border-radius: 5px 5px 2px 2px; background: #edf2f0; }
+.monthly-track > span { display: block; width: 100%; min-height: 8px; border-radius: 5px 5px 2px 2px; background: linear-gradient(180deg, #138778, var(--teal)); }
+.monthly-bars time { color: var(--muted); font-size: 0.75rem; }
+.activity-note { margin: 8px 0 0; color: var(--muted); font-size: 0.84rem; }
 .chart { margin: 20px 0; }
 .bar-row { display: grid; grid-template-columns: 72px 1fr 48px; gap: 8px; align-items: center; margin: 4px 0; }
 .bar { background: var(--teal-soft); height: 18px; }
@@ -309,6 +336,8 @@ td.record-id a {
 .workspace .card h2 { font-size: 1.15rem; }
 .source-text { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.91rem; line-height: 1.65; }
 .workspace .source-text { margin-top: 16px; padding: 16px; border-radius: 8px; background: #f5f8f7; border: 1px solid var(--line); }
+.source-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; color: var(--muted); font-size: 0.82rem; }
+.source-actions .btn-secondary { flex: 0 0 auto; }
 mark.evidence { background: #fde68a; padding: 0 2px; color: var(--ink); }
 .nav-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 .defs details { margin: 8px 0 16px; }
@@ -347,6 +376,14 @@ footer.page-foot nav { display: flex; flex-wrap: wrap; gap: 16px; justify-conten
   .product-intro h2 { font-size: 2.05rem; }
   .product-intro { padding: 18px; }
   .workflow li { grid-template-columns: 1fr; gap: 2px; }
+  .activity-panel { padding-inline: 12px; }
+  .section-heading-row { align-items: start; flex-direction: column; gap: 4px; }
+  .section-heading-row > p { text-align: left; }
+  .monthly-bars { gap: 3px; }
+  .monthly-bars li { grid-template-rows: 1.1rem 92px 1.1rem; }
+  .monthly-count { font-size: 0.64rem; }
+  .monthly-bars time { font-size: 0.66rem; }
+  .source-actions { align-items: stretch; flex-direction: column; }
   footer.page-foot { flex-direction: column; }
   footer.page-foot nav { justify-content: flex-start; }
   .prose { padding: 18px; }

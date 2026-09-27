@@ -1,6 +1,6 @@
 "use strict";
 
-const { app, BrowserWindow, dialog } = require("electron");
+const { app, BrowserWindow, dialog, shell } = require("electron");
 const { fork, spawn } = require("node:child_process");
 const { createRequire } = require("node:module");
 const http = require("node:http");
@@ -269,9 +269,31 @@ function createSplash() {
   return mainWindow.loadFile(path.join(__dirname, "splash.html"));
 }
 
+function keepNavigationInsideApp(win, appOrigin) {
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith(`${appOrigin}/`)) return { action: "allow" };
+    if (url.startsWith("https://") || url.startsWith("http://")) {
+      void shell.openExternal(url);
+    }
+    return { action: "deny" };
+  });
+  win.webContents.on("will-navigate", (event, url) => {
+    if (url.startsWith(`${appOrigin}/`)) return;
+    event.preventDefault();
+    if (url.startsWith("https://") || url.startsWith("http://")) {
+      void shell.openExternal(url);
+    }
+  });
+  win.webContents.session.setPermissionRequestHandler((_webContents, _permission, callback) => {
+    callback(false);
+  });
+}
+
 async function createWindow() {
   await createSplash();
   const port = await pickPort();
+  const appOrigin = `http://127.0.0.1:${port}`;
+  keepNavigationInsideApp(mainWindow, appOrigin);
   startServer(port);
   try {
     await waitForServer(port, 20000);
@@ -287,7 +309,7 @@ async function createWindow() {
   if (!mainWindow || mainWindow.isDestroyed()) {
     throw new Error("HomeSignal window closed before the review page loaded.");
   }
-  await loadWithTimeout(mainWindow, `http://127.0.0.1:${port}/`, 30000);
+  await loadWithTimeout(mainWindow, `${appOrigin}/`, 30000);
 }
 
 app.whenReady().then(() => createWindow()).catch(async (error) => {

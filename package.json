@@ -13,7 +13,7 @@
     "build": "next build",
     "start": "node scripts/prepare-standalone.cjs && PORT=3000 node .next/standalone/server.js",
     "start:3001": "node scripts/prepare-standalone.cjs && PORT=3001 node .next/standalone/server.js",
-    "lint": "next lint",
+    "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/lib/*.test.ts",
     "ingest": "python3 scripts/ingest_pli.py",
@@ -35,12 +35,15 @@
     "@types/node": "^22.18.6",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
-    "electron": "^37.4.0",
-    "electron-builder": "^26.0.12",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
     "eslint": "^9.36.0",
     "eslint-config-next": "^15.5.4",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "postcss": "8.5.28"
   },
   "build": {
     "appId": "org.homesignal.app",
@@ -77,11 +80,14 @@
     "asar": true,
     "forceCodeSigning": false,
     "win": {
+      "icon": "build/icon.ico",
       "artifactName": "HomeSignal-Setup.${ext}",
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "signAndEditExecutable": false
@@ -94,11 +100,24 @@
       "uninstallDisplayName": "HomeSignal"
     },
     "mac": {
+      "icon": "build/icon.png",
       "artifactName": "HomeSignal-mac-${arch}.${ext}",
       "category": "public.app-category.reference",
       "target": [
-        { "target": "dmg", "arch": ["arm64", "x64"] },
-        { "target": "zip", "arch": ["arm64", "x64"] }
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
       ],
       "identity": null,
       "hardenedRuntime": false,

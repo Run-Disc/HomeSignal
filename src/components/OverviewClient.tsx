@@ -66,6 +66,7 @@ export function OverviewClient(props: {
   const from = tableRows.length === 0 ? 0 : safePage * PAGE_SIZE + 1;
   const to = Math.min(tableRows.length, (safePage + 1) * PAGE_SIZE);
   const featured = props.records.find((r) => r.recordId === FLAGSHIP_RECORD_ID);
+  const maxMonthlyIssued = Math.max(1, ...metrics.monthlyIssued.map((row) => row.count));
 
   function updateFilter<K extends keyof Filters>(key: K, value: Filters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -119,6 +120,36 @@ export function OverviewClient(props: {
             <p className="metric-def">Potential records without a decision.</p>
           </article>
         </div>
+      </section>
+      <section className="activity-panel" aria-labelledby="activity-heading">
+        <div className="section-heading-row">
+          <div>
+            <p className="eyebrow">One-year source pattern</p>
+            <h2 id="activity-heading">Issued permit activity by month</h2>
+          </div>
+          <p>Selected neighborhood · permit records, not homes built</p>
+        </div>
+        <ol className="monthly-bars" aria-label="Monthly issued permit record counts">
+          {metrics.monthlyIssued.map((row) => {
+            const label = new Date(`${row.month}-01T00:00:00Z`).toLocaleString("en-US", {
+              month: "short",
+              timeZone: "UTC",
+            });
+            return (
+              <li key={row.month} title={`${label}: ${row.count} issued permit records`}>
+                <span className="monthly-count">{row.count}</span>
+                <span className="monthly-track" aria-hidden="true">
+                  <span style={{ height: `${Math.max(8, (row.count / maxMonthlyIssued) * 100)}%` }} />
+                </span>
+                <time dateTime={row.month}>{label}</time>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="activity-note">
+          Issue dates show administrative activity during 2025. They do not establish construction starts,
+          completions, occupancy, or housing production.
+        </p>
       </section>
       {featured ? (
         <Link className="spotlight" href={`/review/${encodeURIComponent(featured.recordId)}`}>

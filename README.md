@@ -28,8 +28,8 @@ The browser workflow (`npm run dev` / `npm start`) is unchanged.
 
 Nav: **Queue** → **Record** → **Briefing**.
 
-1. Queue shows issued / housing queue / reviewed / open, plus a spotlight row for `BDA-2024-05307`.
-2. Record is the permit description on the left and a human review form on the right. Save, or mark insufficient evidence.
+1. Queue shows issued / housing queue / reviewed / open, a neighborhood-responsive monthly activity chart, and a spotlight row for `BDA-2024-05307`.
+2. Record is the permit description on the left and a human review form on the right. Select exact source words to copy them into the evidence field, then save or mark insufficient evidence.
 3. Briefing prints or downloads CSV of **reviewed** evidence only.
 
 ## Judging alignment
@@ -37,10 +37,10 @@ Nav: **Queue** → **Record** → **Briefing**.
 | Criterion | Demonstrated behavior |
 |---|---|
 | Problem value | Converts a large issued-permit list into a focused evidence-review queue. |
-| User fit & usability | Plain-language Queue → Record → Briefing workflow; guided example; keyboard focus, large controls, mobile record cards, and print output. |
+| User fit & usability | Plain-language Queue → Record → Briefing workflow; guided example; selection-to-quote evidence capture; keyboard focus, large controls, mobile record cards, and print output. |
 | Technical execution | Deterministic local snapshot, validated review persistence, CSV formula protection, source-bound count checks, automated tests, and desktop packages. |
 | Data & AI integrity | Cited WPRDC snapshot; privacy-reduced fields; exact supporting excerpts; explicit unknowns; no fabricated model output; human decision required. |
-| Actionability | Produces a reviewable briefing from accepted source evidence instead of presenting an unsupported housing-production total. |
+| Actionability | Moves from citywide or neighborhood activity to a permit-level source review, then produces a cited briefing without presenting an unsupported housing-production total. |
 | Continuation potential | Add independently labeled evaluation data, test with a housing practitioner, connect current permit statuses, and pilot the review/export workflow with a civic partner. |
 
 No score is guaranteed. The demo and documentation show the working evidence for each criterion so judges can evaluate it directly.

@@ -1,6 +1,6 @@
 # HomeSignal BUILD_STATUS
 
-Updated: 2026-09-26 (desktop packages + product/docs pass)
+Updated: 2026-09-27 (final judging, security, product, and documentation pass)
 
 ## Stage
 
@@ -19,8 +19,8 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 ## Product
 
 - Header: HomeSignal + Queue / Record / Briefing. Snapshot date and Docs are quiet links.
-- Queue: compact metrics, spotlight `BDA-2024-05307`, filters, table. Lecture copy is in `VIDEO_SCRIPT.md`, not on the screen.
-- Record: source text + review form. Extract is collapsed. No fabricated model pane.
+- Queue: compact metrics, a neighborhood-responsive 2025 issued-record activity chart, spotlight `BDA-2024-05307`, filters, and table. The chart explicitly does not claim homes built.
+- Record: source text + review form with selection-to-quote evidence capture. Extract is collapsed. No fabricated model pane.
 - Briefing: print / CSV of reviewed evidence.
 - Zoning and comparable City tools: Sources lists the Affordable Housing Development Project Explorer, the June 2025 Controller dashboard recommendation, and zoning code/map/page as unused future links.
 
@@ -33,13 +33,17 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 
 ## Checks
 
+- `npm run lint`: pass; generated builds and desktop artifacts are excluded from lint while checked source and scripts remain included.
 - `npx tsc --noEmit`: pass
 - `npm test` (`tsx --test`): **32/32 pass**
-- `npm run build`: pass (Next.js 15.5.26). ESLint unused-var on review workspace was removed.
+- `npm run build`: pass (Next.js 15.5.26).
+- `npm audit`: **0 vulnerabilities** after updating Electron to 44.4.5, electron-builder to 26.15.3, and overriding PostCSS to 8.5.28.
 - `node scripts/validate-electron.cjs`: pass (syntax + mac DMG/ZIP + win NSIS config; `identity: null`)
 - `node scripts/prepare-standalone.cjs` + `validate-standalone.cjs`: pass (no `.env`, no parcel fields)
 - Local unsigned macOS package on Darwin: `HomeSignal-mac-arm64.dmg|.zip` and `HomeSignal-mac-x64.dmg|.zip` in `dist-desktop/` (gitignored). Signing skipped (`identity` null). First dual-arch DMG pass hit a transient `hdiutil detach` on `/Volumes/HomeSignal`; retry of arm64 DMG succeeded. GitHub Actions `macos-latest` rebuilds these for artifacts/releases.
 - Windows NSIS remains CI-built on `windows-latest` (`HomeSignal-Setup.exe`). SmartScreen and Gatekeeper warnings are expected for unsigned files.
+- Desktop renderer isolation remains enabled (`contextIsolation`, sandbox, and no Node integration). Browser permissions are denied, and external HTTP(S) links open outside the HomeSignal window.
+- Windows and macOS packages use the HomeSignal application icon rather than Electron’s generic icon.
 
 `POST /api/extract` remains unconfigured. No genuine saved model responses. Synthetic evaluation strings stay out of the snapshot.
 

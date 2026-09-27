@@ -20,6 +20,7 @@ export const CITY_PERMIT_GUIDANCE =
   "https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/Permitting";
 export const ONESTOP =
   "https://www.pittsburghpa.gov/Business-Development/Permits-Licenses-and-Inspections/OneStopPGH-Permit-Center";
+export const ONESTOP_INSIGHTS = "https://insightshelp.pittsburghpa.gov/";
 /** Contextual City / WPRDC zoning pages. HomeSignal does not ingest these or score zoning feasibility. */
 export const ZONING_CODE_CATALOG = "https://pittsburghpa.gov/dcp/zoning-code";
 export const ZONING_CODE = "https://ecode360.com/45474054";

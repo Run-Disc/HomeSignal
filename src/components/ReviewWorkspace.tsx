@@ -83,6 +83,7 @@ export function ReviewWorkspace(props: {
   const [countValue, setCountValue] = useState("");
   const [fieldError, setFieldError] = useState<{ field: "quote" | "countVal"; error: string } | null>(null);
   const requestGen = useRef(0);
+  const sourceTextRef = useRef<HTMLParagraphElement>(null);
 
   const current = reviews[record.recordId];
   const stale = Boolean(current && current.sanitizedInputHash !== record.inputHash);
@@ -303,6 +304,21 @@ export function ReviewWorkspace(props: {
     setMessage("Local review cleared for this record.");
   }
 
+  function useSelectedSourceText() {
+    const selection = window.getSelection();
+    const source = sourceTextRef.current;
+    const selected = selection?.toString().trim() ?? "";
+    const startsInSource = source && selection?.anchorNode ? source.contains(selection.anchorNode) : false;
+    const endsInSource = source && selection?.focusNode ? source.contains(selection.focusNode) : false;
+    if (!selected || !startsInSource || !endsInSource) {
+      setMessage("Select the exact supporting words in the public description, then choose Use selected text.");
+      return;
+    }
+    setQuote(selected);
+    if (fieldError?.field === "quote") setFieldError(null);
+    setMessage("Exact source excerpt copied into the review form. Confirm the count and interpretation before saving.");
+  }
+
   return (
     <div>
       {stale ? (
@@ -318,7 +334,15 @@ export function ReviewWorkspace(props: {
             {record.neighborhood} · {record.issueDate} · {record.sourceClassRaw ?? "—"} ·{" "}
             {record.workTypeRaw ?? "—"} · {record.sourceStatusRaw ?? "—"}
           </p>
-          <p className="source-text">{highlight || "No description"}</p>
+          <p ref={sourceTextRef} className="source-text">{highlight || "No description"}</p>
+          {!blank ? (
+            <div className="source-actions">
+              <button type="button" className="btn-secondary" onClick={useSelectedSourceText}>
+                Use selected text as quote
+              </button>
+              <span>Select the exact words that support a number, then use this button.</span>
+            </div>
+          ) : null}
         </section>
         <section className="card" aria-labelledby="review-heading">
           <h2 id="review-heading">Review</h2>

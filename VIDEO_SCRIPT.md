@@ -16,6 +16,8 @@ Show Queue. Point at Issued permit records / Potential housing records / Human r
 
 “I’m **[your name]**. This is HomeSignal for the AI for Housing Hackathon. Pittsburgh already has tools like the Affordable Housing Development Project Explorer, and a 2025 Controller report asked for a broader housing-development dashboard. This is a different job: a privacy-reduced review of issued permit descriptions. An analyst opens the text, keeps exact quotes, and does not treat a permit record as a finished home.”
 
+Point briefly to the monthly bars: “This is issued-record activity over the selected year and neighborhood. It is not a homes-built chart.”
+
 **0:35–1:05 — Where the data came from**
 
 Click **Snapshot 2026-09-26** in the header if you want the source list on screen; you can also stay on Queue.
@@ -36,7 +38,7 @@ Do not wait for a spinner. Open **Extract** only if you need to show it is empty
 
 **2:25–3:20 — Human review**
 
-Set Housing to housing-related. Scope to new building. Count type: proposed total. Count: 12. Quote: `TOTAL OF 12 DWELLING UNITS ABOVE`. Click **Save**.
+Set Housing to housing-related. Scope to new building. Count type: proposed total. Count: 12. Select `TOTAL OF 12 DWELLING UNITS ABOVE` in the source and click **Use selected text as quote**. Click **Save**.
 
 “I’m saving a local review because that exact sentence is on the left. This is not a City determination. If the text were blank or ‘no work,’ I would use Insufficient evidence instead of inventing a number.”
 

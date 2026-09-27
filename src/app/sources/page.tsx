@@ -8,6 +8,7 @@ import {
   CITY_PERMIT_GUIDANCE,
   CONTROLLER_IZ_REPORT,
   ONESTOP,
+  ONESTOP_INSIGHTS,
   SOURCE_DUMP,
   SOURCE_LANDING,
   SOURCE_RESOURCE,
@@ -85,6 +86,10 @@ export default function SourcesPage() {
           privacy-reduced review of permit descriptions: exact quotes, records kept separate from proposed units.
         </p>
         <ul>
+          <li>
+            OneStopPGH Insights guided tour (City record map and statistics dashboard):{" "}
+            <a href={ONESTOP_INSIGHTS}>{ONESTOP_INSIGHTS}</a>
+          </li>
           <li>
             Affordable Housing Development Project Explorer:{" "}
             <a href={AFFORDABLE_HOUSING_EXPLORER}>{AFFORDABLE_HOUSING_EXPLORER}</a>

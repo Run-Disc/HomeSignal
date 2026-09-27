@@ -24,6 +24,7 @@ const build = pkg.build;
 assert.ok(build, "package.json build config missing");
 assert.equal(build.forceCodeSigning, false);
 assert.ok(build.win?.target?.some((t) => t.target === "nsis"));
+assert.ok(fs.existsSync(path.join(root, build.win.icon)), "Windows app icon missing");
 const macTargets = (build.mac?.target || []).map((t) => t.target);
 assert.ok(macTargets.includes("dmg"), "mac dmg target missing");
 assert.ok(macTargets.includes("zip"), "mac zip target missing");
@@ -32,9 +33,17 @@ assert.ok(macArches.has("arm64"), "mac arm64 missing");
 assert.ok(macArches.has("x64"), "mac x64 missing");
 assert.equal(build.mac.identity, null);
 assert.equal(build.mac.notarize, false);
+assert.ok(fs.existsSync(path.join(root, build.mac.icon)), "macOS app icon missing");
 
 const splash = fs.readFileSync(path.join(root, "electron/splash.html"), "utf8");
 assert.match(splash, /HomeSignal/);
+const electronMain = fs.readFileSync(path.join(root, "electron/main.cjs"), "utf8");
+assert.match(electronMain, /contextIsolation: true/);
+assert.match(electronMain, /nodeIntegration: false/);
+assert.match(electronMain, /sandbox: true/);
+assert.match(electronMain, /setPermissionRequestHandler/);
+assert.match(electronMain, /will-navigate/);
+assert.match(electronMain, /setWindowOpenHandler/);
 
 if (process.argv.includes("--packaged")) {
   const candidates = [

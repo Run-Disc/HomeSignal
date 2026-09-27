@@ -1,6 +1,6 @@
 # Compliance audit (documentation)
 
-Date of this matrix: 2026-09-26. Scope: public repository https://github.com/Run-Disc/HomeSignal at the commit that includes this file. The builder independently reviewed the 14-page participant packet, event website, three challenge briefs, the WPRDC catalog, and the live Google submission form. This file does **not** submit that form or attest eligibility.
+Date of this matrix: 2026-09-27. Scope: public repository https://github.com/Run-Disc/HomeSignal at the commit that includes this file. The repository was checked against the 14-page participant packet, event website, Track 2 challenge brief, WPRDC catalog, comparable City tools, and live Google submission form. This file does **not** submit that form or attest eligibility.
 
 Statuses:
 

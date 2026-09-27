@@ -33,6 +33,7 @@ HomeSignal does **not** claim that no comparable tools exist. These are differen
 
 | Resource | What it is | URL |
 |---|---|---|
+| OneStopPGH Insights guided tour | City public tool for maps, records, detailed views, and summary statistics across planning, zoning, permits, and related cases. HomeSignal adds a privacy-reduced source-quote review and briefing workflow rather than replacing this system. | https://insightshelp.pittsburghpa.gov/ |
 | Pittsburgh Affordable Housing Development Project Explorer | City interactive maps, charts, and tables of affordable developments completed, under construction, in process, or in the pipeline (city announcement 17 April 2025). Not a PLI description-review workspace. | https://www.arcgis.com/apps/dashboards/603c22bb04ba4a478ad91d0758b7c262 |
 | City announcement of the Explorer | Official press page for the tool | https://www.pittsburghpa.gov/News-articles/Homepage/KEEP-PITTSBURGH-HOME-Mayor-Ed-Gainey-Launches-Data-Transparency-Tool-Showing-Progress-on-Delivering-1600-units-of-Affordable-Housing-for-Pittsburghers |
 | Office of the City Controller, *Special Report: Inclusionary Zoning and Affordable Housing Financing* (June 2025) | Recommends a City of Pittsburgh Housing Development Dashboard, or building on the Explorer, with citywide and neighborhood completed-unit and affordable-inventory metrics. HomeSignal does not implement that dashboard. | https://www.pittsburghpa.gov/files/assets/city/v/1/controller/documents/special-report-inclusionary-zoning-6.10.25.pdf |

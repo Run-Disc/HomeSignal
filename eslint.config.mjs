@@ -6,6 +6,28 @@ const compat = new FlatCompat({
   baseDirectory: dirname(fileURLToPath(import.meta.url)),
 });
 
-const eslintConfig = [...compat.extends("next/core-web-vitals", "next/typescript")];
+const eslintConfig = [
+  {
+    ignores: [
+      ".next/**",
+      ".tmp/**",
+      ".tools/**",
+      "coverage/**",
+      "dist-desktop/**",
+      "node_modules/**",
+      "out/**",
+      "release/**",
+      "tmp/**",
+      "next-env.d.ts",
+    ],
+  },
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    files: ["**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+];
 
 export default eslintConfig;
