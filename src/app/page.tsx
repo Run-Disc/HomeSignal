@@ -1,12 +1,15 @@
-import { AppHeader } from "@/components/AppHeader";
 import { OverviewClient } from "@/components/OverviewClient";
-import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode, modeDescription } from "@/lib/extractClient";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { loadPermits, snapshotFilePath, sourceManifest, toClientPermit } from "@/lib/loadSnapshot";
 
-export default function HomePage() {
+import { filtersFromSearchParams, pageSearchParams } from "@/lib/filters";
+
+export default async function HomePage({ searchParams }: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const initialFilters = filtersFromSearchParams(pageSearchParams(await searchParams));
   const permits = loadPermits();
   const client = permits.map(toClientPermit);
   const neighborhoods = [...new Set(permits.map((p) => p.neighborhood))].sort();
@@ -16,25 +19,15 @@ export default function HomePage() {
   const mode = currentAiMode();
 
   return (
-    <div className="shell">
-      <AppHeader
-        snapshotDate={manifest.retrievalDate}
-        modeLabel={`AI mode: ${mode}`}
-        exportHref="/export"
-        current="overview"
-        isHome
-      />
-      <main id="main">
-        <OverviewClient
-          records={client}
-          neighborhoods={neighborhoods}
-          snapshotHash={snapshotHash}
-          sourceUpdateDate={manifest.sourceUpdateDate}
-          mode={modeDescription(mode)}
-          retrievedAt={manifest.retrievalDate}
-        />
-      </main>
-      <SiteFooter />
-    </div>
+    <OverviewClient
+      key={JSON.stringify(initialFilters)}
+      initialFilters={initialFilters}
+      records={client}
+      neighborhoods={neighborhoods}
+      snapshotHash={snapshotHash}
+      sourceUpdateDate={manifest.sourceUpdateDate}
+      mode={modeDescription(mode)}
+      retrievedAt={manifest.retrievalDate}
+    />
   );
 }

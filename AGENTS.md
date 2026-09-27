@@ -18,4 +18,6 @@ HomeSignal is a Track 2 permit-evidence observatory for the AI for Housing Hacka
 
 Must-ship: sanitized PLI snapshot, overview → review → export, deterministic record metrics, AI extraction with validation when a key exists, human review, sources/limitations/evaluation docs.
 
-Deferred: maps, extra years, ACS context, accounts, notifications, project-level unit totals.
+Shipped context: Zillow metro monthly rents and Census QuickFacts city estimates, kept separate from permit metrics.
+
+Deferred: maps, extra years, accounts, notifications, project-level unit totals.

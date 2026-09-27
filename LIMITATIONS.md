@@ -21,5 +21,11 @@
 - No causal claim that permitting changed rents; no neighborhood appreciation forecast; no landlord or resident scoring.
 - Automated redaction of free text is incomplete. Builder inspection of the review corpus is still required before sending text to an external model or publishing screenshots.
 - Local reviews persist in browser storage for this snapshot version only. They do not change City data or other users’ views.
-- Live AI extraction is unavailable until a separate runtime API key is configured. No genuine saved model responses are stored in this repository. Before the build window, AI consultation supported public-source research and early sketches; during the build window Cursor assisted software development. Cursor is not called at runtime.
+- Live AI extraction is unavailable until a separate runtime API key is configured. No genuine saved model responses are stored in this repository. Before the build window, AI consultation supported public-source research and early sketches; during the build window Cursor and Codex assisted software development, documentation, and demo preparation. Cursor is not called at runtime.
 - Decision support only. Verify project details and completion with the responsible public authority.
+
+## Who benefits and who could be harmed
+
+Planners, advocates, and reporters can inspect evidence before making claims. Residents could be harmed by neighborhood stigma, misdirected investment, or automated enforcement based on missing or misread records. Keyword discovery can miss real housing or flag unrelated work. Quote matching proves text provenance, not correct interpretation. Human review and authority follow-up remain required.
+
+Zillow metro asking-rent context and Census city survey context are different measures over different periods. The QuickFacts extract lacks margins of error. No household-flow, displacement, neighborhood affordability, or causal conclusions are supported. See SOURCES.md for reconciliation.

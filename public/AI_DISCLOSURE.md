@@ -4,9 +4,9 @@
 
 Before the build window, AI-assisted consultation supported research of the public challenge materials and early sketches. No application code or reusable product existed before the build window. The first repository commit is timestamped 2026-09-26 09:58:27 America/New_York, after the authorized build window opened at 09:00.
 
-During the build window, Cursor was used **only** for software-development assistance: coding, debugging, testing, and documentation editing.
+During the build window, Cursor (including Grok coding assistance) and OpenAI Codex assisted coding, debugging, testing, interface improvements, documentation, and demo-script preparation. These are development and presentation tools; they do not generate the application’s runtime findings.
 
-Cursor is **not** a runtime model in HomeSignal. Grok is **not** a runtime model in HomeSignal. No Cursor, Grok, or other assistant is called while a visitor uses the queue, record, or briefing screens.
+Cursor is **not** a runtime model in HomeSignal. Grok is **not** a runtime model in HomeSignal. No Cursor, Grok, Codex, or other assistant is called while a visitor uses the queue, record, or briefing screens.
 
 The human builder remains responsible for scope, source-terms review, corpus inspection, claims, eligibility attestations, and event-form submission.
 

@@ -106,6 +106,7 @@ export type ReviewDecision = {
 };
 
 export type Filters = {
+  search?: string;
   year: string;
   neighborhood: string;
   reviewState: "all" | ReviewState | "needs_review";

@@ -67,9 +67,11 @@ export function ReviewWorkspace(props: {
   neighbors: { prev: string | null; next: string | null };
   modeDescription: string;
   aiMode: AiMode;
+  contextQuery: string;
+  briefingQuery: string;
 }) {
   const { record, aiMode } = props;
-  const [reviews, setReviews] = useState(loadReviews);
+  const [reviews, setReviews] = useState<ReturnType<typeof loadReviews>>({});
   const [proposal, setProposal] = useState<ExtractionProposal | null>(null);
   const [message, setMessage] = useState<string | null>(
     aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null,
@@ -90,7 +92,8 @@ export function ReviewWorkspace(props: {
   const blank = record.qualityFlags.includes("blank_description") || !record.workDescriptionSanitized;
 
   useEffect(() => {
-    setProposal(loadCachedProposal(record.recordId, record.inputHash));
+    setReviews(loadReviews());
+    setProposal(aiMode === "source-review" ? null : loadCachedProposal(record.recordId, record.inputHash));
     setMessage(aiMode === "source-review" ? SOURCE_REVIEW_STATUS : null);
     setWaiting(false);
     setDraft(emptyFields());
@@ -98,8 +101,14 @@ export function ReviewWorkspace(props: {
     setQuote("");
     setCountValue("");
     setFieldError(null);
+    setCountKey("proposedTotalUnitCount");
     const existing = loadReviews()[record.recordId];
-    if (existing?.finalFields) setDraft(existing.finalFields);
+    if (existing?.finalFields && existing.sanitizedInputHash === record.inputHash) {
+      setDraft(existing.finalFields);
+      setCountValue(existing.finalFields.proposedTotalUnitCount?.toString() ?? "");
+      setQuote(existing.finalFields.countEvidence.proposedTotalUnitCount?.quote ?? "");
+      setReason(existing.reason);
+    }
   }, [record.recordId, record.inputHash, aiMode]);
 
   const requestExtract = useCallback(async () => {
@@ -209,7 +218,12 @@ export function ReviewWorkspace(props: {
 
   function persist(decision: ReviewDecision) {
     const next = { ...loadReviews(), [record.recordId]: decision };
-    saveReviews(next);
+    try {
+      saveReviews(next);
+    } catch {
+      setMessage("Review was not saved. Browser storage is unavailable or full. Enable local storage before saving again.");
+      return;
+    }
     setReviews(next);
     setFieldError(null);
     setMessage(`Saved as ${decision.state.replaceAll("_", " ")}. ${reviewerLabel(decision.reviewerRole)}.`);
@@ -301,7 +315,19 @@ export function ReviewWorkspace(props: {
     delete next[record.recordId];
     saveReviews(next);
     setReviews(next);
+    setDraft(emptyFields());
+    setCountValue("");
+    setQuote("");
+    setReason("");
+    setFieldError(null);
     setMessage("Local review cleared for this record.");
+  }
+
+  function selectCountField(key: CountField) {
+    setCountKey(key);
+    setCountValue(draft[key]?.toString() ?? "");
+    setQuote(draft.countEvidence[key]?.quote ?? "");
+    setFieldError(null);
   }
 
   function useSelectedSourceText() {
@@ -348,7 +374,8 @@ export function ReviewWorkspace(props: {
           <h2 id="review-heading">Review</h2>
           <p className="review-guidance">
             Read the public description first. Classify only what it supports, attach an exact excerpt to any
-            number, then save the decision. Leave a count blank when it is unknown.
+            number, then save the decision. Text matching checks the quote; you confirm what the number means.
+            A blank count saves as unknown for the selected count type.
           </p>
           {blank ? (
             <p className="banner">
@@ -390,7 +417,7 @@ export function ReviewWorkspace(props: {
             <option value="uncertain">{SCOPE_LABELS.uncertain}</option>
           </select>
           <label htmlFor="countField">Count type</label>
-          <select id="countField" value={countKey} onChange={(e) => setCountKey(e.target.value as CountField)}>
+          <select id="countField" value={countKey} onChange={(e) => selectCountField(e.target.value as CountField)}>
             {COUNT_KEYS.map((k) => (
               <option key={k} value={k}>
                 {COUNT_LABELS[k]}
@@ -442,7 +469,7 @@ export function ReviewWorkspace(props: {
             <button type="button" className="btn" onClick={saveSourceReview}>
               Save
             </button>
-            <Link className="btn-secondary" href={`/export?example=${encodeURIComponent(record.recordId)}`}>
+            <Link className="btn-secondary" href={`/export?${props.briefingQuery}`}>
               Briefing
             </Link>
             {proposal ? (
@@ -460,12 +487,12 @@ export function ReviewWorkspace(props: {
           {props.neighbors.prev || props.neighbors.next ? (
             <p className="nav-row">
               {props.neighbors.prev ? (
-                <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.prev)}`}>
+                <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.prev)}?${props.contextQuery}`}>
                   Previous
                 </Link>
               ) : null}
               {props.neighbors.next ? (
-                <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.next)}`}>
+                <Link className="btn-secondary" href={`/review/${encodeURIComponent(props.neighbors.next)}?${props.contextQuery}`}>
                   Next
                 </Link>
               ) : null}

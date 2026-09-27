@@ -10,6 +10,12 @@ export default function LimitationsPage() {
       <AppHeader snapshotDate={m.retrievalDate} modeLabel={`AI mode: ${currentAiMode()}`} current="limitations" />
       <main id="main" className="prose">
         <h1>Limitations</h1>
+        <h2>Who benefits, and who could be harmed</h2>
+        <p>Planners, housing advocates, and journalists can trace a housing claim back to a public permit description. Residents benefit when public discussion distinguishes proposed work from completed homes.</p>
+        <p>Residents and neighborhoods could be harmed if incomplete permit records are used to label an area as declining, predict displacement, or steer investment away from it. Missing descriptions and uneven reporting can systematically hide activity. This tool must not rank residents or neighborhoods, allocate benefits, or automate enforcement.</p>
+        <h2>What the tool gets wrong or cannot answer</h2>
+        <p>Keyword discovery can miss housing work or flag unrelated work. An exact supporting quote confirms that text exists, not that a number was interpreted correctly. A human must verify the meaning and contact the responsible authority before consequential use.</p>
+        <p>We lack reliable linked completion, occupancy, household-flow, displacement, and neighborhood affordability data. Regional rent and city survey context do not fill those gaps. Survey uncertainty is not quantified in the QuickFacts extract; do not use it to rank small differences.</p>
         <ul>
           <li>A permit record is not a housing unit. This product has no aggregate housing-unit total.</li>
           <li>An issued permit is not evidence that construction started, finished, passed inspection, or became occupied.</li>

@@ -1,4 +1,5 @@
-import { COUNT_LABELS, DECISION_SUPPORT, FLAGSHIP_PERMIT_ID, ONESTOP, SCOPE_LABELS } from "./constants";
+import { COUNT_LABELS, DECISION_SUPPORT, FLAGSHIP_PERMIT_ID, ONESTOP, SCOPE_LABELS, SOURCE_RESOURCE } from "./constants";
+import { currentReviewsForRecords } from "./reviewLogic";
 import { toCsv } from "./csv";
 import type { ClientPermit, Filters, MetricSet, ReviewDecision } from "./types";
 
@@ -10,8 +11,9 @@ function reviewedPairs(
   records: ClientPermit[],
   reviews: Record<string, ReviewDecision>,
 ): Array<{ record: ClientPermit; decision: ReviewDecision }> {
+  const current = currentReviewsForRecords(records, reviews);
   return records
-    .map((record) => ({ record, decision: reviews[record.recordId] }))
+    .map((record) => ({ record, decision: current[record.recordId] }))
     .filter((x): x is { record: ClientPermit; decision: ReviewDecision } =>
       Boolean(x.decision && x.decision.state !== "unreviewed"),
     );
@@ -81,11 +83,7 @@ export function briefingText(args: {
   } = args;
   const reviewed = reviewedPairs(records, reviews);
   const featured = featuredRecordId
-    ? reviewed.find((x) => x.record.recordId === featuredRecordId) ??
-      records
-        .filter((r) => r.recordId === featuredRecordId)
-        .map((record) => ({ record, decision: reviews[record.recordId] }))
-        .find((x) => x.decision && x.decision.state !== "unreviewed")
+    ? reviewed.find((x) => x.record.recordId === featuredRecordId)
     : undefined;
   const featuredUnreviewed =
     featuredRecordId && !featured
@@ -97,12 +95,14 @@ export function briefingText(args: {
   lines.push(`Prepared: ${preparedAt}`);
   lines.push(`Source snapshot: ${snapshotVersion} (sha256 ${snapshotHash})`);
   lines.push(`WPRDC resource last_modified: ${sourceUpdateDate}`);
+  lines.push(`Source: City of Pittsburgh PLI Permits via WPRDC (Creative Commons Attribution): ${SOURCE_RESOURCE}`);
   lines.push(`AI mode: ${mode}`);
   lines.push("");
   lines.push("Export scope (this briefing)");
   lines.push(`- Issue year: ${filters.year}`);
   lines.push(`- Neighborhood: ${filters.neighborhood}`);
   lines.push(`- Review state filter: ${filters.reviewState}`);
+  lines.push(`- Search: ${filters.search?.trim() || "none"}`);
   lines.push(`- Table universe: ${filters.candidatesOnly ? "potential housing candidates" : "full selected cohort"}`);
   lines.push(
     "- CSV and the reviewed-evidence section include local reviews only. Unreviewed candidates are not listed as findings.",
@@ -181,6 +181,7 @@ export function briefingCsv(
   records: ClientPermit[],
   reviews: Record<string, ReviewDecision>,
 ): string {
+  const current = currentReviewsForRecords(records, reviews);
   const headers = [
     "sourcePermitId",
     "issueDate",
@@ -200,10 +201,16 @@ export function briefingCsv(
     "reason",
     "citationId",
     "workDescriptionSanitized",
+    "existingUnitEvidence",
+    "addedUnitEvidence",
+    "removedUnitEvidence",
+    "snapshotVersion",
+    "sourceInputHash",
+    "sourceDatasetUrl",
   ];
   const rows = records
     .map((record) => {
-      const decision = reviews[record.recordId];
+      const decision = current[record.recordId];
       if (!decision || decision.state === "unreviewed") return null;
       const fields = decision.finalFields;
       return [
@@ -225,6 +232,12 @@ export function briefingCsv(
         decision.reason,
         record.citationId,
         record.workDescriptionSanitized,
+        fields?.countEvidence.existingUnitCount?.quote ?? "",
+        fields?.countEvidence.explicitAddedUnitCount?.quote ?? "",
+        fields?.countEvidence.explicitRemovedUnitCount?.quote ?? "",
+        record.snapshotVersion,
+        record.inputHash,
+        SOURCE_RESOURCE,
       ];
     })
     .filter((row): row is Array<string | number> => row != null);

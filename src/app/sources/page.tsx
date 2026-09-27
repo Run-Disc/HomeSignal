@@ -34,6 +34,10 @@ export default function SourcesPage() {
         <p>
           Decision support only. Verify project details and completion with the responsible public authority.
         </p>
+        <h2>Market and community context</h2>
+        <p>The Queue includes a separate, expandable housing-context panel: <a href="https://www.zillow.com/research/data/">Zillow Research ZORI</a> for the Pittsburgh metro, monthly 2025, and <a href="https://www.census.gov/quickfacts/pittsburghcitypennsylvania">Census QuickFacts</a> for Pittsburgh city, 2020–2024. Both were retrieved September 27, 2026. These are real aggregate observations, not synthetic API responses.</p>
+        <p>Geographies, periods, and rent definitions are deliberately kept separate. No causal model, household join, neighborhood allocation, or rent subtraction is performed. Census margins of error are not present in the extract. The downloadable provenance file records values, source URLs, and the Zillow raw-file hash.</p>
+        <p><a href="/housing-context.json" download>Download housing-context provenance</a></p>
         <h2>Primary source</h2>
         <ul>
           <li>Title: {m.title}</li>

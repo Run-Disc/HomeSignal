@@ -42,6 +42,20 @@ describe("metrics", () => {
     assert.equal(metrics.recordsWithExplicitProposedUnitMention, 0);
     assert.equal(metrics.monthlyIssued.find((m) => m.month === "2025-02")?.count, 2);
     assert.ok(!("homesBuilt" in metrics));
+    assert.equal(metrics.monthlyIssued.length, 12);
+    assert.equal(metrics.monthlyIssued.find((m) => m.month === "2025-03")?.count, 0);
+  });
+
+  it("keeps all twelve zero months when a selected neighborhood has no records", () => {
+    const result = computeMetrics([], {}, [], "2025");
+    assert.equal(result.monthlyIssued.length, 12);
+    assert.ok(result.monthlyIssued.every((m) => m.count === 0));
+  });
+
+  it("applies the same permit or neighborhood search to queue and export", () => {
+    assert.equal(applyFilters(records, { ...defaultFilters(), search: "shady" }, {}).length, 2);
+    assert.deepEqual(applyFilters(records, { ...defaultFilters(), search: "A" }, {}).map((r) => r.recordId), ["pli:A", "pli:C"]);
+    assert.equal(applyFilters(records, { ...defaultFilters(), search: "missing" }, {}).length, 0);
   });
 
   it("updates reviewed and needs-review counts from decisions", () => {

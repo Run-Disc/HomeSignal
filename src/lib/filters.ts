@@ -7,6 +7,7 @@ export function filtersToSearchParams(filters: Filters, exampleRecordId?: string
   p.set("neighborhood", filters.neighborhood);
   p.set("reviewState", filters.reviewState);
   p.set("universe", filters.candidatesOnly ? "candidates" : "cohort");
+  if (filters.search?.trim()) p.set("search", filters.search.trim());
   if (exampleRecordId) p.set("example", exampleRecordId);
   return p.toString();
 }
@@ -17,6 +18,7 @@ export function filtersFromSearchParams(params: URLSearchParams | { get(name: st
   const neighborhood = params.get("neighborhood");
   const reviewState = params.get("reviewState");
   const universe = params.get("universe");
+  base.search = params.get("search") ?? "";
   if (year) base.year = year;
   if (neighborhood) base.neighborhood = neighborhood;
   if (
@@ -34,4 +36,12 @@ export function filtersFromSearchParams(params: URLSearchParams | { get(name: st
   if (universe === "cohort") base.candidatesOnly = false;
   if (universe === "candidates") base.candidatesOnly = true;
   return base;
+}
+
+export function pageSearchParams(raw: Record<string, string | string[] | undefined>): URLSearchParams {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(raw)) {
+    if (typeof value === "string") params.set(key, value);
+  }
+  return params;
 }

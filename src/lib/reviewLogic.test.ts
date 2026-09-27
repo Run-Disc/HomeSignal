@@ -69,4 +69,21 @@ describe("manual count sourcing", () => {
       assert.equal(result.sourced, false);
     }
   });
+
+  it("clears a previously saved count and its evidence when left blank", () => {
+    const draft = empty();
+    draft.proposedTotalUnitCount = 12;
+    draft.countEvidence.proposedTotalUnitCount = { field: "workDescriptionSanitized", quote: "TOTAL OF 12 DWELLING UNITS ABOVE", start: 0, end: 30, interpretation: "review" };
+    const result = applyCountCorrection({ draft, countKey: "proposedTotalUnitCount", countValue: "", quote: "", sourceText: source, reason: "Unknown after review" });
+    assert.ok(result.ok);
+    assert.equal(result.fields.proposedTotalUnitCount, null);
+    assert.equal(result.fields.countEvidence.proposedTotalUnitCount, undefined);
+    assert.equal(draft.proposedTotalUnitCount, 12);
+  });
+
+  it("rejects values that cannot be represented as safe whole-number counts", () => {
+    for (const value of ["9007199254740993", "9".repeat(400), "1.5", "-1"]) {
+      assert.equal(parseCountValue(value).ok, false);
+    }
+  });
 });

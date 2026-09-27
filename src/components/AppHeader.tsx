@@ -7,6 +7,7 @@ export function AppHeader(props: {
   snapshotDate: string;
   modeLabel: string;
   exportHref?: string;
+  queueHref?: string;
   reviewHref?: string;
   current?: NavSection;
   isHome?: boolean;
@@ -15,7 +16,7 @@ export function AppHeader(props: {
   const reviewHref = props.reviewHref ?? `/review/${encodeURIComponent(FLAGSHIP_RECORD_ID)}`;
   const exportHref = props.exportHref ?? "/export";
   const items = [
-    { id: "overview" as const, href: "/", label: "Queue" },
+    { id: "overview" as const, href: props.queueHref ?? "/", label: "Queue" },
     { id: "review" as const, href: reviewHref, label: "Record" },
     { id: "export" as const, href: exportHref, label: "Briefing" },
   ];
@@ -60,7 +61,7 @@ export function AppHeader(props: {
           <span className="mode-dot" aria-hidden="true" /> Source review
         </span>
         <Link className="quiet-link" href="/sources" aria-label={`Sources, snapshot retrieved ${props.snapshotDate}`}>
-          Snapshot {props.snapshotDate}
+          Sources
         </Link>
         <Link className="quiet-link" href="/limitations">
           Methods & limits

@@ -4,25 +4,32 @@ import { ReviewWorkspace } from "@/components/ReviewWorkspace";
 import { SiteFooter } from "@/components/SiteFooter";
 import { currentAiMode, modeDescription } from "@/lib/extractClient";
 import { loadPermits, sourceManifest, toClientPermit } from "@/lib/loadSnapshot";
+import { filtersFromSearchParams, filtersToSearchParams, pageSearchParams } from "@/lib/filters";
+import { applyFilters } from "@/lib/metrics";
 
 export default async function ReviewPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ recordId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const filters = filtersFromSearchParams(pageSearchParams(await searchParams));
+  const contextQuery = filtersToSearchParams(filters);
   const { recordId } = await params;
   const decoded = decodeURIComponent(recordId);
+  const briefingQuery = filtersToSearchParams({ ...filters, reviewState: "all" }, decoded);
   const permits = loadPermits();
   const idx = permits.findIndex((p) => p.recordId === decoded);
   if (idx < 0) notFound();
   const record = toClientPermit(permits[idx]);
-  const candidates = permits.filter((p) => p.candidateDiscovery.selected);
+  const candidates = applyFilters(permits, { ...filters, reviewState: "all" }, {});
   const cidx = candidates.findIndex((p) => p.recordId === decoded);
-  const prev = cidx > 0 ? candidates[cidx - 1].recordId : permits[idx - 1]?.recordId ?? null;
+  const prev = cidx > 0 ? candidates[cidx - 1].recordId : null;
   const next =
     cidx >= 0 && cidx < candidates.length - 1
       ? candidates[cidx + 1].recordId
-      : permits[idx + 1]?.recordId ?? null;
+      : null;
   const mode = currentAiMode();
   const manifest = sourceManifest();
 
@@ -32,7 +39,9 @@ export default async function ReviewPage({
         snapshotDate={manifest.retrievalDate}
         modeLabel={`AI mode: ${mode}`}
         current="review"
-        reviewHref={`/review/${encodeURIComponent(record.recordId)}`}
+        queueHref={`/?${contextQuery}`}
+        reviewHref={`/review/${encodeURIComponent(record.recordId)}?${contextQuery}`}
+        exportHref={`/export?${briefingQuery}`}
       />
       <main id="main">
         <ReviewWorkspace
@@ -40,6 +49,8 @@ export default async function ReviewPage({
           neighbors={{ prev, next }}
           modeDescription={modeDescription(mode)}
           aiMode={mode}
+          contextQuery={contextQuery}
+          briefingQuery={briefingQuery}
         />
       </main>
       <SiteFooter />

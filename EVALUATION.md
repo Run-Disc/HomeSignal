@@ -37,8 +37,8 @@ Automated validator tests live in `src/lib/extraction.test.ts` and currently che
 
 - Metric denominators and review-state updates (`src/lib/metrics.test.ts`)
 - CSV formula-prefix neutralization (`src/lib/csv.test.ts`)
-- Manual counts become sourced only with an exact matching quote (`src/lib/reviewLogic.test.ts`)
-- Briefing CSV omits unreviewed candidates (`src/lib/briefing.test.ts`)
+- Manual counts require an exact matching quote; clearing a saved count clears its evidence; unsafe numeric values are rejected (`src/lib/reviewLogic.test.ts`). Text matching verifies provenance, not whether a number denotes homes, stories, or another quantity: that interpretation remains a human responsibility.
+- Briefing CSV omits unreviewed candidates and stale-source reviews, and preserves source URLs, hashes, and all count evidence (`src/lib/briefing.test.ts`)
 - Keyword/work-type discovery aid is labeled as fallible, not as a model (`src/lib/discovery.test.ts`)
 - Proposal validation rejects extra keys, missing evidence, unmatched quotes, record mismatch, and class-as-count evidence (`src/lib/extraction.test.ts`)
 

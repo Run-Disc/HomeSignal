@@ -1,0 +1,71 @@
+{
+  "retrievedAt": "2026-09-27",
+  "zillow": {
+    "publisher": "Zillow Research",
+    "sourceUrl": "https://www.zillow.com/research/data/",
+    "downloadUrl": "https://files.zillowstatic.com/research/public_csvs/zori/Metro_zori_uc_sfrcondomfr_sm_month.csv",
+    "rawSha256": "4177880bb6a7df096024dd8bb1d725d2892dbcc4fd42a00984cbafd0b22f4c38",
+    "regionId": "394982",
+    "geography": "Pittsburgh, PA metro area (MSA)",
+    "series": "ZORI, all homes plus multifamily, smoothed monthly",
+    "monthly": [
+      {
+        "month": "2025-01",
+        "value": 1371.647192349735
+      },
+      {
+        "month": "2025-02",
+        "value": 1377.633837326843
+      },
+      {
+        "month": "2025-03",
+        "value": 1385.6609851358644
+      },
+      {
+        "month": "2025-04",
+        "value": 1395.485947108474
+      },
+      {
+        "month": "2025-05",
+        "value": 1403.0902002270932
+      },
+      {
+        "month": "2025-06",
+        "value": 1414.0263280669756
+      },
+      {
+        "month": "2025-07",
+        "value": 1419.969442438325
+      },
+      {
+        "month": "2025-08",
+        "value": 1420.8725690687959
+      },
+      {
+        "month": "2025-09",
+        "value": 1421.2599999461825
+      },
+      {
+        "month": "2025-10",
+        "value": 1419.281298605933
+      },
+      {
+        "month": "2025-11",
+        "value": 1424.228379956477
+      },
+      {
+        "month": "2025-12",
+        "value": 1422.7702042733724
+      }
+    ]
+  },
+  "census": {
+    "publisher": "U.S. Census Bureau QuickFacts",
+    "sourceUrl": "https://www.census.gov/quickfacts/pittsburghcitypennsylvania",
+    "geography": "Pittsburgh city, Pennsylvania (FIPS 4261000)",
+    "period": "2020\u20132024",
+    "medianGrossRent": 1261,
+    "sameHouseOneYearAgoPercent": 79.4,
+    "uncertainty": "Survey estimates. Margins of error are not displayed in this QuickFacts extract; do not rank small differences or test significance with these values."
+  }
+}

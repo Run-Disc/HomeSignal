@@ -1,4 +1,4 @@
-import type { CountField, EvidenceSpan, ReviewedFields } from "./types";
+import type { ClientPermit, CountField, EvidenceSpan, ReviewDecision, ReviewedFields } from "./types";
 import { COUNT_LABELS } from "./constants";
 
 export type CountCorrectionInput = {
@@ -20,7 +20,9 @@ export function parseCountValue(raw: string): { ok: true; value: number | null }
   if (!/^\d+$/.test(trimmed)) {
     return { ok: false, error: "Count must be a nonnegative whole number, or left blank for unknown." };
   }
-  return { ok: true, value: Number(trimmed) };
+  const value = Number(trimmed);
+  if (!Number.isSafeInteger(value)) return { ok: false, error: "Count is too large to store accurately. Check the source." };
+  return { ok: true, value };
 }
 
 export function exactQuoteIndex(sourceText: string, quote: string): number {
@@ -40,6 +42,8 @@ export function applyCountCorrection(input: CountCorrectionInput): CountCorrecti
   };
 
   if (parsed.value == null) {
+    fields[input.countKey] = null;
+    delete fields.countEvidence[input.countKey];
     return { ok: true, fields, sourced: false };
   }
 
@@ -67,4 +71,13 @@ export function applyCountCorrection(input: CountCorrectionInput): CountCorrecti
 
 export function unsourcedCountNote(countKey: CountField, value: number): string {
   return `${COUNT_LABELS[countKey]} ${value} recorded as a reviewer note without matching source excerpt.`;
+}
+
+/** A review belongs to the exact source snapshot the person inspected. */
+export function currentReviewsForRecords(records: ClientPermit[], reviews: Record<string, ReviewDecision>): Record<string, ReviewDecision> {
+  return Object.fromEntries(records.flatMap((record) => {
+    const decision = reviews[record.recordId];
+    return decision && decision.recordId === record.recordId && decision.snapshotVersion === record.snapshotVersion &&
+      decision.sanitizedInputHash === record.inputHash ? [[record.recordId, decision]] : [];
+  }));
 }

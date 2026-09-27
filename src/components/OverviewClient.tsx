@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { FLAGSHIP_PERMIT_ID, FLAGSHIP_RECORD_ID, PAGE_SIZE } from "@/lib/constants";
+import { HousingContext } from "@/components/HousingContext";
+import { useEffect, useMemo, useState } from "react";
+import { FLAGSHIP_PERMIT_ID, FLAGSHIP_RECORD_ID, PAGE_SIZE, SCOPE_LABELS } from "@/lib/constants";
+import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { filtersToSearchParams } from "@/lib/filters";
+import { currentReviewsForRecords } from "@/lib/reviewLogic";
 import { explainDiscovery } from "@/lib/discovery";
 import {
   loadFailedIds,
@@ -19,6 +24,7 @@ function statusClass(state: string): string {
 }
 
 export function OverviewClient(props: {
+  initialFilters: Filters;
   records: ClientPermit[];
   neighborhoods: string[];
   snapshotHash: string;
@@ -26,11 +32,12 @@ export function OverviewClient(props: {
   mode: string;
   retrievedAt: string;
 }) {
-  const [filters, setFilters] = useState<Filters>(defaultFilters());
-  const [reviews] = useState(loadReviews);
+  const [filters, setFilters] = useState<Filters>(props.initialFilters);
+  const [storedReviews, setStoredReviews] = useState<ReturnType<typeof loadReviews>>({});
+  useEffect(() => setStoredReviews(loadReviews()), []);
+  const reviews = useMemo(() => currentReviewsForRecords(props.records, storedReviews), [props.records, storedReviews]);
   const [failed] = useState(loadFailedIds);
   const [sortKey, setSortKey] = useState<"issueDate" | "sourcePermitId" | "neighborhood">("issueDate");
-  const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
 
   const cohort = useMemo(
@@ -43,14 +50,11 @@ export function OverviewClient(props: {
     [cohort, filters.neighborhood],
   );
   const metrics = useMemo(
-    () => computeMetrics(neighborhoodCohort, reviews, failed),
-    [neighborhoodCohort, reviews, failed],
+    () => computeMetrics(neighborhoodCohort, reviews, failed, filters.year),
+    [neighborhoodCohort, reviews, failed, filters.year],
   );
   const tableRows = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const rows = applyFilters(neighborhoodCohort, filters, reviews).filter((r) =>
-      q ? r.sourcePermitId.toLowerCase().includes(q) || r.neighborhood.toLowerCase().includes(q) : true,
-    );
+    const rows = applyFilters(neighborhoodCohort, filters, reviews);
     return [...rows].sort((a, b) => {
       const av = a[sortKey] ?? "";
       const bv = b[sortKey] ?? "";
@@ -58,14 +62,16 @@ export function OverviewClient(props: {
       if (av > bv) return 1;
       return a.sourcePermitId.localeCompare(b.sourcePermitId);
     });
-  }, [neighborhoodCohort, filters, reviews, sortKey, query]);
+  }, [neighborhoodCohort, filters, reviews, sortKey]);
 
   const pageCount = Math.max(1, Math.ceil(tableRows.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount - 1);
   const pageRows = tableRows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
   const from = tableRows.length === 0 ? 0 : safePage * PAGE_SIZE + 1;
   const to = Math.min(tableRows.length, (safePage + 1) * PAGE_SIZE);
-  const featured = props.records.find((r) => r.recordId === FLAGSHIP_RECORD_ID);
+  const featured = tableRows.find((r) => r.recordId === FLAGSHIP_RECORD_ID);
+  const contextQuery = filtersToSearchParams(filters);
+  const recordHref = (id: string) => `/review/${encodeURIComponent(id)}?${contextQuery}`;
   const maxMonthlyIssued = Math.max(1, ...metrics.monthlyIssued.map((row) => row.count));
 
   function updateFilter<K extends keyof Filters>(key: K, value: Filters[K]) {
@@ -74,7 +80,11 @@ export function OverviewClient(props: {
   }
 
   return (
-    <>
+    <div className="shell">
+      <AppHeader snapshotDate={props.retrievedAt} modeLabel={props.mode} current="overview" isHome
+        queueHref={`/?${contextQuery}`} exportHref={`/export?${contextQuery}`}
+        reviewHref={recordHref(featured?.recordId ?? tableRows[0]?.recordId ?? FLAGSHIP_RECORD_ID)} />
+      <main id="main">
       <section className="product-intro" aria-labelledby="product-heading">
         <div>
           <p className="eyebrow">Pittsburgh permit evidence workspace</p>
@@ -91,8 +101,8 @@ export function OverviewClient(props: {
         </ol>
       </section>
       <p className="integrity-note">
-        <strong>Decision support:</strong> every number below counts permit records, not homes built. No address,
-        owner, contractor, parcel, or contact data is shown.
+        <strong>Decision support:</strong> queue totals and activity bars count permit records, not homes built. Structured address,
+        owner, contractor, and parcel fields are excluded; free-text redaction may be incomplete.
       </p>
       <section aria-labelledby="metrics-heading">
         <h2 id="metrics-heading" className="visually-hidden">
@@ -142,7 +152,7 @@ export function OverviewClient(props: {
               <li key={row.month} title={`${label}: ${row.count} issued permit records`}>
                 <span className="monthly-count">{row.count}</span>
                 <span className="monthly-track" aria-hidden="true">
-                  <span style={{ height: `${Math.max(8, (row.count / maxMonthlyIssued) * 100)}%` }} />
+                  <span style={{ height: `${row.count === 0 ? 0 : Math.max(8, (row.count / maxMonthlyIssued) * 100)}%` }} />
                 </span>
                 <time dateTime={row.month}>{label}</time>
               </li>
@@ -154,8 +164,9 @@ export function OverviewClient(props: {
           completions, occupancy, or housing production.
         </p>
       </section>
+      <HousingContext />
       {featured ? (
-        <Link className="spotlight" href={`/review/${encodeURIComponent(featured.recordId)}`}>
+        <Link className="spotlight" href={recordHref(featured.recordId)}>
           <span><span className="eyebrow">Start the guided demo</span><strong>{featured.sourcePermitId}</strong></span>
           <span>{featured.neighborhood}</span>
           <span>{featured.sourceStatusRaw}</span>
@@ -217,9 +228,9 @@ export function OverviewClient(props: {
           <label htmlFor="query">Search</label>
           <input
             id="query"
-            value={query}
+            value={filters.search ?? ""}
             onChange={(e) => {
-              setQuery(e.target.value);
+              updateFilter("search", e.target.value);
               setPage(0);
             }}
             placeholder={`e.g. ${FLAGSHIP_PERMIT_ID}`}
@@ -231,7 +242,6 @@ export function OverviewClient(props: {
             className="btn-secondary"
             onClick={() => {
               setFilters(defaultFilters());
-              setQuery("");
               setPage(0);
             }}
           >
@@ -265,7 +275,7 @@ export function OverviewClient(props: {
             const state = (review?.state ?? "unreviewed") as ReviewState;
             return (
               <li key={`card-${row.recordId}`} className="card record-card">
-                <Link className="record-card-link" href={`/review/${encodeURIComponent(row.recordId)}`}>
+                <Link className="record-card-link" href={recordHref(row.recordId)}>
                   <span className="record-card-id">{row.sourcePermitId}</span>
                   <span>
                     {row.issueDate} · {row.neighborhood} · {row.sourceClassRaw ?? "Unknown"}
@@ -298,8 +308,8 @@ export function OverviewClient(props: {
                 </button>
               </th>
               <th>Source class</th>
-              <th>Suggested scope</th>
-              <th>Units</th>
+              <th>Reviewed scope</th>
+              <th>Proposed total mentioned</th>
               <th>Match</th>
               <th>Status</th>
             </tr>
@@ -317,12 +327,12 @@ export function OverviewClient(props: {
                 return (
                   <tr key={row.recordId} className={row.recordId === FLAGSHIP_RECORD_ID ? "row-featured" : undefined}>
                     <td className="record-id">
-                      <Link href={`/review/${encodeURIComponent(row.recordId)}`}>{row.sourcePermitId}</Link>
+                      <Link href={recordHref(row.recordId)}>{row.sourcePermitId}</Link>
                     </td>
                     <td>{row.issueDate}</td>
                     <td>{row.neighborhood}</td>
                     <td>{row.sourceClassRaw ?? "Unknown"}</td>
-                    <td>{review?.finalFields?.proposedScope ?? "—"}</td>
+                    <td>{review?.finalFields ? SCOPE_LABELS[review.finalFields.proposedScope] : "—"}</td>
                     <td>
                       {review?.finalFields?.proposedTotalUnitCount != null
                         ? String(review.finalFields.proposedTotalUnitCount)
@@ -339,6 +349,8 @@ export function OverviewClient(props: {
           </tbody>
         </table>
       </div>
-    </>
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

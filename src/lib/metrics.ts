@@ -3,6 +3,7 @@ import type { Filters, MetricSet, PermitRecord, ReviewDecision } from "./types";
 type MetricRecord = Pick<
   PermitRecord,
   | "recordId"
+  | "sourcePermitId"
   | "issueDate"
   | "neighborhood"
   | "candidateDiscovery"
@@ -23,6 +24,8 @@ export function applyFilters<T extends MetricRecord>(
   reviews: Record<string, ReviewDecision>,
 ): T[] {
   return records.filter((record) => {
+    const query = filters.search?.trim().toLowerCase();
+    if (query && !record.sourcePermitId.toLowerCase().includes(query) && !record.neighborhood.toLowerCase().includes(query)) return false;
     if (filters.year !== "all" && issueYear(record.issueDate) !== filters.year) return false;
     if (filters.neighborhood !== "all" && record.neighborhood !== filters.neighborhood) return false;
     if (filters.candidatesOnly && !record.candidateDiscovery.selected) return false;
@@ -38,6 +41,7 @@ export function computeMetrics(
   cohort: MetricRecord[],
   reviews: Record<string, ReviewDecision>,
   failedExtractionIds: string[],
+  selectedYear?: string,
 ): MetricSet {
   const candidates = cohort.filter((r) => r.candidateDiscovery.selected);
   const reviewed = Object.values(reviews).filter(
@@ -60,6 +64,10 @@ export function computeMetrics(
   ).length;
 
   const months = new Map<string, number>();
+  const years = selectedYear && selectedYear !== "all" ? [selectedYear] : [...new Set(cohort.map((r) => issueYear(r.issueDate)))];
+  for (const year of years) {
+    for (let month = 1; month <= 12; month++) months.set(`${year}-${String(month).padStart(2, "0")}`, 0);
+  }
   for (const record of cohort) {
     const m = issueMonth(record.issueDate);
     months.set(m, (months.get(m) ?? 0) + 1);

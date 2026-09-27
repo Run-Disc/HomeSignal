@@ -20,8 +20,8 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 
 - Header: HomeSignal + Queue / Record / Briefing. Snapshot date and Docs are quiet links.
 - Queue: compact metrics, a neighborhood-responsive 2025 issued-record activity chart, spotlight `BDA-2024-05307`, filters, and table. The chart explicitly does not claim homes built.
-- Record: source text + review form with selection-to-quote evidence capture. Extract is collapsed. No fabricated model pane.
-- Briefing: print / CSV of reviewed evidence.
+- Record: source text + review form with selection-to-quote evidence capture. Saved fields reload; clearing a count removes its evidence; changing count types restores their saved values. Source-review mode never loads cached AI proposals. Extract is collapsed. No fabricated model pane.
+- Briefing: preserved neighborhood/search filters, visible export scope, featured evidence, official verification handoff, unclipped print output, and CSV containing all count quotes and source provenance.
 - Zoning and comparable City tools: Sources lists the Affordable Housing Development Project Explorer, the June 2025 Controller dashboard recommendation, and zoning code/map/page as unused future links.
 
 ## Desktop
@@ -35,7 +35,7 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 
 - `npm run lint`: pass; generated builds and desktop artifacts are excluded from lint while checked source and scripts remain included.
 - `npx tsc --noEmit`: pass
-- `npm test` (`tsx --test`): **32/32 pass**
+- `npm test` (`tsx --test`): **37/37 pass**
 - `npm run build`: pass (Next.js 15.5.26).
 - `npm audit`: **0 vulnerabilities** after updating Electron to 44.4.5, electron-builder to 26.15.3, and overriding PostCSS to 8.5.28.
 - `node scripts/validate-electron.cjs`: pass (syntax + mac DMG/ZIP + win NSIS config; `identity: null`)
@@ -52,3 +52,11 @@ Deadline: Sunday 2026-09-27 23:59 ET.
 ## Builder-only remaining actions
 
 See `FINAL_ACTIONS.md`.
+
+## Final review update (v0.1.2)
+
+- Added real Zillow metro monthly rent and Census city community context, with separate geography/period/definition labels and downloadable provenance. Context is excluded from permit-export calculations.
+- Added explicit beneficiaries, potential harms, missing data, and human verification questions.
+- Browser rehearsal verified Middle Hill (17 issued / 4 candidates), rejection of a count without a quote, a sourced 12-unit mention, preserved filters, and a briefing with one local review / three remaining candidates. Month selection changed the Zillow display from December $1,423 to January $1,372. No browser console errors were reported in the rehearsed flow.
+- Narrow-width queue and briefing had no document-level horizontal overflow in the browser check.
+- No external practitioner validation or measured extraction accuracy is claimed.

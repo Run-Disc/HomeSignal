@@ -114,4 +114,13 @@ describe("briefing export", () => {
     });
     assert.match(csv, /"'=cmd"/);
   });
+
+  it("excludes stale source reviews and carries full provenance with current evidence", () => {
+    const stale = { ...reviews, "pli:BDA-2024-05307": { ...reviews["pli:BDA-2024-05307"], sanitizedInputHash: "old-hash" } };
+    assert.equal(briefingCsv(records, stale).includes("BDA-2024-05307"), false);
+    const csv = briefingCsv(records, reviews);
+    assert.match(csv, /snapshotVersion/);
+    assert.match(csv, /pli-2025-bda-v1/);
+    assert.match(csv, /https:\/\/data.wprdc.org\/dataset\/pli-permits\/resource\//);
+  });
 });
